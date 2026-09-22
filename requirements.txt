@@ -1,0 +1,8 @@
+# Round 1: charts/build_charts.py (pandas, matplotlib). The n8n POC itself needs no Python.
+requests>=2.31.0
+python-dotenv>=1.0.0
+pandas>=2.0.0
+matplotlib>=3.8.0
+numpy>=1.26.0
+openai>=1.0.0
+pinecone-client>=3.0.0  # planned for Round 2 (tariff RAG)
