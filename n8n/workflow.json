@@ -1,0 +1,109 @@
+{
+  "name": "Capstone - Pre-Shipment Check",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1e842f95-3b5a-4e6d-bf1a-aa3f1d41a4f1",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8afc4aff-ab9e-4d26-8962-3d66b9c09223",
+              "name": "invoice_text",
+              "value": "Invoice: steel rebar shipment, 500 tons, quantity well above the typical route volume",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "85d9283b-8e0d-4c8f-9b18-d5b7c3d5a150",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=You are a customs pre-shipment assistant for a construction-materials import/export company.\n\nGiven the shipment description below:\n1. Suggest the HS code (first 6 digits) and name which category it falls into: (1) Bulk/raw construction material, (2) CE-marked construction product, or (3) product under additional trade measures.\n2. State which documents are required for that category (e.g., a Declaration of Performance for CE-marked items).\n3. Explicitly flag if a required document appears to be missing from the description.\n4. Flag if this shipment should go to manual human review (e.g., unusually high quantity, regulated material).\n5. State the rule or source your suggestion is based on, so a human can verify it in seconds.\n\nShipment description: {{ $json.invoice_text }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        352,
+        48
+      ],
+      "id": "9c7af3c0-bd76-4c65-88da-2845c33a4080",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "AL4eXlzIKVcboxk7",
+          "name": "OpenAi account 10"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "d28ec2c1-affe-471a-8478-5bc0a5e35a30",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "830695148bd1ae79a7685a5d7f1fa337ea0c44b5e0b04bf9816d60425264c85f"
+  },
+  "id": "gs4tr4n6Sr58Yszq",
+  "tags": []
+}
