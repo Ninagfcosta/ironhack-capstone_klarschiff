@@ -60,8 +60,8 @@ Because a wrong code can cost money and penalties, KlarSchiff follows the spirit
 | Technical documentation (Art. 11) | This repository (see outline below) |
 | Record-keeping (Art. 12) | LangSmith traces + decision log with model and knowledge-base version |
 | Transparency to users (Art. 13) | Every result shows reasons, evidence, sources, data date and limits |
-| Human oversight (Art. 14) | A person approves, corrects or rejects every result; 11 review triggers; nothing is filed automatically |
-| Accuracy and robustness (Art. 15) | 20-case evaluation, 14 unit tests, offline fallback, format checks, error analysis |
+| Human oversight (Art. 14) | A person approves, corrects or rejects every result; 13 review triggers; nothing is filed automatically |
+| Accuracy and robustness (Art. 15) | 20-case evaluation, 16 unit tests, offline fallback, format checks, error analysis |
 
 ## 7. Technical documentation outline
 

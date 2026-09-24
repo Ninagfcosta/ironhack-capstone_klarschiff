@@ -39,7 +39,7 @@ flowchart LR
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env            # add your own OPENAI_API_KEY and LANGSMITH_API_KEY (never commit .env)
-python -m pytest -q             # 14 offline tests
+python -m pytest -q             # 16 offline tests
 streamlit run mvp/app.py        # the MVP (works offline too, in keyword mode)
 python evaluation/run_eval.py --langsmith   # 20-case LangSmith experiment
 python -m klarschiff.monitor    # tariff monitor (also runs daily via GitHub Actions)
@@ -55,7 +55,7 @@ python -m klarschiff.monitor    # tariff monitor (also runs daily via GitHub Act
 | Use case definition | [`use_case_definition.md`](use_case_definition.md) | 3 categories with legal basis, e-invoicing, metrics, out of scope, R1 → R2 evolution |
 | POC | [`poc/`](poc/) | n8n batch POC v2 (20 cases, prompt-only baseline) + agent architecture |
 | **MVP** | [`mvp/`](mvp/) · [`klarschiff/`](klarschiff/) | Streamlit app, 5-step agent, RAG over 50 reviewed headings, versioned rules, tariff monitor, audit log |
-| **LangSmith evaluation** | [`evaluation/langsmith.md`](evaluation/langsmith.md) | 20 cases, 6 evaluators, **error analysis (6 errors found)** |
+| **LangSmith evaluation** | [`evaluation/langsmith.md`](evaluation/langsmith.md) | 20 cases, 6 evaluators, **error analysis (8 errors found, incl. a real LLM false all-clear)** |
 | ROI & risks | [`roi_risk_assessment.md`](roi_risk_assessment.md) | 3 scenarios, break-even month 7 (base), 12 risks |
 | EU AI Act | [`compliance/eu_ai_act_compliance.md`](compliance/eu_ai_act_compliance.md) | Minimal risk, reasoning step by step, Digital Omnibus 2026 dates |
 | GDPR | [`compliance/gdpr_documentation.md`](compliance/gdpr_documentation.md) | Data flow, legal bases, DPIA screening, transfers, retention |
@@ -81,7 +81,7 @@ python -m klarschiff.monitor    # tariff monitor (also runs daily via GitHub Act
 ├── evaluation/            # dataset (20 cases), evaluators, runner, LangSmith doc, results
 ├── poc/                   # n8n batch POC v2
 ├── compliance/            # EU AI Act, GDPR
-├── tests/                 # 14 unit tests (offline)
+├── tests/                 # 16 unit tests (offline)
 ├── data/                  # decision log, monitor state, alerts (created at runtime)
 ├── .github/workflows/     # daily tariff monitor
 ├── research/ charts/ n8n/ cost_estimation/ feedback/ 00_origin_silvertrust/

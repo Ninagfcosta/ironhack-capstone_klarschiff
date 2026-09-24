@@ -38,7 +38,7 @@ Shipment ─► Intake ─► Validate ─► Retrieve candidates (RAG) ─► L
 - **Retrieval (RAG):** BM25 over `klarschiff/knowledge/hs_headings.json` (50 reviewed headings with keywords in English and a German glossary). The LLM gets the top 5 real headings, so it chooses instead of inventing.
 - **LLM:** GPT-4o-mini, temperature 0, JSON output, pinned model name (`KLARSCHIFF_MODEL`). If the API fails, the agent falls back to offline mode and **always** routes to a person.
 - **Rules:** `klarschiff/knowledge/trade_measures.json` holds every measure with legal reference, effective date, source link, `last_verified` and a re-check interval. Rules older than their interval trigger a review.
-- **Review triggers:** confidence < 0.75, code not in the knowledge base, missing information, missing mandatory document, invoice/packing mismatch, Category 3, shipment ≥ 100 t, CBAM goods ≥ 50 t in one shipment, stale rules, open monitor alert, offline mode.
+- **Review triggers (13):** description too vague (< 3 meaningful words), close call between two headings, confidence < 0.75, code not in the knowledge base, missing information, missing mandatory document, invoice/packing mismatch, Category 3, shipment ≥ 100 t, CBAM goods ≥ 50 t in one shipment, stale rules, open monitor alert, offline mode.
 - **Tracing:** every run is a LangSmith trace (`klarschiff_agent` → `recommend_llm` → OpenAI call).
 
 ## 3. Reproduce
@@ -48,7 +48,7 @@ cd capstone-round1-hoffmann
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env          # paste your own keys into .env
-python -m pytest -q           # 14 offline tests
+python -m pytest -q           # 16 offline tests
 python evaluation/run_eval.py --local      # 20 cases, results in evaluation/results/
 streamlit run mvp/app.py      # the MVP
 ```
