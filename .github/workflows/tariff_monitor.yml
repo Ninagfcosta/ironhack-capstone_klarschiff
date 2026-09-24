@@ -1,0 +1,25 @@
+# Runs the KlarSchiff tariff monitor every day and commits new alerts to data/alerts.json.
+name: tariff-monitor
+on:
+  schedule:
+    - cron: "0 5 * * *"   # 05:00 UTC = 07:00 Berlin (summer time)
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests pydantic python-dotenv langsmith
+      - run: python -m klarschiff.monitor
+      - name: Commit alerts
+        run: |
+          git config user.name "klarschiff-monitor"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/alerts.json data/monitor_state.json
+          git diff --cached --quiet || git commit -m "monitor: tariff alerts $(date -u +%F)"
+          git push

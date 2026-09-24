@@ -1,0 +1,140 @@
+{
+  "name": "KlarSchiff - POC v2 (20-case batch, prompt-only baseline)",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "36a5500d-9666-43f1-9029-299c6085ebbc",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 20 test shipments (same as evaluation/dataset.jsonl)\nconst cases = [\n {\n  \"id\": \"TC01\",\n  \"description\": \"Invoice: 500 bags of Portland cement CEM I 42.5 R, 25 kg each (12.5 t), Turkey to Germany. Packing list attached. DoP and CE label attached.\",\n  \"origin\": \"TR\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"2523.29\"\n  ],\n  \"expected_review\": true,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC02\",\n  \"description\": \"Invoice: sawn spruce beams, strength class C24, kiln dried, 40 m3. Packing list attached. Supplier due diligence statement attached.\",\n  \"origin\": \"NO\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"4407.12\"\n  ],\n  \"expected_review\": false,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC03\",\n  \"description\": \"Invoice: stone wool insulation rolls, thermal conductivity 0.035 W/mK, 1,200 rolls. DoP and CE marking attached. Packing list attached.\",\n  \"origin\": \"RS\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"6806.10\"\n  ],\n  \"expected_review\": false,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC04\",\n  \"description\": \"Invoice: precast concrete wall elements for a residential building, 24 pieces. Packing list attached. Declaration of Performance missing.\",\n  \"origin\": \"RS\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"6810.91\"\n  ],\n  \"expected_review\": true,\n  \"expected_missing\": [\n   \"Declaration of Performance (DoP / DoPC)\"\n  ]\n },\n {\n  \"id\": \"TC05\",\n  \"description\": \"Invoice: hot-rolled ribbed reinforcing steel bars B500B, 12 m lengths, 500 t. Mill certificate attached. Packing list attached.\",\n  \"origin\": \"TR\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"7214.20\"\n  ],\n  \"expected_review\": true,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC06\",\n  \"description\": \"Invoice: paper-faced gypsum plasterboard 12.5 mm, 2,000 sheets. DoP and CE marking attached. Packing list attached.\",\n  \"origin\": \"TR\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"6809.11\"\n  ],\n  \"expected_review\": false,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC07\",\n  \"description\": \"Invoice: porcelain floor tiles 60x60 cm, water absorption below 0.5%, 900 m2. DoP and CE label attached. Packing list attached.\",\n  \"origin\": \"CN\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"6907.21\"\n  ],\n  \"expected_review\": true,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC08\",\n  \"description\": \"Invoice: double-glazed insulating glass units for windows, 150 units. Declaration of Performance missing. Packing list attached.\",\n  \"origin\": \"CN\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"7008.00\"\n  ],\n  \"expected_review\": true,\n  \"expected_missing\": [\n   \"Declaration of Performance (DoP / DoPC)\"\n  ]\n },\n {\n  \"id\": \"TC09\",\n  \"description\": \"Invoice: 20 t crushed granite aggregate 8/16 mm for concrete. DoP and CE marking attached. Packing list attached.\",\n  \"origin\": \"NO\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"2517.10\"\n  ],\n  \"expected_review\": false,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC10\",\n  \"description\": \"Invoice: untreated spruce logs, diameter 20-40 cm, 300 m3. Packing list attached.\",\n  \"origin\": \"NO\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"4403.23\"\n  ],\n  \"expected_review\": false,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC11\",\n  \"description\": \"Invoice: ready-mixed dry masonry mortar M10 in 25 kg bags, 800 bags. DoP and CE marking attached. Packing list attached. Safety data sheet missing.\",\n  \"origin\": \"TR\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"3824.50\"\n  ],\n  \"expected_review\": true,\n  \"expected_missing\": [\n   \"Safety Data Sheet (SDS, in German for the German market)\"\n  ]\n },\n {\n  \"id\": \"TC12\",\n  \"description\": \"Invoice: aluminium window frames with thermal break, 60 units. DoP and CE marking attached. Packing list attached.\",\n  \"origin\": \"TR\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"7610.10\"\n  ],\n  \"expected_review\": true,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC13\",\n  \"description\": \"Invoice: silicone sealant cartridges 310 ml, 5,000 pcs. Packing list attached. Safety data sheet attached.\",\n  \"origin\": \"CN\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"3214.10\",\n   \"3910.00\"\n  ],\n  \"expected_review\": false,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC14\",\n  \"description\": \"Invoice: panels, 200 pieces. Packing list attached.\",\n  \"origin\": \"CN\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [],\n  \"expected_review\": true,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC15\",\n  \"description\": \"Invoice: stainless steel kitchen sinks, 300 pcs. Packing list attached.\",\n  \"origin\": \"CN\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"7324.10\"\n  ],\n  \"expected_review\": true,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC16\",\n  \"description\": \"Rechnung: Betonstahl in Ringen, gerippt, 25 t. Werkszeugnis anbei. Lieferschein anbei.\",\n  \"origin\": \"TR\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"7213.10\"\n  ],\n  \"expected_review\": true,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC17\",\n  \"description\": \"Invoice: OSB/3 boards 18 mm, 500 boards. DoP and CE marking attached. Packing list attached.\",\n  \"origin\": \"BR\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"4410.12\"\n  ],\n  \"expected_review\": true,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC18\",\n  \"description\": \"Invoice: steel H-beams HEB 300, 40 t, export from Germany to the USA. Mill certificate attached. Packing list attached.\",\n  \"origin\": \"DE\",\n  \"destination\": \"US\",\n  \"expected_hs\": [\n   \"7216.33\"\n  ],\n  \"expected_review\": true,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC19\",\n  \"description\": \"Invoice: natural red clay roofing tiles, 20,000 pcs. DoP and CE marking attached. Packing list attached.\",\n  \"origin\": \"TR\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"6905.10\"\n  ],\n  \"expected_review\": false,\n  \"expected_missing\": []\n },\n {\n  \"id\": \"TC20\",\n  \"description\": \"Invoice: 3,000 t Portland cement clinker in bulk, vessel shipment.\",\n  \"origin\": \"EG\",\n  \"destination\": \"DE\",\n  \"expected_hs\": [\n   \"2523.10\"\n  ],\n  \"expected_review\": true,\n  \"expected_missing\": []\n }\n];\nreturn cases.map(c => ({ json: c }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "2caf05e1-7c67-42b8-ada1-b3f6c325486b",
+      "name": "Load 20 test cases"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=You are a customs pre-shipment assistant for a construction-materials import/export company in Germany.\n\nGiven the shipment below:\n1. Suggest the HS code (6 digits, format 0000.00).\n2. List the documents required.\n3. List required documents that are missing.\n4. Say if the shipment must go to manual human review (true/false).\n5. Give the rule or source for your suggestion.\n\nReply with JSON only, keys: hs_code, required_documents, missing_documents, manual_review, source, confidence.\n\nShipment: {{ $json.description }}\nOrigin: {{ $json.origin }}  Destination: {{ $json.destination }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        440,
+        0
+      ],
+      "id": "d8acbe37-221d-4636-be3d-84be7f2458fb",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "AL4eXlzIKVcboxk7",
+          "name": "OpenAi account 10"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compare each model answer with the expected answer (same criteria as the Python evaluators)\nconst cases = $('Load 20 test cases').all().map(i => i.json);\nconst outs = $input.all();\nfunction findJsonText(o) {\n  if (typeof o === 'string') return o.includes('hs_code') ? o : null;\n  if (o && typeof o === 'object') { for (const v of Object.values(o)) { const t = findJsonText(v); if (t) return t; } }\n  return null;\n}\nreturn outs.map((item, i) => {\n  const c = cases[i];\n  let a = {};\n  const raw = findJsonText(item.json) || '{}';\n  try { a = JSON.parse(raw.replace(/```json|```/g, '').trim()); } catch (e) { a = { parse_error: true }; }\n  const code = String(a.hs_code || '').replace(/[^0-9]/g, '');\n  const got = code.length >= 6 ? code.slice(0, 4) + '.' + code.slice(4, 6) : String(a.hs_code || '');\n  const exp = c.expected_hs;\n  const hs = exp.length === 0 ? null : (exp.includes(got) ? 1 : (exp.some(e => e.slice(0, 4) === got.slice(0, 4)) ? 0.5 : 0));\n  const review = a.manual_review === true || a.manual_review === 'true';\n  const falseAllClear = c.expected_review && !review;\n  return { json: { id: c.id, expected_hs: exp.join(' / ') || '(ambiguous)', got_hs: got, hs_score: hs,\n                   expected_review: c.expected_review, got_review: review, false_all_clear: falseAllClear,\n                   description: c.description } };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ],
+      "id": "9a5ac45e-e327-41d9-b629-6d571a17453c",
+      "name": "Score against expected"
+    },
+    {
+      "parameters": {
+        "jsCode": "// One summary line for the whole run\nconst rows = $input.all().map(i => i.json);\nconst scored = rows.filter(r => r.hs_score !== null);\nconst hsMean = scored.reduce((s, r) => s + r.hs_score, 0) / scored.length;\nconst fac = rows.filter(r => r.false_all_clear).map(r => r.id);\nreturn [{ json: { cases: rows.length, hs_code_accuracy: Math.round(hsMean * 100) + '%',\n                  false_all_clear: fac.length, false_all_clear_cases: fac.join(', ') || 'none',\n                  wrong_codes: scored.filter(r => r.hs_score < 1).map(r => `${r.id}: ${r.got_hs} (expected ${r.expected_hs})`) } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        0
+      ],
+      "id": "736a38bd-b222-4982-8268-db7006f86404",
+      "name": "Summary"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Load 20 test cases",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load 20 test cases": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Score against expected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score against expected": {
+      "main": [
+        [
+          {
+            "node": "Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

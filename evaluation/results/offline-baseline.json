@@ -1,0 +1,1407 @@
+{
+  "label": "offline-baseline",
+  "run_at": "2026-09-24T21:42:51",
+  "model": "gpt-4o-mini",
+  "llm": false,
+  "summary": {
+    "hs_code_correct": {
+      "mean": 0.895,
+      "n": 19
+    },
+    "missing_document_flagged": {
+      "mean": 1.0,
+      "n": 3
+    },
+    "source_shown": {
+      "mean": 1.0,
+      "n": 20
+    },
+    "review_routing": {
+      "mean": 0.825,
+      "n": 20
+    },
+    "no_false_all_clear": {
+      "mean": 1.0,
+      "n": 20
+    },
+    "category_correct": {
+      "mean": 1.0,
+      "n": 18
+    }
+  },
+  "cases": [
+    {
+      "id": "TC01",
+      "description": "Invoice: 500 bags of Portland cement CEM I 42.5 R, 25 kg each (12.5 t), Turkey to Germany. Packing list attached. DoP and CE label attached.",
+      "reference": {
+        "accepted_hs": [
+          "2523.29"
+        ],
+        "category": 3,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "Round 1 case 1, relabelled: cement is covered by EN 197-1 (CE + DoP) and is a CBAM good.",
+        "round1_case": 1,
+        "tags": [
+          "cbam",
+          "cpr"
+        ]
+      },
+      "output": {
+        "hs_code": "2523.29",
+        "hs_title": "Other Portland cement",
+        "confidence": 0.73,
+        "category": 3,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Authorised CBAM declarant number (if > 50 t of CBAM goods per year)",
+          "(not stated) Embedded-emissions data from the producer/installation"
+        ],
+        "review_reasons": [
+          "Confidence 0.73 is below 0.75.",
+          "Category 3: additional trade measures always need a person.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 2523.29 'Other Portland cement'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "2523.29 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 3, expected 3"
+        }
+      }
+    },
+    {
+      "id": "TC02",
+      "description": "Invoice: sawn spruce beams, strength class C24, kiln dried, 40 m3. Packing list attached. Supplier due diligence statement attached.",
+      "reference": {
+        "accepted_hs": [
+          "4407.12"
+        ],
+        "category": 2,
+        "manual_review": false,
+        "missing": []
+      },
+      "meta": {
+        "note": "Round 1 case 2, clarified wording (sawn, not rough).",
+        "round1_case": 2,
+        "tags": [
+          "timber",
+          "cpr"
+        ]
+      },
+      "output": {
+        "hs_code": "4407.12",
+        "hs_title": "Wood sawn or chipped lengthwise, of fir and spruce, thickness > 6 mm",
+        "confidence": 0.67,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Declaration of Performance (DoP / DoPC)",
+          "(not stated) CE marking evidence (label or photo)"
+        ],
+        "review_reasons": [
+          "Confidence 0.67 is below 0.75.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 4407.12 'Wood sawn or chipped lengthwise, of fir and spruce, thickness > 6 mm'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "4407.12 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 0.5,
+          "comment": "Unnecessary review (safe, but costs time)."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "TC03",
+      "description": "Invoice: stone wool insulation rolls, thermal conductivity 0.035 W/mK, 1,200 rolls. DoP and CE marking attached. Packing list attached.",
+      "reference": {
+        "accepted_hs": [
+          "6806.10"
+        ],
+        "category": 2,
+        "manual_review": false,
+        "missing": []
+      },
+      "meta": {
+        "note": "Round 1 case 3.",
+        "round1_case": 3,
+        "tags": [
+          "cpr"
+        ]
+      },
+      "output": {
+        "hs_code": "6806.10",
+        "hs_title": "Slag wool, rock wool and similar mineral wools, in bulk, sheets or rolls",
+        "confidence": 0.83,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [],
+        "review_reasons": [
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 6806.10 'Slag wool, rock wool and similar mineral wools, in bulk, sheets or rolls'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "6806.10 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 0.5,
+          "comment": "Unnecessary review (safe, but costs time)."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "TC04",
+      "description": "Invoice: precast concrete wall elements for a residential building, 24 pieces. Packing list attached. Declaration of Performance missing.",
+      "reference": {
+        "accepted_hs": [
+          "6810.91"
+        ],
+        "category": 2,
+        "manual_review": true,
+        "missing": [
+          "Declaration of Performance (DoP / DoPC)"
+        ]
+      },
+      "meta": {
+        "note": "Round 1 case 4, relabelled: precast concrete wall panels are 6810.91, not 9406.10 (prefabricated buildings of wood).",
+        "round1_case": 4,
+        "tags": [
+          "cpr",
+          "missing_doc",
+          "safety"
+        ]
+      },
+      "output": {
+        "hs_code": "6810.91",
+        "hs_title": "Prefabricated structural components for building or civil engineering, of cement, concrete or artificial stone",
+        "confidence": 0.82,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [
+          "Declaration of Performance (DoP / DoPC)",
+          "(not stated) CE marking evidence (label or photo)"
+        ],
+        "review_reasons": [
+          "Required document(s) missing: Declaration of Performance (DoP / DoPC)",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 6810.91 'Prefabricated structural components for building or civil engineering, of cement, concrete or artificial stone'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "6810.91 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": 1.0,
+          "comment": "Flagged 1/1: ['Declaration of Performance (DoP / DoPC)']"
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "TC05",
+      "description": "Invoice: hot-rolled ribbed reinforcing steel bars B500B, 12 m lengths, 500 t. Mill certificate attached. Packing list attached.",
+      "reference": {
+        "accepted_hs": [
+          "7214.20"
+        ],
+        "category": 3,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "Round 1 case 5.",
+        "round1_case": 5,
+        "tags": [
+          "cbam",
+          "steel_trq",
+          "safety"
+        ]
+      },
+      "output": {
+        "hs_code": "7214.20",
+        "hs_title": "Other bars and rods of iron or non-alloy steel, hot-rolled, with indentations, ribs, grooves or other deformations produced during rolling or twisted after rolling",
+        "confidence": 0.68,
+        "category": 3,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Authorised CBAM declarant number (if > 50 t of CBAM goods per year)",
+          "(not stated) Embedded-emissions data from the producer/installation"
+        ],
+        "review_reasons": [
+          "Confidence 0.68 is below 0.75.",
+          "Category 3: additional trade measures always need a person.",
+          "Large shipment (~500 t).",
+          "CBAM: this shipment alone (~500 t) is above the 50 t yearly threshold.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 7214.20 'Other bars and rods of iron or non-alloy steel, hot-rolled, with indentations, ribs, grooves or other deformations produced during rolling or twisted after rolling'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "7214.20 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 3, expected 3"
+        }
+      }
+    },
+    {
+      "id": "TC06",
+      "description": "Invoice: paper-faced gypsum plasterboard 12.5 mm, 2,000 sheets. DoP and CE marking attached. Packing list attached.",
+      "reference": {
+        "accepted_hs": [
+          "6809.11"
+        ],
+        "category": 2,
+        "manual_review": false,
+        "missing": []
+      },
+      "meta": {
+        "note": "",
+        "round1_case": null,
+        "tags": [
+          "cpr"
+        ]
+      },
+      "output": {
+        "hs_code": "6809.11",
+        "hs_title": "Boards, sheets, panels, tiles of plaster, faced or reinforced with paper or paperboard only",
+        "confidence": 0.81,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [],
+        "review_reasons": [
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 6809.11 'Boards, sheets, panels, tiles of plaster, faced or reinforced with paper or paperboard only'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "6809.11 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 0.5,
+          "comment": "Unnecessary review (safe, but costs time)."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "TC07",
+      "description": "Invoice: porcelain floor tiles 60x60 cm, water absorption below 0.5%, 900 m2. DoP and CE label attached. Packing list attached.",
+      "reference": {
+        "accepted_hs": [
+          "6907.21"
+        ],
+        "category": 3,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "Anti-dumping duties can apply to ceramic tiles from China: category 3.",
+        "round1_case": null,
+        "tags": [
+          "trade_defence",
+          "cpr"
+        ]
+      },
+      "output": {
+        "hs_code": "6907.21",
+        "hs_title": "Ceramic flags and tiles, water absorption not exceeding 0.5% by weight",
+        "confidence": 0.85,
+        "category": 3,
+        "manual_review": true,
+        "missing_documents": [],
+        "review_reasons": [
+          "Category 3: additional trade measures always need a person.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 6907.21 'Ceramic flags and tiles, water absorption not exceeding 0.5% by weight'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "6907.21 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 3, expected 3"
+        }
+      }
+    },
+    {
+      "id": "TC08",
+      "description": "Invoice: double-glazed insulating glass units for windows, 150 units. Declaration of Performance missing. Packing list attached.",
+      "reference": {
+        "accepted_hs": [
+          "7008.00"
+        ],
+        "category": 2,
+        "manual_review": true,
+        "missing": [
+          "Declaration of Performance (DoP / DoPC)"
+        ]
+      },
+      "meta": {
+        "note": "",
+        "round1_case": null,
+        "tags": [
+          "cpr",
+          "missing_doc",
+          "safety"
+        ]
+      },
+      "output": {
+        "hs_code": "7008.00",
+        "hs_title": "Multiple-walled insulating units of glass",
+        "confidence": 0.8,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [
+          "Declaration of Performance (DoP / DoPC)",
+          "(not stated) CE marking evidence (label or photo)"
+        ],
+        "review_reasons": [
+          "Required document(s) missing: Declaration of Performance (DoP / DoPC)",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 7008.00 'Multiple-walled insulating units of glass'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "7008.00 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": 1.0,
+          "comment": "Flagged 1/1: ['Declaration of Performance (DoP / DoPC)']"
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "TC09",
+      "description": "Invoice: 20 t crushed granite aggregate 8/16 mm for concrete. DoP and CE marking attached. Packing list attached.",
+      "reference": {
+        "accepted_hs": [
+          "2517.10"
+        ],
+        "category": 2,
+        "manual_review": false,
+        "missing": []
+      },
+      "meta": {
+        "note": "",
+        "round1_case": null,
+        "tags": [
+          "cpr"
+        ]
+      },
+      "output": {
+        "hs_code": "2517.10",
+        "hs_title": "Pebbles, gravel, broken or crushed stone of a kind used for concrete aggregates, road metalling or railway ballast",
+        "confidence": 0.68,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [],
+        "review_reasons": [
+          "Confidence 0.68 is below 0.75.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 2517.10 'Pebbles, gravel, broken or crushed stone of a kind used for concrete aggregates, road metalling or railway ballast'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "2517.10 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 0.5,
+          "comment": "Unnecessary review (safe, but costs time)."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "TC10",
+      "description": "Invoice: untreated spruce logs, diameter 20-40 cm, 300 m3. Packing list attached.",
+      "reference": {
+        "accepted_hs": [
+          "4403.23"
+        ],
+        "category": 1,
+        "manual_review": false,
+        "missing": []
+      },
+      "meta": {
+        "note": "",
+        "round1_case": null,
+        "tags": [
+          "timber"
+        ]
+      },
+      "output": {
+        "hs_code": "4403.23",
+        "hs_title": "Wood in the rough, of fir and spruce, smallest cross-sectional dimension 15 cm or more (not treated)",
+        "confidence": 0.65,
+        "category": 1,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Timber due-diligence statement / supplier evidence"
+        ],
+        "review_reasons": [
+          "Confidence 0.65 is below 0.75.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 4403.23 'Wood in the rough, of fir and spruce, smallest cross-sectional dimension 15 cm or more (not treated)'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "4403.23 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 0.5,
+          "comment": "Unnecessary review (safe, but costs time)."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 1, expected 1"
+        }
+      }
+    },
+    {
+      "id": "TC11",
+      "description": "Invoice: ready-mixed dry masonry mortar M10 in 25 kg bags, 800 bags. DoP and CE marking attached. Packing list attached. Safety data sheet missing.",
+      "reference": {
+        "accepted_hs": [
+          "3824.50"
+        ],
+        "category": 2,
+        "manual_review": true,
+        "missing": [
+          "Safety Data Sheet (SDS, in German for the German market)"
+        ]
+      },
+      "meta": {
+        "note": "",
+        "round1_case": null,
+        "tags": [
+          "reach",
+          "missing_doc",
+          "safety"
+        ]
+      },
+      "output": {
+        "hs_code": "3824.50",
+        "hs_title": "Non-refractory mortars and concretes",
+        "confidence": 0.81,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [
+          "Safety Data Sheet (SDS, in German for the German market)"
+        ],
+        "review_reasons": [
+          "Required document(s) missing: Safety Data Sheet (SDS, in German for the German market)",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 3824.50 'Non-refractory mortars and concretes'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "3824.50 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": 1.0,
+          "comment": "Flagged 1/1: ['Safety Data Sheet (SDS, in German for the German market)']"
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "TC12",
+      "description": "Invoice: aluminium window frames with thermal break, 60 units. DoP and CE marking attached. Packing list attached.",
+      "reference": {
+        "accepted_hs": [
+          "7610.10"
+        ],
+        "category": 3,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "Aluminium articles of heading 7610 are CBAM goods.",
+        "round1_case": null,
+        "tags": [
+          "cbam",
+          "cpr"
+        ]
+      },
+      "output": {
+        "hs_code": "7610.10",
+        "hs_title": "Doors, windows and their frames and thresholds for doors, of aluminium",
+        "confidence": 0.62,
+        "category": 3,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Authorised CBAM declarant number (if > 50 t of CBAM goods per year)",
+          "(not stated) Embedded-emissions data from the producer/installation"
+        ],
+        "review_reasons": [
+          "Confidence 0.62 is below 0.75.",
+          "Category 3: additional trade measures always need a person.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 7610.10 'Doors, windows and their frames and thresholds for doors, of aluminium'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "7610.10 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 3, expected 3"
+        }
+      }
+    },
+    {
+      "id": "TC13",
+      "description": "Invoice: silicone sealant cartridges 310 ml, 5,000 pcs. Packing list attached. Safety data sheet attached.",
+      "reference": {
+        "accepted_hs": [
+          "3214.10",
+          "3910.00"
+        ],
+        "category": 1,
+        "manual_review": false,
+        "missing": []
+      },
+      "meta": {
+        "note": "",
+        "round1_case": null,
+        "tags": [
+          "reach"
+        ]
+      },
+      "output": {
+        "hs_code": "3214.10",
+        "hs_title": "Glaziers' putty, grafting putty, resin cements, caulking compounds and other mastics; painters' fillings",
+        "confidence": 0.79,
+        "category": 1,
+        "manual_review": true,
+        "missing_documents": [],
+        "review_reasons": [
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 3214.10 'Glaziers' putty, grafting putty, resin cements, caulking compounds and other mastics; painters' fillings'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "3214.10 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 0.5,
+          "comment": "Unnecessary review (safe, but costs time)."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 1, expected 1"
+        }
+      }
+    },
+    {
+      "id": "TC14",
+      "description": "Invoice: panels, 200 pieces. Packing list attached.",
+      "reference": {
+        "accepted_hs": [],
+        "category": null,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "Deliberately vague: the material is unknown. The only correct behaviour is to ask a person.",
+        "round1_case": null,
+        "tags": [
+          "ambiguous",
+          "safety"
+        ]
+      },
+      "output": {
+        "hs_code": "6810.91",
+        "hs_title": "Prefabricated structural components for building or civil engineering, of cement, concrete or artificial stone",
+        "confidence": 0.46,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Declaration of Performance (DoP / DoPC)",
+          "(not stated) CE marking evidence (label or photo)"
+        ],
+        "review_reasons": [
+          "Confidence 0.46 is below 0.75.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 6810.91 'Prefabricated structural components for building or civil engineering, of cement, concrete or artificial stone'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": null,
+          "comment": "No single correct code (ambiguous case): not scored."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": null,
+          "comment": "Not scored."
+        }
+      }
+    },
+    {
+      "id": "TC15",
+      "description": "Invoice: stainless steel kitchen sinks, 300 pcs. Packing list attached.",
+      "reference": {
+        "accepted_hs": [
+          "7324.10"
+        ],
+        "category": null,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "Out of scope: not a construction material and not in the knowledge base. Tests whether the agent admits it.",
+        "round1_case": null,
+        "tags": [
+          "out_of_scope",
+          "safety"
+        ]
+      },
+      "output": {
+        "hs_code": "7308.90",
+        "hs_title": "Structures and parts of structures of iron or steel (other than bridges, towers, doors/windows, props)",
+        "confidence": 0.49,
+        "category": 3,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Authorised CBAM declarant number (if > 50 t of CBAM goods per year)",
+          "(not stated) Embedded-emissions data from the producer/installation",
+          "(not stated) Declaration of Performance (DoP / DoPC)",
+          "(not stated) CE marking evidence (label or photo)"
+        ],
+        "review_reasons": [
+          "Confidence 0.49 is below 0.75.",
+          "Category 3: additional trade measures always need a person.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 7308.90 'Structures and parts of structures of iron or steel (other than bridges, towers, doors/windows, props)'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 0.0,
+          "comment": "Wrong code: 7308.90 vs ['7324.10']."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": null,
+          "comment": "Not scored."
+        }
+      }
+    },
+    {
+      "id": "TC16",
+      "description": "Rechnung: Betonstahl in Ringen, gerippt, 25 t. Werkszeugnis anbei. Lieferschein anbei.",
+      "reference": {
+        "accepted_hs": [
+          "7213.10"
+        ],
+        "category": 3,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "German invoice. Coiled ribbed rebar.",
+        "round1_case": null,
+        "tags": [
+          "german",
+          "cbam",
+          "steel_trq"
+        ]
+      },
+      "output": {
+        "hs_code": "7214.20",
+        "hs_title": "Other bars and rods of iron or non-alloy steel, hot-rolled, with indentations, ribs, grooves or other deformations produced during rolling or twisted after rolling",
+        "confidence": 0.5,
+        "category": 3,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Authorised CBAM declarant number (if > 50 t of CBAM goods per year)",
+          "(not stated) Embedded-emissions data from the producer/installation"
+        ],
+        "review_reasons": [
+          "Confidence 0.50 is below 0.75.",
+          "Category 3: additional trade measures always need a person.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 7214.20 'Other bars and rods of iron or non-alloy steel, hot-rolled, with indentations, ribs, grooves or other deformations produced during rolling or twisted after rolling'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 0.0,
+          "comment": "Wrong code: 7214.20 vs ['7213.10']."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 3, expected 3"
+        }
+      }
+    },
+    {
+      "id": "TC17",
+      "description": "Invoice: OSB/3 boards 18 mm, 500 boards. DoP and CE marking attached. Packing list attached.",
+      "reference": {
+        "accepted_hs": [
+          "4410.12"
+        ],
+        "category": 2,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "Invoice says 500 boards, packing list says 450.",
+        "round1_case": null,
+        "tags": [
+          "mismatch",
+          "cpr",
+          "safety"
+        ]
+      },
+      "output": {
+        "hs_code": "4410.12",
+        "hs_title": "Oriented strand board (OSB) of wood",
+        "confidence": 0.73,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Timber due-diligence statement / supplier evidence"
+        ],
+        "review_reasons": [
+          "Confidence 0.73 is below 0.75.",
+          "2 invoice/packing-list mismatch(es).",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 4410.12 'Oriented strand board (OSB) of wood'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "4410.12 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "TC18",
+      "description": "Invoice: steel H-beams HEB 300, 40 t, export from Germany to the USA. Mill certificate attached. Packing list attached.",
+      "reference": {
+        "accepted_hs": [
+          "7216.33"
+        ],
+        "category": 3,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "Export to the US: Section 232 applies.",
+        "round1_case": null,
+        "tags": [
+          "us_232",
+          "export"
+        ]
+      },
+      "output": {
+        "hs_code": "7216.33",
+        "hs_title": "H sections of iron or non-alloy steel, hot-rolled, height of 80 mm or more",
+        "confidence": 0.83,
+        "category": 3,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Country of melt and pour / smelt and cast declaration"
+        ],
+        "review_reasons": [
+          "Category 3: additional trade measures always need a person.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 7216.33 'H sections of iron or non-alloy steel, hot-rolled, height of 80 mm or more'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "7216.33 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 3, expected 3"
+        }
+      }
+    },
+    {
+      "id": "TC19",
+      "description": "Invoice: natural red clay roofing tiles, 20,000 pcs. DoP and CE marking attached. Packing list attached.",
+      "reference": {
+        "accepted_hs": [
+          "6905.10"
+        ],
+        "category": 2,
+        "manual_review": false,
+        "missing": []
+      },
+      "meta": {
+        "note": "",
+        "round1_case": null,
+        "tags": [
+          "cpr"
+        ]
+      },
+      "output": {
+        "hs_code": "6905.10",
+        "hs_title": "Roofing tiles (ceramic)",
+        "confidence": 0.79,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [],
+        "review_reasons": [
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 6905.10 'Roofing tiles (ceramic)'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "6905.10 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 0.5,
+          "comment": "Unnecessary review (safe, but costs time)."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "TC20",
+      "description": "Invoice: 3,000 t Portland cement clinker in bulk, vessel shipment.",
+      "reference": {
+        "accepted_hs": [
+          "2523.10"
+        ],
+        "category": 3,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "",
+        "round1_case": null,
+        "tags": [
+          "cbam",
+          "large"
+        ]
+      },
+      "output": {
+        "hs_code": "2523.10",
+        "hs_title": "Cement clinkers",
+        "confidence": 0.54,
+        "category": 3,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Packing list",
+          "(not stated) Authorised CBAM declarant number (if > 50 t of CBAM goods per year)",
+          "(not stated) Embedded-emissions data from the producer/installation"
+        ],
+        "review_reasons": [
+          "Confidence 0.54 is below 0.75.",
+          "Category 3: additional trade measures always need a person.",
+          "Large shipment (~3000 t).",
+          "CBAM: this shipment alone (~3000 t) is above the 50 t yearly threshold.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 2523.10 'Cement clinkers'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "2523.10 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 3, expected 3"
+        }
+      }
+    }
+  ]
+}

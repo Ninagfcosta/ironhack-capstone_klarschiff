@@ -1,0 +1,171 @@
+{
+  "_meta": {
+    "purpose": "Trade measures and regulations that change the documents, duties or risk of a shipment. Each entry has an effective date, a source and a 'last_verified' date. The Monitor step re-checks the sources and raises alerts when something changes.",
+    "version": "2026-09-25",
+    "warning": "Duty RATES are never stored here as final truth. The agent links to the live official tariff (TARIC for the EU, HTS for the US) for the shipment date."
+  },
+  "measures": [
+    {
+      "id": "EU_CBAM",
+      "jurisdiction": "EU",
+      "applies_to_destination": ["EU"],
+      "name": "Carbon Border Adjustment Mechanism (CBAM) - definitive regime",
+      "legal_ref": "Regulation (EU) 2023/956, as simplified in 2025",
+      "effective_from": "2026-01-01",
+      "hs_prefixes": ["2523", "72", "7301", "7302", "7303", "7304", "7305", "7306", "7307", "7308", "7309", "7310", "7311", "7318", "7326", "7601", "7603", "7604", "7605", "7606", "7607", "7608", "7609", "7610", "7611", "7612", "7613", "7614", "7616"],
+      "effect": "Importers of more than 50 tonnes of CBAM goods per calendar year must be authorised CBAM declarants, buy CBAM certificates and surrender them for the embedded emissions (first annual declaration in 2027 for 2026 imports).",
+      "documents": [
+        {"name": "Authorised CBAM declarant number (if > 50 t of CBAM goods per year)", "mandatory": true},
+        {"name": "Embedded-emissions data from the producer/installation", "mandatory": true}
+      ],
+      "volatility": "medium",
+      "review_every_days": 90,
+      "source_url": "https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/cbam-definitive-regime_en",
+      "last_verified": "2026-09-25"
+    },
+    {
+      "id": "EU_STEEL_TRQ_2026",
+      "jurisdiction": "EU",
+      "applies_to_destination": ["EU"],
+      "name": "EU steel import measure (replaces the steel safeguard): tariff-rate quotas, 50% out-of-quota duty, melt-and-pour evidence",
+      "legal_ref": "Regulation (EU) 2026/1384",
+      "effective_from": "2026-07-01",
+      "hs_prefixes": ["72", "7306"],
+      "effect": "Duty-free volumes are limited by country quotas (total about 18.3 million tonnes per year); imports above the quota pay 50%. Importers must prove where the steel was melted and poured (e.g. mill certificate). Check whether the product is in one of the 30 product categories of Annex I.",
+      "documents": [
+        {"name": "Mill certificate showing the country of melt and pour", "mandatory": true}
+      ],
+      "volatility": "high",
+      "review_every_days": 30,
+      "source_url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries",
+      "last_verified": "2026-09-25"
+    },
+    {
+      "id": "EU_TRADE_DEFENCE",
+      "jurisdiction": "EU",
+      "applies_to_destination": ["EU"],
+      "name": "EU anti-dumping and anti-subsidy duties (depend on the country of origin)",
+      "legal_ref": "Regulation (EU) 2016/1036 and 2016/1037 (basic regulations); specific measures published in TARIC",
+      "effective_from": "2016-06-20",
+      "hs_prefixes": ["72", "73", "76", "6907", "7005", "7019"],
+      "effect": "Extra duties can apply to specific products from specific countries. They change often. The agent links to TARIC for the exact CN code, origin and date.",
+      "documents": [],
+      "volatility": "high",
+      "review_every_days": 30,
+      "source_url": "https://ec.europa.eu/taxation_customs/dds2/taric/taric_consultation.jsp",
+      "last_verified": "2026-09-25"
+    },
+    {
+      "id": "EU_CPR",
+      "jurisdiction": "EU",
+      "applies_to_destination": ["EU"],
+      "name": "Construction Products Regulation: CE marking and Declaration of Performance (and Conformity)",
+      "legal_ref": "Regulation (EU) 2024/3110 (general application from 8 Jan 2026), replacing Regulation (EU) No 305/2011 step by step",
+      "effective_from": "2026-01-08",
+      "hs_prefixes": [],
+      "flag": "cpr_hen",
+      "effect": "Construction products covered by a harmonised standard need CE marking and a Declaration of Performance (DoP), or the new Declaration of Performance and Conformity (DoPC), depending on the applicable technical specification during the transition. Importers must check both before placing the product on the EU market.",
+      "documents": [
+        {"name": "Declaration of Performance (DoP / DoPC)", "mandatory": true},
+        {"name": "CE marking evidence (label or photo)", "mandatory": true}
+      ],
+      "volatility": "low",
+      "review_every_days": 180,
+      "source_url": "https://eur-lex.europa.eu/eli/reg/2024/3110/oj/eng",
+      "last_verified": "2026-09-25"
+    },
+    {
+      "id": "EU_REACH_SDS",
+      "jurisdiction": "EU",
+      "applies_to_destination": ["EU"],
+      "name": "REACH: Safety Data Sheet for hazardous substances and mixtures",
+      "legal_ref": "Regulation (EC) No 1907/2006, Article 31",
+      "effective_from": "2007-06-01",
+      "hs_prefixes": [],
+      "flag": "reach_sds",
+      "effect": "Mixtures such as mortars, adhesives and sealants usually need a Safety Data Sheet in the language of the country where they are sold (German for Germany).",
+      "documents": [
+        {"name": "Safety Data Sheet (SDS, in German for the German market)", "mandatory": true}
+      ],
+      "volatility": "low",
+      "review_every_days": 365,
+      "source_url": "https://eur-lex.europa.eu/eli/reg/2006/1907/oj/eng",
+      "last_verified": "2026-09-25"
+    },
+    {
+      "id": "EU_TIMBER_DD",
+      "jurisdiction": "EU",
+      "applies_to_destination": ["EU"],
+      "name": "Timber due diligence (EU Timber Regulation, to be replaced by the EU Deforestation Regulation)",
+      "legal_ref": "Regulation (EU) No 995/2010 (EUTR); Regulation (EU) 2023/1115 (EUDR) - check the current application date",
+      "effective_from": "2013-03-03",
+      "hs_prefixes": [],
+      "flag": "timber_dd",
+      "effect": "Wood and wood products need due-diligence evidence on legal harvest (and, under EUDR, deforestation-free origin with geolocation).",
+      "documents": [
+        {"name": "Timber due-diligence statement / supplier evidence", "mandatory": true}
+      ],
+      "volatility": "high",
+      "review_every_days": 60,
+      "source_url": "https://environment.ec.europa.eu/topics/forests/deforestation/regulation-deforestation-free-products_en",
+      "last_verified": "2026-09-25"
+    },
+    {
+      "id": "EU_TR_CUSTOMS_UNION",
+      "jurisdiction": "EU",
+      "applies_to_destination": ["EU"],
+      "applies_to_origin": ["TR"],
+      "name": "EU-Turkiye customs union: proof for preferential treatment",
+      "legal_ref": "Decision No 1/95 of the EC-Turkey Association Council; ECSC products under the EU-Turkiye free trade agreement",
+      "effective_from": "1996-01-01",
+      "hs_prefixes": [],
+      "effect": "Industrial goods in free circulation in Turkiye use the A.TR movement certificate. Steel products (outside the customs union) need an origin proof such as EUR.1 to claim a preference.",
+      "documents": [
+        {"name": "A.TR movement certificate (or EUR.1 for steel products) to claim preferential treatment", "mandatory": false}
+      ],
+      "volatility": "low",
+      "review_every_days": 365,
+      "source_url": "https://trade.ec.europa.eu/access-to-markets/en/home",
+      "last_verified": "2026-09-25"
+    },
+    {
+      "id": "US_SECTION_232",
+      "jurisdiction": "US",
+      "applies_to_destination": ["US"],
+      "name": "US Section 232 duties on steel, aluminium and derivative products",
+      "legal_ref": "Section 232, Trade Expansion Act of 1962; presidential proclamations (changed several times in 2025-2026)",
+      "effective_from": "2018-03-23",
+      "hs_prefixes": ["72", "73", "76"],
+      "effect": "Articles made (almost) entirely of steel or aluminium pay 50%; since 6 Apr 2026 the duty is calculated on the full value of the product. Rates and product lists change often.",
+      "documents": [
+        {"name": "Country of melt and pour / smelt and cast declaration", "mandatory": true}
+      ],
+      "volatility": "very high",
+      "review_every_days": 14,
+      "source_url": "https://www.federalregister.gov/documents/search?conditions%5Bterm%5D=section+232+steel",
+      "last_verified": "2026-09-25"
+    },
+    {
+      "id": "US_GENERAL_TARIFFS",
+      "jurisdiction": "US",
+      "applies_to_destination": ["US"],
+      "name": "US general import surcharges after the Supreme Court IEEPA ruling",
+      "legal_ref": "Supreme Court, Learning Resources v. Trump (20 Feb 2026) ended IEEPA tariffs; replaced by a temporary surcharge under Section 122 of the Trade Act of 1974 (max. 150 days unless Congress extends)",
+      "effective_from": "2026-02-20",
+      "hs_prefixes": [""],
+      "effect": "A general surcharge on top of the normal duty may or may not apply on the shipment date. Always check the live HTS and Federal Register.",
+      "documents": [],
+      "volatility": "very high",
+      "review_every_days": 7,
+      "source_url": "https://hts.usitc.gov/",
+      "last_verified": "2026-09-25"
+    }
+  ],
+  "watch_sources": [
+    {"id": "EC_CBAM_PAGE", "type": "page_hash", "url": "https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/cbam-definitive-regime_en", "measure": "EU_CBAM"},
+    {"id": "EC_STEEL_NEWS", "type": "page_hash", "url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries", "measure": "EU_STEEL_TRQ_2026"},
+    {"id": "EU_EUDR_PAGE", "type": "page_hash", "url": "https://environment.ec.europa.eu/topics/forests/deforestation/regulation-deforestation-free-products_en", "measure": "EU_TIMBER_DD"},
+    {"id": "US_FEDREG_TARIFFS", "type": "federal_register", "terms": ["section 232 steel", "section 232 aluminum", "section 122 import surcharge", "harmonized tariff schedule modification"], "measure": "US_SECTION_232"},
+    {"id": "US_HTS_RATES", "type": "usitc_hts", "hs": ["2523.29", "6806.10", "7214.20", "7308.90", "7610.10", "6907.21"], "measure": "US_GENERAL_TARIFFS"}
+  ]
+}

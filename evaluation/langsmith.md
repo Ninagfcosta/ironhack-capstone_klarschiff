@@ -1,0 +1,73 @@
+# Evaluation with LangSmith: 20 cases, 6 evaluators, and the errors we found
+
+**Version:** Round 2 · 25 September 2026 · dataset `klarschiff-eval-v2` · project `klarschiff`
+
+> Teaching-staff feedback after Round 1: *"A machine is never perfect: show at least one error."*
+> This document shows the errors: in the agent, in our code, and in our own Round 1 answer key.
+
+## 1. Setup
+
+| Item | Value |
+|---|---|
+| Tracing | `LANGSMITH_TRACING=true`; every run is one trace: `klarschiff_agent` (chain) → `recommend_llm` → OpenAI call |
+| Dataset | `evaluation/dataset.jsonl` → uploaded as `klarschiff-eval-v2` (inputs = shipment, outputs = reference answer, metadata = tags) |
+| Experiment | `python evaluation/run_eval.py --langsmith` (uses `client.evaluate`, max concurrency 2) |
+| Local runner | `python evaluation/run_eval.py --local` (same agent, same evaluators, JSON in `evaluation/results/`) |
+| Model | `gpt-4o-mini`, temperature 0, pinned via `KLARSCHIFF_MODEL` |
+
+## 2. Dataset: 20 shipments
+
+| Group | Cases | What it tests |
+|---|---|---|
+| Round 1 cases (relabelled where the key was wrong) | TC01-TC05 | Continuity with Round 1 |
+| Category 2, CE-marked products | TC03, TC06, TC08, TC09, TC19, TC17 | DoP/CE rules |
+| Category 3, trade measures | TC01, TC05, TC07, TC12, TC16, TC18, TC20 | CBAM, EU steel measure, anti-dumping, US Section 232 |
+| **Safety cases** (must go to a person) | TC04, TC08, TC11 (missing documents), TC14 (vague), TC15 (out of scope), TC17 (quantity mismatch) | The "no false all-clear" rule |
+| Language and route | TC16 (German invoice), TC18 (export to the US) | Real-life variety |
+
+## 3. Evaluators (the Round 1 criteria, automated)
+
+| Evaluator | Round 1 criterion | Score |
+|---|---|---|
+| `hs_code_correct` | #1 correct code | 1 exact · 0.5 right 4-digit heading · 0 wrong (not scored for TC14) |
+| `missing_document_flagged` | #2 missing documents flagged | share of expected missing documents flagged |
+| `source_shown` | #3 traceable source | reason + evidence or KB title + live tariff links |
+| `review_routing` | #4 uncertain cases to a person | 1 correct · 0.5 unnecessary review · **0 false all-clear** |
+| `no_false_all_clear` | safety metric | 0 if a case that needed a person was passed |
+| `category_correct` | new | category 1/2/3 matches the rules |
+
+## 4. Results
+
+| Experiment | HS code | Missing docs | Source | Routing | False all-clears | Category |
+|---|---|---|---|---|---|---|
+| A · Offline baseline (keyword retrieval, no LLM) | **0.89** (17/19 exact) | 1.00 | 1.00 | 0.83 | **0** | 1.00 |
+| B · Prompt-only n8n batch (no retrieval, no rules) | *run `poc/poc_workflow.json`* | | | | | |
+| C · Full agent, gpt-4o-mini (LangSmith experiment) | *run `run_eval.py --langsmith`* | | | | | |
+
+Experiment A ran on 25 Sep 2026 (`evaluation/results/offline-baseline.json`). Experiments B and C need the OpenAI and LangSmith keys and run on the project owner's machine; the table and the screenshots in §7 are filled in from those runs.
+
+## 5. Error analysis
+
+| # | Error | Where | Severity | What we did |
+|---|---|---|---|---|
+| E1 | **Our Round 1 answer key was wrong twice.** Concrete wall panels were labelled 9406.10 (prefab buildings *of wood*); correct is **6810.91**. Cement was labelled "no extra certificate"; it needs DoP + CE (EN 197-1) and is a CBAM good. | Round 1 eval plan | High (we scored the model against wrong answers) | Relabelled TC01 and TC04. In the pilot, the broker reviews every expected answer before it is used. |
+| E2 | **German invoice "Betonstahl in Ringen" → 7214.20 (straight bars) instead of 7213.10 (coils).** The keyword layer did not know *Ringen* = coils. | Retrieval (offline) | Medium (wrong sub-code; routed to a person anyway: Category 3) | Added *Ringen/gerippt* to the German glossary; 7213.10 is now a top-2 candidate, so the LLM can choose it. Still wrong in offline mode: an honest limit of keyword matching. |
+| E3 | **Kitchen sinks (out of scope) → 7308.90 (steel structures).** Correct is 7324.10, which is not in the knowledge base. | Retrieval | Low: confidence 0.49, the agent said "manual review" | Working as designed: the agent does not know, and it says so. Pilot: log out-of-scope products to decide whether to extend the knowledge base. |
+| E4 | **7 unnecessary reviews in offline mode** (TC02, 03, 06, 09, 10, 13, 19). Safe, but each costs a person about 5 minutes. | Review rules | Low (cost, not risk) | Expected: offline mode always asks a person. Experiment C measures how many remain with the LLM. |
+| E5 | **Bug found by a unit test:** "DoP missing. CE label attached." marked the CE label as *missing*, because the word "missing" from the previous sentence was read. | Intake code | High (a false "missing" or, reversed, a false "provided") | Fixed: the detector now reads only the same sentence. Regression test added. |
+| E6 | **Our results are probably optimistic.** The same person wrote the knowledge base keywords and the 20 test descriptions. | Method | High for the business case | Pilot uses **real, anonymised I&E shipments labelled by the broker**, unseen before the test (blind test). |
+
+## 6. What to watch in the pilot
+
+1. **False all-clears: must stay at 0.** One is a stop signal for the pilot.
+2. **Override rate** (team level): very low over weeks can mean people stopped checking (automation bias).
+3. **Unnecessary review rate:** if above ~30%, the value case weakens; tune thresholds with the broker.
+4. **Out-of-scope products:** which products arrive that the knowledge base does not know.
+5. **Model changes:** re-run this dataset before any model update (OpenAI retires models with ~6 months' notice).
+6. **Monitor alerts:** time from alert to review; stale rules must never exceed their re-check interval.
+
+## 7. Screenshots (to add after experiment C)
+
+- LangSmith dataset `klarschiff-eval-v2` (20 examples)
+- Experiment comparison view (A vs C, and B from n8n)
+- One trace opened: `klarschiff_agent` → `recommend_llm` (prompt, candidates, JSON answer, latency, tokens)

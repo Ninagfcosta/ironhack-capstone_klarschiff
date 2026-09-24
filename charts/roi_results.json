@@ -1,0 +1,44 @@
+{
+  "Conservative": {
+    "monthly_value": 3200,
+    "breakeven_month": null,
+    "roi_12": [
+      -34,
+      47100,
+      31200
+    ],
+    "roi_36": [
+      -20,
+      134700,
+      108000
+    ]
+  },
+  "Base": {
+    "monthly_value": 6400,
+    "breakeven_month": 7,
+    "roi_12": [
+      32,
+      47100,
+      62400
+    ],
+    "roi_36": [
+      60,
+      134700,
+      216000
+    ]
+  },
+  "Optimistic": {
+    "monthly_value": 9600,
+    "breakeven_month": 5,
+    "roi_12": [
+      99,
+      47100,
+      93600
+    ],
+    "roi_36": [
+      141,
+      134700,
+      324000
+    ]
+  }
+}
