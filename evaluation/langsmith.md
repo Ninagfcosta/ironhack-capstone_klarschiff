@@ -42,7 +42,7 @@
 |---|---|---|---|---|---|---|
 | A · Offline baseline (keyword retrieval, no LLM) | 0.89 | 1.00 | 1.00 | 0.83 | 1.00 | 1.00 |
 | C1 · Full agent v2.0, gpt-4o-mini | **0.95** | 1.00 | 1.00 | 0.95 | **0.95 (1 false all-clear: TC14)** | 1.00 |
-| C2 · Full agent v2.1 (two new review triggers) | 0.95 | 1.00 | 1.00 | **1.00** | **1.00** | 1.00 |
+| C2 · Full agent v2.1 (two new review triggers) · LangSmith experiment `klarschiff-v2.1-77b05f0d` (EU region) | 0.95 | 1.00 | 1.00 | **1.00** | **1.00** | 1.00 |
 | B · Prompt-only n8n batch (no retrieval, no rules) | *run `poc/poc_workflow.json`* | | | | | |
 
 Runs on 24 Sep 2026 (`evaluation/results/offline-baseline.json`, `llm-gpt-4o-mini-v2.0.json`, `llm-gpt-4o-mini-v2.1.json`). In v2.1, 13 of 20 shipments go to a person; 7 pass as "all checks passed" (a person still approves before filing).
@@ -71,7 +71,7 @@ Runs on 24 Sep 2026 (`evaluation/results/offline-baseline.json`, `llm-gpt-4o-min
 5. **Model changes:** re-run this dataset before any model update (OpenAI retires models with ~6 months' notice).
 6. **Monitor alerts:** time from alert to review; stale rules must never exceed their re-check interval.
 
-## 7. Screenshots (to add after experiment C)
+## 7. Screenshots (`evaluation/screenshots/`)
 
 - LangSmith dataset `klarschiff-eval-v2` (20 examples)
 - Experiment comparison view (A vs C, and B from n8n)
