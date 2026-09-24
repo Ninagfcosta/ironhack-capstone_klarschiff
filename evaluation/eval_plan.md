@@ -28,6 +28,8 @@ Cases are synthetic (no real client data used), built to span the three shipment
 
 **Result summary: 3 Pass · 2 Partial · 0 Fail.** Both safety-critical checks worked (case 4 flagged the missing DoP; case 5 was routed to manual review). The misses were on fine-grained HS sub-codes, which is exactly the gap named in §4.
 
+**Note on the legal source cited by the POC:** in case 3 the model cited the older Construction Products Regulation (EU) No 305/2011. It is being replaced by Regulation (EU) 2024/3110, which applies from 8 January 2026 (see `research/use_cases.md`). Round 2 will update the prompt and the tariff/rule knowledge base so the agent cites the current regulation.
+
 **Design note:** case 4 and case 5 are deliberately "should flag, not silently pass" cases. A mini-set where every case sails through cleanly doesn't actually test whether the tool catches problems — it only proves it can read a well-formed invoice, which was never the hard part.
 
 ## 3. Scoring method
