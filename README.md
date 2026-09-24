@@ -5,6 +5,11 @@
 
 > **Why "KlarSchiff"?** In German, *"Klar Schiff"* means the ship is ready and everything is in order. *Klar* also means **clear**: every suggestion the AI makes has to be clear enough for a human to check it in seconds. That is the direct answer to the client's biggest fear: *"AI is not transparent."*
 
+
+> 🌱 **Origin:** this idea was born in **Project 4 · SilverTrust**, a pair consulting exercise with my classmate Asal (logistics client). See [`00_origin_silvertrust/`](00_origin_silvertrust/).
+>
+> 🧭 Part of my Ironhack journey: [Module 1](https://github.com/ninagfcosta/ironhack-module-1_ai-foundations_podcast-studio) → [Module 2](https://github.com/ninagfcosta/ironhack-module-2_python-apis_content-creator) → [Module 3](https://github.com/ninagfcosta/ironhack-module-3_rag-agents_company-research) → [Module 4 · SilverTrust](https://github.com/ninagfcosta/ironhack-module-4_evaluation-compliance_silvertrust) → **Capstone · KlarSchiff**
+
 ---
 
 ## 1. The problem in one paragraph
@@ -50,6 +55,7 @@ flowchart LR
 ```
 .
 ├── README.md
+├── 00_origin_silvertrust/        # where the idea was born (Project 4 · SilverTrust)
 ├── requirements.txt
 ├── .env.example                 # variable names only, never real keys
 ├── research/
