@@ -38,13 +38,16 @@
 
 ## 4. Results
 
-| Experiment | HS code | Missing docs | Source | Routing | False all-clears | Category |
+| Experiment | HS code | Missing docs | Source | Routing | No false all-clear | Category |
 |---|---|---|---|---|---|---|
-| A · Offline baseline (keyword retrieval, no LLM) | **0.89** (17/19 exact) | 1.00 | 1.00 | 0.83 | **0** | 1.00 |
+| A · Offline baseline (keyword retrieval, no LLM) | 0.89 | 1.00 | 1.00 | 0.83 | 1.00 | 1.00 |
+| C1 · Full agent v2.0, gpt-4o-mini | **0.95** | 1.00 | 1.00 | 0.95 | **0.95 (1 false all-clear: TC14)** | 1.00 |
+| C2 · Full agent v2.1 (two new review triggers) | 0.95 | 1.00 | 1.00 | **1.00** | **1.00** | 1.00 |
 | B · Prompt-only n8n batch (no retrieval, no rules) | *run `poc/poc_workflow.json`* | | | | | |
-| C · Full agent, gpt-4o-mini (LangSmith experiment) | *run `run_eval.py --langsmith`* | | | | | |
 
-Experiment A ran on 25 Sep 2026 (`evaluation/results/offline-baseline.json`). Experiments B and C need the OpenAI and LangSmith keys and run on the project owner's machine; the table and the screenshots in §7 are filled in from those runs.
+Runs on 24 Sep 2026 (`evaluation/results/offline-baseline.json`, `llm-gpt-4o-mini-v2.0.json`, `llm-gpt-4o-mini-v2.1.json`). In v2.1, 13 of 20 shipments go to a person; 7 pass as "all checks passed" (a person still approves before filing).
+
+**Read this carefully:** v2.1 still picks a wrong code in TC16 (0.95 on HS codes). What improved is that the wrong code is now **caught**. And because the two new triggers were designed after looking at these 20 cases, **1.00 on routing is optimistic** (E6): the pilot's blind test is the real measure.
 
 ## 5. Error analysis
 
@@ -55,7 +58,9 @@ Experiment A ran on 25 Sep 2026 (`evaluation/results/offline-baseline.json`). Ex
 | E3 | **Kitchen sinks (out of scope) → 7308.90 (steel structures).** Correct is 7324.10, which is not in the knowledge base. | Retrieval | Low: confidence 0.49, the agent said "manual review" | Working as designed: the agent does not know, and it says so. Pilot: log out-of-scope products to decide whether to extend the knowledge base. |
 | E4 | **7 unnecessary reviews in offline mode** (TC02, 03, 06, 09, 10, 13, 19). Safe, but each costs a person about 5 minutes. | Review rules | Low (cost, not risk) | Expected: offline mode always asks a person. Experiment C measures how many remain with the LLM. |
 | E5 | **Bug found by a unit test:** "DoP missing. CE label attached." marked the CE label as *missing*, because the word "missing" from the previous sentence was read. | Intake code | High (a false "missing" or, reversed, a false "provided") | Fixed: the detector now reads only the same sentence. Regression test added. |
-| E6 | **Our results are probably optimistic.** The same person wrote the knowledge base keywords and the 20 test descriptions. | Method | High for the business case | Pilot uses **real, anonymised I&E shipments labelled by the broker**, unseen before the test (blind test). |
+| E7 | **The LLM passed a vague shipment (TC14 "panels, 200 pieces").** It guessed 6811.82 (fibre-cement) with confidence 0.8 and listed no missing information → **false all-clear** in v2.0. | Recommend (LLM) | **High: the one error we design against** | v2.1: a deterministic **vagueness check** (fewer than 3 meaningful words → a person). Regression test added. |
+| E8 | **The LLM's confidence is not calibrated.** It reported 0.9 on 18 of 20 cases, also on TC16 where it translated "in Ringen" correctly as "in coils" and still chose 7214.20 (straight bars) instead of 7213.10 (coils). | Recommend (LLM) | Medium | v2.1: **close-call check**: when the two best knowledge-base headings score within 15%, a person chooses. The LLM's confidence is never trusted alone. |
+| E6 | **Our results are probably optimistic.** The same person wrote the knowledge base keywords and the 20 test descriptions, and the v2.1 fixes were tuned on the same 20 cases. | Method | High for the business case | Pilot uses **real, anonymised I&E shipments labelled by the broker**, unseen before the test (blind test). |
 
 ## 6. What to watch in the pilot
 

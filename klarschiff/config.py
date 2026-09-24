@@ -22,6 +22,10 @@ TEMPERATURE = float(os.getenv("KLARSCHIFF_TEMPERATURE", "0"))
 CONFIDENCE_THRESHOLD = float(os.getenv("KLARSCHIFF_CONFIDENCE_THRESHOLD", "0.75"))
 LARGE_SHIPMENT_TONNES = float(os.getenv("KLARSCHIFF_LARGE_SHIPMENT_TONNES", "100"))
 CBAM_THRESHOLD_TONNES = 50.0
+# Added in v2.1 after error analysis (TC14 false all-clear, TC16 close call). The LLM's own confidence was
+# almost always 0.9, so it is not trusted alone: these two independent checks can force a review.
+MIN_CONTENT_WORDS = int(os.getenv("KLARSCHIFF_MIN_CONTENT_WORDS", "3"))
+CLOSE_CALL_RATIO = float(os.getenv("KLARSCHIFF_CLOSE_CALL_RATIO", "0.85"))
 
 EU_COUNTRIES = {
     "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT", "LV",

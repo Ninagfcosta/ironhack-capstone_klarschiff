@@ -61,6 +61,12 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
         reasons.append(f"Confidence {cls.confidence:.2f} is below {config.CONFIDENCE_THRESHOLD:.2f}.")
     if heading is None:
         reasons.append(f"Code {cls.hs_code} is not in the reviewed knowledge base.")
+    content_words = set(retrieval.tokenize(s.description))
+    if len(content_words) < config.MIN_CONTENT_WORDS:
+        reasons.append(f"Description too vague ({len(content_words)} meaningful word(s)): material, form or use is missing.")
+    if len(candidates) > 1 and candidates[1].score >= config.CLOSE_CALL_RATIO * candidates[0].score \
+            and cls.hs_code in (candidates[0].code, candidates[1].code):
+        reasons.append(f"Close call between {candidates[0].code} and {candidates[1].code}: a person must choose.")
     if cls.missing_information:
         reasons.append("Information missing: " + "; ".join(cls.missing_information[:3]))
     if missing:

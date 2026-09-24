@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 os.environ["OPENAI_API_KEY"] = ""          # force offline mode in tests
+os.environ["LANGSMITH_TRACING"] = "false"  # unit tests never send traces
 os.environ.setdefault("KLARSCHIFF_DATA_DIR", str(ROOT / "data" / "_test"))
 
 from klarschiff import agent, config, intake, recommend, retrieval, rules, validate  # noqa: E402
@@ -128,3 +129,19 @@ def test_monitor_creates_alerts_and_routes_to_review(monkeypatch, tmp_path):
     assert any(a["source"] == "USITC HTS" for a in rep["new_alerts"])
     assert any(a["source"] == "EU official page" for a in rep["new_alerts"])
     assert monitor.open_alerts_for("7214.20")
+
+
+def test_vague_description_goes_to_review(monkeypatch):
+    """Regression test for TC14 (v2.0 false all-clear with the LLM): 'panels' alone must never pass."""
+    monkeypatch.setattr(config, "llm_available", lambda: True)
+    monkeypatch.setattr(recommend, "_call_llm", lambda s, c: Classification(hs_code="6811.82", confidence=0.8, reasoning="x" * 40))
+    r = agent.run(Shipment(description="Invoice: panels, 200 pieces. Packing list attached.", origin="CN"))
+    assert r.manual_review and any("too vague" in x for x in r.review_reasons)
+
+
+def test_close_call_goes_to_review(monkeypatch):
+    """Regression test for TC16: coiled vs straight rebar are close headings; a person chooses."""
+    monkeypatch.setattr(config, "llm_available", lambda: True)
+    monkeypatch.setattr(recommend, "_call_llm", lambda s, c: Classification(hs_code="7214.20", confidence=0.9, reasoning="x" * 40))
+    r = agent.run(Shipment(description="Rechnung: Betonstahl in Ringen, gerippt, 25 t.", origin="TR"))
+    assert any("Close call" in x for x in r.review_reasons)
