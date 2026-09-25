@@ -213,3 +213,13 @@ def test_blind_test_runs_on_the_template():
     import blind_test
     summary = blind_test.run(ROOT / "evaluation" / "blind_test_template.csv")
     assert summary["shipments"] == 2 and summary["false_all_clears"] == 0
+
+
+def test_translation_note_uses_detected_language(monkeypatch):
+    """Found in the manual test on 25/09: the model said 'en' for a Turkish invoice; the note must say 'tr'."""
+    from klarschiff import language
+    monkeypatch.setattr(config, "llm_available", lambda: True)
+    monkeypatch.setattr(language, "to_english", lambda text: {"language": "en", "english": "Portland cement CEM I 42.5 R, 500 bags x 25 kg", "uncertain_terms": []})
+    monkeypatch.setattr(recommend, "_call_llm", lambda *a, **k: None, raising=False)
+    r = agent.run(Shipment(description="Portland çimentosu CEM I 42,5 R 500 torba x 25 kg", origin="TR"))
+    assert any("Translated from 'tr'" in x for x in r.review_reasons), r.review_reasons

@@ -12,9 +12,9 @@ from langsmith import traceable
 
 from . import config
 
-TURKISH = re.compile(r"[ğĞışŞİ]")
+TURKISH = re.compile(r"[ğĞışŞİçÇ]")  # ç added 25/09 after the manual test (çimentosu was missed)
 CJK = re.compile(r"[㐀-鿿豈-﫿]")
-TURKISH_WORDS = re.compile(r"\b(fatura|çimento|cimento|torba|adet|ton|çelik|celik|inşaat|insaat|nervürlü|nervurlu|seramik|karo|ahşap|ahsap)\b", re.I)
+TURKISH_WORDS = re.compile(r"\b(fatura|çimento|cimento|torba|adet|ton|çelik|celik|inşaat|insaat|nervürlü|nervurlu|seramik|karo|ahşap|ahsap)\w*", re.I)  # \w* = Turkish suffixes, e.g. çimentosu, torbalar
 
 TRANSLATE_PROMPT = """You translate shipping-document goods descriptions into English for customs classification.
 Keep every technical detail: material, grade (e.g. CEM I 42.5, B500B), dimensions, quantities, units, and statements

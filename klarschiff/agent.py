@@ -34,7 +34,8 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
             try:
                 t = language.to_english(original)
                 translated = t.get("english", "")
-                note = f"Translated from '{t.get('language', lang)}': a person checks the translation."
+                # Use our own detector for the label: the model sometimes answers with the target language ('en').
+                note = f"Translated from '{lang}': a person checks the translation."
                 if t.get("uncertain_terms"):
                     note += " Uncertain terms: " + ", ".join(map(str, t["uncertain_terms"][:5])) + "."
                 pre_reasons.append(note)
