@@ -33,7 +33,7 @@ def missing_document_flagged(outputs: dict, reference_outputs: dict) -> dict:
 def source_shown(outputs: dict, reference_outputs: dict) -> dict:
     """Criterion 3: the answer is traceable: a reason, evidence words or a knowledge-base title, and live tariff links."""
     has_reason = len(outputs.get("reasoning", "")) > 30
-    has_trace = bool(outputs.get("evidence")) or outputs.get("hs_title", "") not in ("", "Not in knowledge base")
+    has_trace = bool(outputs.get("evidence")) or outputs.get("hs_title", "") not in ("", "Not in knowledge base", "Not a valid HS 2022 code")
     has_links = bool(outputs.get("links"))
     score = 1.0 if (has_reason and has_trace and has_links) else 0.0
     return {"key": "source_shown", "score": score, "comment": f"reason={has_reason} trace={has_trace} links={has_links}"}

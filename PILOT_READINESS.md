@@ -32,3 +32,15 @@ python evaluation/blind_test.py evaluation/blind_test_template.csv
 
 ## Interface language
 English by default, German with one click (`mvp/i18n.py`). German users see German labels, reasons and disclaimer; legal names stay as in the regulation.
+
+## v2.3: any product + master list
+
+| Before (v2.2) | Now (v2.3) |
+|---|---|
+| 50 construction headings | Full HS 2022 (5,613 subheadings) + 50 reviewed headings on top |
+| Construction rules only | Rule packs: CE (machinery, electrical/radio + WEEE, batteries), export control (EU dual-use, US EAR), food/plants, EUDR (upcoming), CBAM full scope, trade defence |
+| Lookup by description only | Master list: product ID with many part numbers; conflicts found on import |
+
+**Honest limits:** retrieval over 5,613 short texts is harder than over 50 curated headings (offline keyword baseline on the
+17 universal cases: 0.75 exact codes, see `evaluation/results/offline-baseline-universal.json`). Every code that is not
+reviewed goes to a person, so trust grows product family by product family (the pilot starts with one family).

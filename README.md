@@ -1,6 +1,6 @@
 # ⚓ KlarSchiff: AI pre-shipment co-pilot
 
-**HS code suggestion · document check · tariff monitor, for construction-materials import/export**
+**HS code suggestion · document check · tariff monitor · master list, for any goods imported or exported (pilot: construction materials)**
 AI Consulting Capstone · Ironhack AI Consulting & Integration Bootcamp · **Author:** Janaina Hoffmann (Berlin)
 **Status:** Round 1 presented 24 Sep 2026 · **Round 2 (final) 10 Oct 2026**
 
@@ -34,6 +34,12 @@ flowchart LR
 **The AI suggests; a person decides. Nothing is ever filed automatically.**
 
 > **v2.2 (branch `v2.2-pro`):** scans and photos, Turkish/Chinese invoices, EU model provider option, login + EU server setup, blind-test runner, **English / German interface switch** → [`PILOT_READINESS.md`](PILOT_READINESS.md)
+>
+> **v2.3 (same branch): any product, not only construction.**
+> - **Full HS 2022** (5,613 subheadings, public-domain UN reference texts) as the search base; the 50 broker-reviewed headings stay on top. Codes not yet reviewed always go to a person.
+> - **Rule packs for all goods:** CE (machinery, electrical/radio + WEEE, batteries), export control (EU dual-use on export, US EAR for US-origin items), food/plants (official controls), EUDR (shown as *upcoming* until 30 Dec 2026), CBAM full scope, trade defence.
+> - **Master list (Produktstamm):** part numbers change, the product stays. A new part number with the same description reuses the approved HS code and German description; similar products show the differences; conflicts in the client's list are found on import → [`klarschiff/master_list.py`](klarschiff/master_list.py)
+> - **17 new test cases** from other industries: `python evaluation/run_eval.py --local --dataset universal`
 
 ## 3. Try it (5 minutes)
 
@@ -41,7 +47,7 @@ flowchart LR
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env            # add your own OPENAI_API_KEY and LANGSMITH_API_KEY (never commit .env)
-python -m pytest -q             # 16 offline tests
+python -m pytest -q             # offline tests (never call a paid model)
 streamlit run mvp/app.py        # the MVP (works offline too, in keyword mode)
 python evaluation/run_eval.py --langsmith   # 20-case LangSmith experiment
 python -m klarschiff.monitor    # tariff monitor (also runs daily via GitHub Actions)
@@ -56,7 +62,7 @@ python -m klarschiff.monitor    # tariff monitor (also runs daily via GitHub Act
 | Round 1 decision | [`feedback/round1_decision.md`](feedback/round1_decision.md) | KEEP the use case, 5 changes, 2 wrong Round 1 answer keys admitted |
 | Use case definition | [`use_case_definition.md`](use_case_definition.md) | 3 categories with legal basis, e-invoicing, metrics, out of scope, R1 → R2 evolution |
 | POC | [`poc/`](poc/) | n8n batch POC v2 (20 cases, prompt-only baseline) + agent architecture |
-| **MVP** | [`mvp/`](mvp/) · [`klarschiff/`](klarschiff/) | Streamlit app, 5-step agent, RAG over 50 reviewed headings, versioned rules, tariff monitor, audit log |
+| **MVP** | [`mvp/`](mvp/) · [`klarschiff/`](klarschiff/) | Streamlit app (EN/DE), 5-step agent, RAG over the full HS 2022 + 50 reviewed headings, master list, versioned rules, tariff monitor, audit log |
 | **LangSmith evaluation** | [`evaluation/langsmith.md`](evaluation/langsmith.md) | 20 cases, 6 evaluators, **error analysis (8 errors found, incl. a real LLM false all-clear)** |
 | ROI & risks | [`roi_risk_assessment.md`](roi_risk_assessment.md) | 3 scenarios, break-even month 7 (base), 12 risks |
 | EU AI Act | [`compliance/eu_ai_act_compliance.md`](compliance/eu_ai_act_compliance.md) | Minimal risk, reasoning step by step, Digital Omnibus 2026 dates |
@@ -78,7 +84,7 @@ python -m klarschiff.monitor    # tariff monitor (also runs daily via GitHub Act
 ```
 .
 ├── klarschiff/            # the agent: intake, validate, retrieval, recommend, rules, monitor, report
-│   └── knowledge/         # hs_headings.json (50 headings), trade_measures.json (versioned rules + sources)
+│   └── knowledge/         # hs2022_subheadings.json (5,613), hs_headings.json (50 reviewed), trade_measures.json (rule packs + sources)
 ├── mvp/                   # Streamlit app + sample data + documentation
 ├── evaluation/            # dataset (20 cases), evaluators, runner, LangSmith doc, results
 ├── poc/                   # n8n batch POC v2
@@ -94,6 +100,6 @@ python -m klarschiff.monitor    # tariff monitor (also runs daily via GitHub Act
 
 - Money figures are **illustrative** (client-interview exercise); the pilot replaces them with measured values.
 - All test shipments are **synthetic**; no real client or personal data.
-- The knowledge base covers **50 construction-material headings** and must be re-verified by a licensed customs professional. Duty rates are **linked live** (TARIC, EZT-online, HTS), not stored.
+- Any product can be classified (full HS 2022), but only **50 reviewed headings** and **master-list products** are trusted without extra review; all rules must be re-verified by a licensed customs professional. Duty rates are **linked live** (TARIC, EZT-online, HTS), not stored.
 - The same author wrote the tests and the knowledge base, so scores are **likely optimistic**; the pilot includes a blind test labelled by the broker.
 - **Change rule:** re-run `evaluation/run_eval.py` before changing the model, the prompt or the rules.

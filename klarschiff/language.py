@@ -16,6 +16,9 @@ TURKISH = re.compile(r"[ğĞışŞİçÇ]")  # ç added 25/09 after the manual t
 CJK = re.compile(r"[㐀-鿿豈-﫿]")
 TURKISH_WORDS = re.compile(r"\b(fatura|çimento|cimento|torba|adet|ton|çelik|celik|inşaat|insaat|nervürlü|nervurlu|seramik|karo|ahşap|ahsap)\w*", re.I)  # \w* = Turkish suffixes, e.g. çimentosu, torbalar
 
+GERMAN = re.compile(r"[äöüßÄÖÜ]")
+GERMAN_WORDS = re.compile(r"\b(und|mit|ohne|für|fuer|aus|der|die|das|stück|stueck|rechnung|lieferung|ersatzteil|anbei|fehlt)\b", re.I)
+
 TRANSLATE_PROMPT = """You translate shipping-document goods descriptions into English for customs classification.
 Keep every technical detail: material, grade (e.g. CEM I 42.5, B500B), dimensions, quantities, units, and statements
 about documents (e.g. 'Declaration of Performance missing'). Do not add or interpret anything.
@@ -23,11 +26,17 @@ Reply with JSON only: {"language": "ISO 639-1 code", "english": "the translation
 
 
 def detect_language(text: str) -> str:
-    """Cheap, offline first check. Returns 'zh', 'tr' or 'en/de' (handled natively)."""
+    """Cheap, offline first check. Returns 'zh', 'tr', 'de' or 'en/de' (English).
+
+    German is the home language of the users: it is translated for the search when an AI model is available,
+    but it does not force a review (the glossary covers German offline). Turkish and Chinese always go to a person.
+    """
     if CJK.search(text):
         return "zh"
     if TURKISH.search(text) or len(TURKISH_WORDS.findall(text)) >= 2:
         return "tr"
+    if GERMAN.search(text) or len(GERMAN_WORDS.findall(text)) >= 2:
+        return "de"
     return "en/de"
 
 

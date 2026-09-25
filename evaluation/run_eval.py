@@ -1,4 +1,4 @@
-"""Run the 20-case evaluation.
+"""Run the evaluation (core: 20 construction cases; --dataset universal: 17 cases from other industries).
 
   python evaluation/run_eval.py --local       # runs here, writes evaluation/results/<name>.json + .md (no LangSmith needed)
   python evaluation/run_eval.py --langsmith   # uploads the dataset and runs a LangSmith experiment (needs LANGSMITH_API_KEY)
@@ -23,6 +23,7 @@ from evaluators import ALL  # noqa: E402
 
 DATASET = ROOT / "evaluation" / "dataset.jsonl"
 DATASET_NAME = "klarschiff-eval-v2"
+DATASETS = {"core": ("dataset.jsonl", "klarschiff-eval-v2"), "universal": ("dataset_universal.jsonl", "klarschiff-eval-universal")}
 
 
 def load_cases():
@@ -62,7 +63,7 @@ def run_langsmith(label: str):
     from langsmith import Client
     client = Client()
     if not client.has_dataset(dataset_name=DATASET_NAME):
-        client.create_dataset(DATASET_NAME, description="KlarSchiff: 20 shipments, 3 categories, safety and edge cases")
+        client.create_dataset(DATASET_NAME, description="KlarSchiff evaluation cases")
         client.create_examples(dataset_name=DATASET_NAME, examples=[
             {"inputs": c["inputs"], "outputs": c["reference"], "metadata": {**c["meta"], "case_id": c["id"]}} for c in load_cases()])
     results = client.evaluate(target, data=DATASET_NAME, evaluators=ALL, experiment_prefix=label,
@@ -76,8 +77,12 @@ if __name__ == "__main__":
     ap.add_argument("--local", action="store_true")
     ap.add_argument("--langsmith", action="store_true")
     ap.add_argument("--label", default=None)
+    ap.add_argument("--dataset", choices=list(DATASETS), default="core",
+                    help="core = the 20 construction cases; universal = 17 cases from other industries (v2.3)")
     a = ap.parse_args()
-    label = a.label or ("llm-" + config.MODEL if config.llm_available() else "offline-baseline")
+    DATASET = ROOT / "evaluation" / DATASETS[a.dataset][0]
+    DATASET_NAME = DATASETS[a.dataset][1]
+    label = a.label or (("llm-" + config.MODEL if config.llm_available() else "offline-baseline") + ("" if a.dataset == "core" else "-" + a.dataset))
     if a.langsmith:
         run_langsmith(label)
     else:

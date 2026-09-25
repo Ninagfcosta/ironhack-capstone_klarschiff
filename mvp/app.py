@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT))
 
 import hmac  # noqa: E402
 
-from klarschiff import agent, config, intake, monitor, report, vision  # noqa: E402
+from klarschiff import agent, config, intake, master_list, monitor, report, vision  # noqa: E402
 from klarschiff.intake import DOC_PATTERNS  # noqa: E402
 from klarschiff.models import Shipment  # noqa: E402
 
@@ -62,7 +62,8 @@ for line in (ROOT / "evaluation" / "dataset.jsonl").read_text(encoding="utf-8").
     c = json.loads(line)
     SAMPLES[f"{c['id']} · {c['inputs']['description'][:70]}"] = c["inputs"]
 
-tab_check, tab_monitor, tab_log, tab_about = st.tabs([T(x) for x in ["🔎 Check a shipment", "📡 Tariff monitor", "🗂️ Decisions & metrics", "ℹ️ How it works"]])
+tab_check, tab_master, tab_monitor, tab_log, tab_about = st.tabs(
+    [T(x) for x in ["🔎 Check a shipment", "📒 Master list", "📡 Tariff monitor", "🗂️ Decisions & metrics", "ℹ️ How it works"]])
 
 # ---------------------------------------------------------------- CHECK
 with tab_check:
@@ -83,6 +84,8 @@ with tab_check:
         uses = ["construction", "other"]
         use = c3.selectbox(T("Use"), uses, format_func=T, key="use_" + L, index=uses.index(st.session_state.get("use_val", "construction")))
         st.session_state["use_val"] = use
+        part_no = st.text_input(T("Part number (optional)"), base.get("part_number", ""), key="pn_" + sample,
+                                help=T("Used to find the product in the master list, even when the part number changed."))
         docs = st.multiselect(T("Documents you have"), list(DOC_PATTERNS), key="docs", placeholder=T("Choose options"))
         complete = st.checkbox(T("This list is complete: anything not selected is missing"), value=False, key="complete")
         with st.expander(T("Optional: invoice, packing list, PDF, scan, photo or e-invoice")):
@@ -132,7 +135,9 @@ with tab_check:
                 st.stop()
             s = Shipment(shipment_id=(sample.split(" ·")[0] if SAMPLES[sample] else "manual"), description=text,
                          origin=origin, destination=dest, intended_use=use, documents_provided=docs,
-                         invoice_lines=inv, packing_lines=pk, documents_list_complete=complete, legible=legible, unreadable_parts=unreadable, source=source)
+                         invoice_lines=inv, packing_lines=pk, documents_list_complete=complete, legible=legible, unreadable_parts=unreadable, source=source,
+                         part_number=part_no)
+            st.session_state["shipment"] = s
             with st.spinner(T("Checking documents, rules and tariffs…")):
                 st.session_state["result"] = agent.run(s)
         except ValueError as e:
@@ -157,6 +162,17 @@ with tab_check:
             k2.markdown(f'<div class="ks-card">{T("Confidence")}<br><span class="ks-big">{r.confidence:.0%}</span></div>', unsafe_allow_html=True)
             k3.markdown(f'<div class="ks-card">{T("Category")}<br><span class="ks-big">{r.category}</span> / 3</div>', unsafe_allow_html=True)
             st.markdown(f"**{r.hs_title}**")
+            if r.master:
+                mp = r.master.get("product") or {}
+                kind = {"part_number": "📒 Known part number", "same_description": "📒 New part number, same product",
+                        "similar": "📒 Similar product in the master list"}.get(r.master["kind"], "📒 Master list")
+                with st.expander(T(kind) + f": {mp.get('product_id', '')}", expanded=True):
+                    st.markdown(f"**{mp.get('description', '')}** · HS **{mp.get('hs_code') or '-'}**")
+                    if mp.get("description_de"):
+                        st.markdown(f"🇩🇪 {mp['description_de']}")
+                    st.caption(T("Part numbers") + ": " + (", ".join(mp.get("part_numbers") or []) or "-"))
+                    for dff in r.master.get("differences") or []:
+                        st.warning(dff)
             if r.translated_description:
                 with st.expander(T("🌐 Translated from '{}': original and English", r.source_language), expanded=True):
                     st.markdown(f"**{T('Original')}:** {r.original_description}")
@@ -187,7 +203,9 @@ with tab_check:
             if r.measures:
                 st.markdown("#### " + T("Trade measures and rules"))
                 for m in r.measures:
-                    with st.expander(f"{'🔴' if m.volatility in ('high', 'very high') else '🟡'} {m.name}"):
+                    icon = "⏳" if m.upcoming else ("🔴" if m.volatility in ("high", "very high") else "🟡")
+                    label = f"{icon} {m.name}" + (f" · {T('from')} {m.effective_from}" if m.upcoming else "")
+                    with st.expander(label):
                         st.write(m.effect)
                         st.caption(f"{m.legal_ref} · {T('verified')} {m.last_verified}{' · ⚠️ ' + T('re-verify') if m.stale else ''} · [{T('source')}]({m.source_url})")
             if r.alerts:
@@ -206,6 +224,9 @@ with tab_check:
             st.session_state["decision_val"] = decision
             final_hs = d2.text_input(T("Final HS code"), r.hs_code if decision == "approved" else "")
             comment = st.text_input(T("Comment (why?)"), "", key="comment")
+            shp = st.session_state.get("shipment")
+            add_master = st.checkbox(T("Add to the master list (links the part number to the product)"),
+                                     value=bool(shp and shp.part_number), key="add_master")
             b1, b2 = st.columns(2)
             if b1.button(T("Save decision"), width="stretch"):
                 if decision == "corrected" and not final_hs:
@@ -213,9 +234,60 @@ with tab_check:
                 else:
                     report.log_decision(r, decision, final_hs, comment=comment)
                     st.success(T("Saved to the decision log (audit trail)."))
+                    if add_master and decision != "rejected" and final_hs and shp:
+                        pid = (r.master or {}).get("product", {}) or {}
+                        prod = master_list.approve(r.original_description or shp.description, final_hs, part_number=shp.part_number,
+                                                   approved_by="reviewer",
+                                                   product_id=pid.get("product_id", "") if (r.master or {}).get("kind") != "similar" else "")
+                        st.success(T("Master list updated: product {}.", prod.product_id))
             b2.download_button(T("Download review pack for the broker"), report.review_pack(r, decision, final_hs, comment),
                                file_name=f"klarschiff_{r.shipment_id}_review_pack.md", width="stretch")
             st.caption(T(r.disclaimer))
+
+# ---------------------------------------------------------------- MASTER LIST
+with tab_master:
+    st.subheader(T("Master list (Produktstamm)"))
+    st.write(T("Part numbers change, the product stays. Each product keeps ONE approved HS code and ONE approved German "
+               "description; part numbers are linked to it. A new part number with the same description reuses the code, "
+               "and a person confirms."))
+    products = master_list.load()
+    m1, m2, m3 = st.columns(3)
+    m1.metric(T("Products"), len(products))
+    m2.metric(T("Part numbers"), sum(len(p.part_numbers) for p in products))
+    m3.metric(T("Without HS code (conflicts)"), sum(1 for p in products if not p.hs_code))
+    with st.expander(T("Import the client's list (CSV)"), expanded=not products or bool(st.session_state.get("ml_report"))):
+        st.caption(T("Columns: part_number, description, description_de, hs_code · example: mvp/sample_data/master_list_sample.csv · "
+                     "importing replaces the current list"))
+        up = st.file_uploader(T("Master list CSV"), type=["csv"], key="ml_csv")
+        if up and st.button(T("Import and check the list"), type="primary"):
+            st.session_state["ml_report"] = master_list.import_csv(up.getvalue().decode("utf-8-sig"))
+            st.rerun()  # refresh the counters above
+        rep = st.session_state.get("ml_report")
+        if rep:
+            st.success(T("{} rows → {} products · {} part numbers merged · {} conflict(s)", rep["rows"], rep["products"],
+                         rep["merged_part_numbers"], len(rep["conflicts"])))
+            for c in rep["conflicts"]:
+                st.error(T("Same product, different HS codes: {} ({}), part numbers {}: a person decides.",
+                           c["description"], " / ".join(c["hs_codes"]), ", ".join(c["part_numbers"])))
+    if products:
+        st.dataframe(pd.DataFrame([{"ID": p.product_id, "HS": p.hs_code or "⚠️", T("Description"): p.description,
+                                    T("German description"): p.description_de, T("Part numbers"): ", ".join(p.part_numbers)}
+                                   for p in products]), hide_index=True, width="stretch")
+        st.download_button(T("Download master list (CSV)"), master_list.to_csv(products), file_name="klarschiff_master_list.csv")
+        st.markdown("#### " + T("Find a product"))
+        f1, f2 = st.columns([1, 2])
+        q_pn = f1.text_input(T("Part number"), key="q_pn")
+        q_d = f2.text_input(T("Description"), key="q_d")
+        if q_pn or q_d:
+            mm = master_list.lookup(q_pn, q_d, products)
+            if mm.product:
+                kinds = {"part_number": "Known part number", "same_description": "New part number, same product",
+                         "similar": "Similar product"}
+                st.info(f"{T(kinds[mm.kind])} · {mm.product.product_id} · HS {mm.product.hs_code or '-'} · {mm.product.description}")
+                for dff in mm.differences:
+                    st.warning(dff)
+            else:
+                st.caption(T("No product found: the agent classifies it and, after approval, adds it to the list."))
 
 # ---------------------------------------------------------------- MONITOR
 with tab_monitor:

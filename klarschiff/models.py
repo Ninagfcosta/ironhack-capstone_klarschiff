@@ -28,12 +28,14 @@ class Shipment(BaseModel):
     legible: bool = Field(True, description="False when a scan or photo could not be read completely")
     unreadable_parts: list[str] = Field(default_factory=list)
     source: str = Field("typed", description="typed / text PDF / scan / photo / e-invoice")
+    part_number: str = Field("", description="Client part number (Artikelnummer), optional; used for the master list")
 
 
 class Candidate(BaseModel):
     code: str
     title: str
     score: float
+    reviewed: bool = False  # True = heading in the reviewed layer (checked by a person, with rule flags)
 
 
 class Classification(BaseModel):
@@ -63,6 +65,8 @@ class MeasureHit(BaseModel):
     last_verified: str
     stale: bool = False
     volatility: str = "low"
+    upcoming: bool = False  # starts within 180 days: shown as a warning, no documents required yet
+    effective_from: str = ""
 
 
 class ValidationIssue(BaseModel):
@@ -90,11 +94,12 @@ class AgentResult(BaseModel):
     alternatives: list[str]
     candidates: list[Candidate]
     links: dict[str, str]
-    mode: Literal["llm", "offline"]
+    mode: Literal["llm", "offline", "master list"]
     model: str
     kb_version: str
     tariff_data_as_of: str
     generated_at: str
+    master: dict | None = None  # master-list match: kind, product, score, differences
     source_language: str = "en/de"
     original_description: str = ""
     translated_description: str = ""

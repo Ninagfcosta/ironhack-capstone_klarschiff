@@ -40,7 +40,10 @@ def test_english_is_default_and_unchanged():
 def test_all_agent_reasons_translate(monkeypatch):
     monkeypatch.setattr(config, "llm_available", lambda: False)
     seen = set()
-    for line in (ROOT / "evaluation" / "dataset.jsonl").read_text(encoding="utf-8").splitlines():
+    lines = []
+    for f in ("dataset.jsonl", "dataset_universal.jsonl"):
+        lines += (ROOT / "evaluation" / f).read_text(encoding="utf-8").splitlines()
+    for line in lines:
         inputs = json.loads(line)["inputs"]
         r = agent.run(Shipment(**{k: v for k, v in inputs.items() if k in Shipment.model_fields}))
         seen.update(r.review_reasons + r.category_reasons)
@@ -53,3 +56,20 @@ def test_translation_reason_keeps_values():
     de = reason("Translated from 'tr': a person checks the translation. Uncertain terms: torba.", "de")
     assert de == "Übersetzt aus 'tr': ein Mensch prüft die Übersetzung. Unsichere Begriffe: torba."
     assert reason("Close call between 7214.20 and 7213.10: a person must choose.", "de").startswith("Knappe Entscheidung zwischen 7214.20 und 7213.10")
+
+
+def test_master_list_reasons_translate(tmp_path, monkeypatch):
+    from klarschiff import master_list
+    monkeypatch.setattr(config, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(config, "llm_available", lambda: False)
+    master_list.import_csv((ROOT / "mvp" / "sample_data" / "master_list_sample.csv").read_text(encoding="utf-8"))
+    cases = [("Wafer stage assembly, spare part for optical wafer inspection system", "0100-77777"),
+             ("Linear motor 24 V for positioning stage", "0200-55120"),
+             ("Hex bolt M16x40 stainless A2", "0400-99999"),
+             ("Ceramic heater plate 230 V for vacuum chamber", "0400-10010")]
+    reasons = set()
+    for d, pn in cases:
+        r = agent.run(Shipment(description=d, part_number=pn))
+        reasons.update(x for x in r.review_reasons if "product KS-" in x or "part number" in x.lower())
+    assert len(reasons) >= 4, reasons
+    assert all(reason(x, "de") != x for x in reasons), [x for x in reasons if reason(x, "de") == x]

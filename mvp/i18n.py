@@ -149,6 +149,45 @@ UI: dict[str, str] = {
     "A very low override rate over time can mean automation bias (people stop checking). Measured per team, not per person (works-council rules in Germany, §87 BetrVG).":
         "Eine dauerhaft sehr niedrige Korrekturquote kann Automation Bias bedeuten (Menschen prüfen nicht mehr). "
         "Gemessen pro Team, nicht pro Person (Mitbestimmung des Betriebsrats, §87 BetrVG).",
+    # v2.3: master list and universal goods
+    "📒 Master list": "📒 Produktstamm",
+    "Master list (Produktstamm)": "Produktstamm (Master-Liste)",
+    "Part numbers change, the product stays. Each product keeps ONE approved HS code and ONE approved German description; part numbers are linked to it. A new part number with the same description reuses the code, and a person confirms.":
+        "Artikelnummern ändern sich, das Produkt bleibt. Jedes Produkt hat EINEN freigegebenen HS-Code und EINE freigegebene "
+        "deutsche Beschreibung; Artikelnummern werden damit verknüpft. Eine neue Artikelnummer mit gleicher Beschreibung "
+        "übernimmt den Code, und ein Mensch bestätigt.",
+    "Products": "Produkte",
+    "Part numbers": "Artikelnummern",
+    "Part number": "Artikelnummer",
+    "Part number (optional)": "Artikelnummer (optional)",
+    "Used to find the product in the master list, even when the part number changed.":
+        "Damit wird das Produkt im Produktstamm gefunden, auch wenn sich die Artikelnummer geändert hat.",
+    "Without HS code (conflicts)": "Ohne HS-Code (Konflikte)",
+    "Import the client's list (CSV)": "Liste des Kunden importieren (CSV)",
+    "Columns: part_number, description, description_de, hs_code · example: mvp/sample_data/master_list_sample.csv · importing replaces the current list":
+        "Spalten: part_number, description, description_de, hs_code · Beispiel: mvp/sample_data/master_list_sample.csv · "
+        "der Import ersetzt die aktuelle Liste",
+    "Master list CSV": "Produktstamm als CSV",
+    "Import and check the list": "Liste importieren und prüfen",
+    "{} rows → {} products · {} part numbers merged · {} conflict(s)": "{} Zeilen → {} Produkte · {} Artikelnummern zusammengeführt · {} Konflikt(e)",
+    "Same product, different HS codes: {} ({}), part numbers {}: a person decides.":
+        "Gleiches Produkt, verschiedene HS-Codes: {} ({}), Artikelnummern {}: ein Mensch entscheidet.",
+    "Description": "Beschreibung",
+    "German description": "Deutsche Beschreibung",
+    "Download master list (CSV)": "Produktstamm herunterladen (CSV)",
+    "Find a product": "Produkt suchen",
+    "No product found: the agent classifies it and, after approval, adds it to the list.":
+        "Kein Produkt gefunden: der Agent klassifiziert es und nimmt es nach der Freigabe in die Liste auf.",
+    "Known part number": "Bekannte Artikelnummer",
+    "New part number, same product": "Neue Artikelnummer, gleiches Produkt",
+    "Similar product": "Ähnliches Produkt",
+    "📒 Known part number": "📒 Bekannte Artikelnummer",
+    "📒 New part number, same product": "📒 Neue Artikelnummer, gleiches Produkt",
+    "📒 Similar product in the master list": "📒 Ähnliches Produkt im Produktstamm",
+    "📒 Master list": "📒 Produktstamm",
+    "Add to the master list (links the part number to the product)": "In den Produktstamm aufnehmen (verknüpft die Artikelnummer mit dem Produkt)",
+    "Master list updated: product {}.": "Produktstamm aktualisiert: Produkt {}.",
+    "from": "ab",
 }
 
 ABOUT = {
@@ -156,27 +195,32 @@ ABOUT = {
 **KlarSchiff checks shipment documents before the goods leave, so errors are caught at the desk, not at the border.**
 
 1. **Intake** reads the description, CSV lines, text PDFs, scans and photos (AI vision), e-invoices (XRechnung/ZUGFeRD), and translates Turkish or Chinese invoices.
+   **Master list:** a known product (even with a new part number) reuses its approved HS code and German description.
 2. **Validate** compares invoice and packing list line by line.
-3. **Recommend** finds candidate headings in a reviewed knowledge base (RAG) and the LLM picks one, with reasons.
+3. **Recommend** searches the whole Harmonized System 2022 (5,613 subheadings, RAG) and the LLM picks one, with reasons. Codes not yet reviewed by a person always go to review.
 4. **Rules** (versioned, with legal references) decide category, documents and trade measures.
 5. **Monitor** watches official sources for tariff changes and raises alerts.
 6. **A person decides.** Every decision is logged. Nothing is ever filed automatically.
 
-Limits: curated knowledge base (construction materials only); translations and scans always go to a person;
-rules must be re-verified by a customs professional.
+Limits: any product can be classified, but only reviewed codes and master-list products can pass without extra review;
+rule packs (CE, export control, food/plants, deforestation, CBAM, trade defence) show indicative scope; translations and scans
+always go to a person; rules must be re-verified by a customs professional.
 """,
     "de": """
 **KlarSchiff prüft Versandunterlagen, bevor die Ware das Lager verlässt: Fehler werden am Schreibtisch gefunden, nicht an der Grenze.**
 
 1. **Erfassung** liest Beschreibung, CSV-Positionen, Text-PDFs, Scans und Fotos (KI-Bilderkennung), E-Rechnungen (XRechnung/ZUGFeRD) und übersetzt türkische oder chinesische Rechnungen.
+   **Produktstamm:** ein bekanntes Produkt (auch mit neuer Artikelnummer) übernimmt seinen freigegebenen HS-Code und die deutsche Beschreibung.
 2. **Abgleich** vergleicht Rechnung und Packliste Position für Position.
-3. **Vorschlag** sucht passende Positionen in einer geprüften Wissensbasis (RAG), das Sprachmodell wählt eine aus, mit Begründung.
+3. **Vorschlag** durchsucht das gesamte Harmonisierte System 2022 (5.613 Unterpositionen, RAG), das Sprachmodell wählt eine aus, mit Begründung. Noch nicht von einem Menschen geprüfte Codes gehen immer in die Prüfung.
 4. **Regeln** (versioniert, mit Rechtsgrundlage) bestimmen Kategorie, Unterlagen und Handelsmaßnahmen.
 5. **Monitor** beobachtet amtliche Quellen auf Zolländerungen und öffnet Warnungen.
 6. **Ein Mensch entscheidet.** Jede Entscheidung wird protokolliert. Nichts wird automatisch angemeldet.
 
-Grenzen: kuratierte Wissensbasis (nur Baustoffe); Übersetzungen und Scans gehen immer an einen Menschen;
-Regeln müssen von einer Zollfachkraft erneut geprüft werden.
+Grenzen: jedes Produkt kann eingereiht werden, aber nur geprüfte Codes und Produkte aus dem Produktstamm kommen ohne
+zusätzliche Prüfung durch; Regelpakete (CE, Exportkontrolle, Lebensmittel/Pflanzen, Entwaldung, CBAM, Handelsschutz)
+zeigen einen indikativen Umfang; Übersetzungen und Scans gehen immer an einen Menschen; Regeln müssen von einer
+Zollfachkraft erneut geprüft werden.
 """,
 }
 
@@ -195,7 +239,21 @@ REASONS: list[tuple[str, str]] = [
     (r"^Information missing: (.*)$", "Fehlende Angaben: {0}"),
     (r"^Required document\(s\) missing: (.*)$", "Pflichtunterlage(n) fehlen: {0}"),
     (r"^(\d+) invoice/packing-list mismatch\(es\)\.$", "{0} Abweichung(en) zwischen Rechnung und Packliste."),
-    (r"^Category 3: additional trade measures always need a person\.$", "Kategorie 3: zusätzliche Handelsmaßnahmen brauchen immer einen Menschen."),
+    (r"^Category 3: additional trade measures or controls always need a person\.$",
+     "Kategorie 3: zusätzliche Handelsmaßnahmen oder Kontrollen brauchen immer einen Menschen."),
+    (r"^Code (\S+) is not a valid HS 2022 subheading\.$", "Code {0} ist keine gültige HS-2022-Unterposition."),
+    (r"^CE-marked product \((.+)\): EU Declaration of Conformity \+ CE marking\.$",
+     "CE-pflichtiges Produkt ({0}): EU-Konformitätserklärung + CE-Kennzeichnung."),
+    (r"^Special controls apply: (.*)\.$", "Besondere Kontrollen gelten: {0}."),
+    (r"^Upcoming rule: (\S+) applies from (\S+)\.$", "Kommende Regel: {0} gilt ab {1}."),
+    (r"^New part number (\S+) matches product (\S+) by description: confirm the link \(HS (\S+)\)\.$",
+     "Neue Artikelnummer {0} passt laut Beschreibung zu Produkt {1}: Verknüpfung bestätigen (HS {2})."),
+    (r"^Known part number, but the description changed \((.*)\): check product (\S+)\.$",
+     "Bekannte Artikelnummer, aber die Beschreibung hat sich geändert ({0}): Produkt {1} prüfen."),
+    (r"^Master list conflict for product (\S+): codes differ in the list; a person decides\.$",
+     "Konflikt im Produktstamm für Produkt {0}: unterschiedliche Codes in der Liste; ein Mensch entscheidet."),
+    (r"^Similar to product (\S+) \(HS (\S+)\) but not the same \((.*)\): a person decides\.$",
+     "Ähnlich wie Produkt {0} (HS {1}), aber nicht gleich ({2}): ein Mensch entscheidet."),
     (r"^Large shipment \(~(.+?) t\)\.$", "Große Sendung (~{0} t)."),
     (r"^CBAM: this shipment alone \(~(.+?) t\) is above the 50 t yearly threshold\.$",
      "CBAM: diese Sendung allein (~{0} t) liegt über der Jahresschwelle von 50 t."),

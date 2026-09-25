@@ -8,8 +8,8 @@ from datetime import date, datetime, timezone
 
 from langsmith import traceable
 
-from . import config, intake, language, monitor, recommend, retrieval, rules, validate
-from .models import AgentResult, Shipment
+from . import config, intake, language, master_list, monitor, recommend, retrieval, rules, validate
+from .models import AgentResult, Candidate, Classification, Shipment
 
 
 def taric_link(hs_code: str, origin: str, on: date | None = None) -> str:
@@ -29,7 +29,14 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
     original = s.description
     lang = language.detect_language(original)
     translated = ""
-    if lang != "en/de":
+    if lang == "de":
+        # v2.3: German descriptions are translated for the search over the (English) HS texts; no review needed
+        if config.llm_available():
+            try:
+                translated = language.to_english(original).get("english", "")
+            except Exception:
+                translated = ""  # the German glossary still works
+    elif lang != "en/de":
         if config.llm_available():
             try:
                 t = language.to_english(original)
@@ -61,8 +68,36 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
 
     # 3. Recommend: retrieval (RAG) + LLM choice
     query = s.description + " " + " ".join(l.description for l in s.invoice_lines)
-    candidates = retrieval.search(query, k=5)
-    cls, mode = recommend.classify(s, candidates)
+    candidates = retrieval.search(query, k=8)
+
+    # 3a. Master list (Produktstamm): the product, not the part number, carries the approved code
+    master_reasons: list[str] = []
+    m = master_list.lookup(s.part_number, s.description)
+    p = m.product
+    if m.kind in ("part_number", "same_description") and p and p.hs_code:
+        cls = Classification(hs_code=p.hs_code, confidence=0.95,
+                             reasoning=f"Approved in the master list: product {p.product_id} '{p.description}' "
+                                       f"(HS {p.hs_code}, approved {p.approved_on or 'on import'}). No new classification needed.",
+                             evidence=[p.description])
+        mode = "master list"
+        if m.kind == "same_description" and s.part_number:
+            master_reasons.append(f"New part number {master_list.normalise_pn(s.part_number)} matches product {p.product_id} "
+                                  f"by description: confirm the link (HS {p.hs_code}).")
+        elif m.kind == "part_number" and len(retrieval.tokenize(s.description)) >= config.MIN_CONTENT_WORDS:
+            # same part number, clearly different text: maybe the part number was re-used for another product
+            if master_list.similarity(p.description, s.description) < master_list.SIMILAR:
+                diff = master_list.describe_differences(p.description, s.description)
+                master_reasons.append(f"Known part number, but the description changed ({'; '.join(diff) or 'wording'}): "
+                                      f"check product {p.product_id}.")
+    else:
+        if m.kind in ("part_number", "same_description") and p and not p.hs_code:
+            master_reasons.append(f"Master list conflict for product {p.product_id}: codes differ in the list; a person decides.")
+        if m.kind == "similar" and p:
+            master_reasons.append(f"Similar to product {p.product_id} (HS {p.hs_code or '?'}) but not the same "
+                                  f"({'; '.join(m.differences) or 'wording'}): a person decides.")
+            if p.hs_code and p.hs_code not in [c.code for c in candidates]:
+                candidates.insert(0, Candidate(code=p.hs_code, title=f"Master list: {p.description}", score=0.0, reviewed=True))
+        cls, mode = recommend.classify(s, candidates)
     heading = retrieval.get_heading(cls.hs_code)
     flags = (heading or {}).get("flags", {})
     if s.intended_use != "construction":
@@ -83,15 +118,17 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
     alerts = monitor.open_alerts_for(cls.hs_code)
 
     # Review triggers (a person decides whenever one is true)
-    reasons = list(pre_reasons)
+    reasons = list(pre_reasons) + master_reasons
     if cls.confidence < config.CONFIDENCE_THRESHOLD:
         reasons.append(f"Confidence {cls.confidence:.2f} is below {config.CONFIDENCE_THRESHOLD:.2f}.")
     if heading is None:
+        reasons.append(f"Code {cls.hs_code} is not a valid HS 2022 subheading.")
+    elif not heading.get("reviewed") and mode != "master list":
         reasons.append(f"Code {cls.hs_code} is not in the reviewed knowledge base.")
     content_words = set(retrieval.tokenize(s.description))
-    if len(content_words) < config.MIN_CONTENT_WORDS:
+    if len(content_words) < config.MIN_CONTENT_WORDS and m.kind != "part_number":
         reasons.append(f"Description too vague ({len(content_words)} meaningful word(s)): material, form or use is missing.")
-    if len(candidates) > 1 and candidates[1].score >= config.CLOSE_CALL_RATIO * candidates[0].score \
+    if mode != "master list" and len(candidates) > 1 and candidates[1].score >= config.CLOSE_CALL_RATIO * candidates[0].score \
             and cls.hs_code in (candidates[0].code, candidates[1].code):
         reasons.append(f"Close call between {candidates[0].code} and {candidates[1].code}: a person must choose.")
     if cls.missing_information:
@@ -101,7 +138,7 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
     if issues:
         reasons.append(f"{len(issues)} invoice/packing-list mismatch(es).")
     if cat == 3:
-        reasons.append("Category 3: additional trade measures always need a person.")
+        reasons.append("Category 3: additional trade measures or controls always need a person.")
     if tonnes and tonnes >= config.LARGE_SHIPMENT_TONNES:
         reasons.append(f"Large shipment (~{tonnes:g} t).")
     if tonnes and any(m.id == "EU_CBAM" for m in measures) and tonnes >= config.CBAM_THRESHOLD_TONNES:
@@ -114,7 +151,7 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
         reasons.append("Offline mode (no LLM): keyword match only.")
 
     return AgentResult(
-        shipment_id=s.shipment_id, hs_code=cls.hs_code, hs_title=(heading or {}).get("title", "Not in knowledge base"),
+        shipment_id=s.shipment_id, hs_code=cls.hs_code, hs_title=(heading or {}).get("title", "Not a valid HS 2022 code"),
         confidence=round(cls.confidence, 2), category=cat, category_reasons=cat_reasons,
         required_documents=docs, missing_documents=missing + [f"(not stated) {n}" for n in not_stated],
         validation_issues=issues, measures=measures, alerts=alerts,
@@ -123,8 +160,9 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
         links={"TARIC (EU, live)": taric_link(cls.hs_code, s.origin, today),
                "EZT-online (German customs tariff)": "https://auskunft.ezt-online.de",
                "HTS (US, live)": "https://hts.usitc.gov/search?query=" + cls.hs_code.replace(".", "")},
-        mode=mode, model=config.MODEL if mode == "llm" else "none (offline)",
-        kb_version=retrieval.load_kb()["_meta"]["version"],
+        mode=mode, model=config.MODEL if mode == "llm" else ("none (master list)" if mode == "master list" else "none (offline)"),
+        master=(m.model_dump() if m.kind != "none" else None),
+        kb_version=retrieval.load_kb()["_meta"]["version"] + " + " + retrieval.load_hs()["_meta"]["version"],
         tariff_data_as_of=f"rules {rules.load_measures()['_meta']['version']} · monitor last run {monitor.last_run()}",
         generated_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
         source_language=lang, original_description=original, translated_description=translated,

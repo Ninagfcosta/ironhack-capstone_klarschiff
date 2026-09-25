@@ -61,6 +61,7 @@ Runs on 24 Sep 2026 (`evaluation/results/offline-baseline.json`, `llm-gpt-4o-min
 | E7 | **The LLM passed a vague shipment (TC14 "panels, 200 pieces").** It guessed 6811.82 (fibre-cement) with confidence 0.8 and listed no missing information → **false all-clear** in v2.0. | Recommend (LLM) | **High: the one error we design against** | v2.1: a deterministic **vagueness check** (fewer than 3 meaningful words → a person). Regression test added. |
 | E8 | **The LLM's confidence is not calibrated.** It reported 0.9 on 18 of 20 cases, also on TC16 where it translated "in Ringen" correctly as "in coils" and still chose 7214.20 (straight bars) instead of 7213.10 (coils). | Recommend (LLM) | Medium | v2.1: **close-call check**: when the two best knowledge-base headings score within 15%, a person chooses. The LLM's confidence is never trusted alone. |
 | E9 | **Wrong source language (v2.2, manual test 25 Sep 2026).** A photo of a Turkish cement invoice was translated correctly, but the review reason said "Translated from 'en'": the model reported the target language, and our detector missed "çimentosu" (letter ç, Turkish suffix). | Intake (translation) | Low (the shipment still went to a person) | Label now comes from our own detector; detector also catches ç and Turkish suffixes; regression test `test_translation_note_uses_detected_language`. |
+| E10 | **An invalid code in our own reviewed knowledge base.** Glulam was stored as 4418.62, which does not exist in HS 2022 (correct: 4418.81, engineered structural timber). Found when the full HS 2022 list was added (v2.3). | Knowledge base | Medium (a person would have filed a non-existent code) | Fixed; new test `test_every_reviewed_code_exists_in_hs_2022` checks every reviewed code against HS 2022. |
 | E6 | **Our results are probably optimistic.** The same person wrote the knowledge base keywords and the 20 test descriptions, and the v2.1 fixes were tuned on the same 20 cases. | Method | High for the business case | Pilot uses **real, anonymised I&E shipments labelled by the broker**, unseen before the test (blind test). |
 
 ## 6. What to watch in the pilot
@@ -77,3 +78,18 @@ Runs on 24 Sep 2026 (`evaluation/results/offline-baseline.json`, `llm-gpt-4o-min
 - LangSmith dataset `klarschiff-eval-v2` (20 examples)
 - Experiment comparison view (A vs C, and B from n8n)
 - One trace opened: `klarschiff_agent` → `recommend_llm` (prompt, candidates, JSON answer, latency, tokens)
+
+## v2.3: universal cases (other industries)
+
+`evaluation/dataset_universal.jsonl`: 17 shipments outside construction (semiconductor inspection tools and spare parts,
+batteries, laptops, coffee, T-shirts, chairs, bicycles, plastics, aluminium profiles, pumps, cocoa, smartphones, bolts,
+bearings, an export to China, one vague case). Written by the same person as the agent: optimistic, like E6.
+
+| Run | HS exact | Routing | No false all-clear | Category |
+|---|---|---|---|---|
+| Offline keyword baseline (no LLM), 25 Sep 2026 | 0.75 | 1.00 | 1.00 | 0.94 |
+| GPT-4o-mini | run on the Mac: `python evaluation/run_eval.py --local --dataset universal` | | | |
+
+Every universal case goes to a person, because none of these codes is in the reviewed layer yet: this is by design.
+Misses in the offline run: wafer inspection system → 9030.82 (expected 9031.41), T-shirts → 6105.10 (6109.10),
+bicycle with aluminium frame → 7610.10 (8712.00): keyword search is misled by material words; the LLM step exists for this.

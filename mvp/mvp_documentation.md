@@ -28,6 +28,17 @@ because the pilot users are German customs, logistics and construction teams. In
 - The agent's review reasons are translated by pattern; anything unknown stays in English (never hidden).
 - Not translated on purpose: legal names (CBAM, CE, DoP, TARIC), HS titles from the knowledge base, and the model's free-text reasoning (the app says so).
 
+### Master list / Produktstamm (v2.3)
+Problem seen at a manufacturer and its logistics provider (names withheld): the product master list is keyed by part number.
+Part numbers change (revision, new supplier, new ERP) while the description stays the same, so the lookup finds nothing and
+the approved HS code and German description are lost. People re-classify, and the same product can get different codes.
+- Tab **📒 Master list**: import the client's CSV (`part_number, description, description_de, hs_code`). Rows with the same
+  description become ONE product with several part numbers; **conflicts** (same description, different codes) are shown.
+- In **Check a shipment**, enter the part number. Known part number → approved code reused. New part number, same
+  description → code reused and a person confirms the link. Similar description → a person decides, with the differences
+  (e.g. `m10x40 → m12x40`, `a2 → a4`).
+- Saving a decision with "Add to the master list" links the part number to the product and writes the history.
+
 ## 3. Run it
 
 ```bash
@@ -66,4 +77,4 @@ Without an OpenAI key the app still runs in **offline mode**: keyword match only
 
 ## 7. Known limits
 
-Curated knowledge base (50 construction-material headings); English/German only; no OCR; rules must be re-verified by a licensed customs professional; duty rates are linked, not calculated.
+v2.3: any product can be classified (full HS 2022), but only reviewed headings and master-list products pass without extra review; translations and scans always go to a person; rules must be re-verified by a licensed customs professional; duty rates are linked, not calculated.

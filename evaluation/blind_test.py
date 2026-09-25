@@ -40,7 +40,7 @@ def load(path: Path) -> list[dict]:
         return [r for r in csv.DictReader(f) if (r.get("description") or "").strip()]
 
 
-def run(path: Path) -> dict:
+def run(path: Path, out_dir: Path | None = None) -> dict:
     rows, out = load(path), []
     for r in rows:
         s = Shipment(shipment_id=r["shipment_id"], description=r["description"], origin=r.get("origin", ""),
@@ -65,14 +65,14 @@ def run(path: Path) -> dict:
     summary["go_no_go"] = ("NO-GO: a risky shipment passed without a person" if summary["false_all_clears"]
                            else "GO criteria met on this sample" if (summary["hs_exact_6digit"] or 0) >= 0.9
                            else "REVIEW: codes accepted below 90%")
-    dest = ROOT / "evaluation" / "results" / f"blind_{path.stem}.csv"
+    dest = (out_dir or ROOT / "evaluation" / "results") / f"blind_{path.stem}.csv"
     dest.parent.mkdir(exist_ok=True)
     if out:
         with dest.open("w", newline="", encoding="utf-8") as f:
             w = csv.DictWriter(f, fieldnames=list(out[0]))
             w.writeheader()
             w.writerows(out)
-    summary["details_file"] = str(dest.relative_to(ROOT))
+    summary["details_file"] = str(dest.relative_to(ROOT)) if dest.is_relative_to(ROOT) else str(dest)
     return summary
 
 

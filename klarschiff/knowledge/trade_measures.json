@@ -1,171 +1,661 @@
 {
-  "_meta": {
-    "purpose": "Trade measures and regulations that change the documents, duties or risk of a shipment. Each entry has an effective date, a source and a 'last_verified' date. The Monitor step re-checks the sources and raises alerts when something changes.",
-    "version": "2026-09-25",
-    "warning": "Duty RATES are never stored here as final truth. The agent links to the live official tariff (TARIC for the EU, HTS for the US) for the shipment date."
-  },
-  "measures": [
+ "_meta": {
+  "purpose": "Trade measures and regulations that change the documents, duties or risk of a shipment. Each entry has an effective date, a source and a 'last_verified' date. The Monitor step re-checks the sources and raises alerts when something changes.",
+  "version": "2026-09-25",
+  "warning": "Duty RATES are never stored here as final truth. The agent links to the live official tariff (TARIC for the EU, HTS for the US) for the shipment date.",
+  "scope": "v2.3: rule packs for all goods (CE products, export control, food/plants, deforestation, CBAM, trade defence); construction rules stay. Indicative HS prefixes: a specialist confirms scope."
+ },
+ "measures": [
+  {
+   "id": "EU_CBAM",
+   "jurisdiction": "EU",
+   "applies_to_destination": [
+    "EU"
+   ],
+   "name": "Carbon Border Adjustment Mechanism (CBAM) - definitive regime",
+   "legal_ref": "Regulation (EU) 2023/956, as simplified in 2025",
+   "effective_from": "2026-01-01",
+   "hs_prefixes": [
+    "250700",
+    "2523",
+    "2716",
+    "280410",
+    "2808",
+    "2814",
+    "283421",
+    "3102",
+    "3105",
+    "72",
+    "7301",
+    "7302",
+    "7303",
+    "7304",
+    "7305",
+    "7306",
+    "7307",
+    "7308",
+    "7309",
+    "7310",
+    "7311",
+    "7318",
+    "7326",
+    "7601",
+    "7603",
+    "7604",
+    "7605",
+    "7606",
+    "7607",
+    "7608",
+    "7609",
+    "7610",
+    "7611",
+    "7612",
+    "7613",
+    "7614",
+    "7616"
+   ],
+   "effect": "Importers of more than 50 tonnes of CBAM goods per calendar year must be authorised CBAM declarants, buy CBAM certificates and surrender them for the embedded emissions (first annual declaration in 2027 for 2026 imports).",
+   "documents": [
     {
-      "id": "EU_CBAM",
-      "jurisdiction": "EU",
-      "applies_to_destination": ["EU"],
-      "name": "Carbon Border Adjustment Mechanism (CBAM) - definitive regime",
-      "legal_ref": "Regulation (EU) 2023/956, as simplified in 2025",
-      "effective_from": "2026-01-01",
-      "hs_prefixes": ["2523", "72", "7301", "7302", "7303", "7304", "7305", "7306", "7307", "7308", "7309", "7310", "7311", "7318", "7326", "7601", "7603", "7604", "7605", "7606", "7607", "7608", "7609", "7610", "7611", "7612", "7613", "7614", "7616"],
-      "effect": "Importers of more than 50 tonnes of CBAM goods per calendar year must be authorised CBAM declarants, buy CBAM certificates and surrender them for the embedded emissions (first annual declaration in 2027 for 2026 imports).",
-      "documents": [
-        {"name": "Authorised CBAM declarant number (if > 50 t of CBAM goods per year)", "mandatory": true},
-        {"name": "Embedded-emissions data from the producer/installation", "mandatory": true}
-      ],
-      "volatility": "medium",
-      "review_every_days": 90,
-      "source_url": "https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/cbam-definitive-regime_en",
-      "last_verified": "2026-09-25"
+     "name": "Authorised CBAM declarant number (if > 50 t of CBAM goods per year)",
+     "mandatory": true
     },
     {
-      "id": "EU_STEEL_TRQ_2026",
-      "jurisdiction": "EU",
-      "applies_to_destination": ["EU"],
-      "name": "EU steel import measure (replaces the steel safeguard): tariff-rate quotas, 50% out-of-quota duty, melt-and-pour evidence",
-      "legal_ref": "Regulation (EU) 2026/1384",
-      "effective_from": "2026-07-01",
-      "hs_prefixes": ["72", "7306"],
-      "effect": "Duty-free volumes are limited by country quotas (total about 18.3 million tonnes per year); imports above the quota pay 50%. Importers must prove where the steel was melted and poured (e.g. mill certificate). Check whether the product is in one of the 30 product categories of Annex I.",
-      "documents": [
-        {"name": "Mill certificate showing the country of melt and pour", "mandatory": true}
-      ],
-      "volatility": "high",
-      "review_every_days": 30,
-      "source_url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries",
-      "last_verified": "2026-09-25"
-    },
-    {
-      "id": "EU_TRADE_DEFENCE",
-      "jurisdiction": "EU",
-      "applies_to_destination": ["EU"],
-      "name": "EU anti-dumping and anti-subsidy duties (depend on the country of origin)",
-      "legal_ref": "Regulation (EU) 2016/1036 and 2016/1037 (basic regulations); specific measures published in TARIC",
-      "effective_from": "2016-06-20",
-      "hs_prefixes": ["72", "73", "76", "6907", "7005", "7019"],
-      "effect": "Extra duties can apply to specific products from specific countries. They change often. The agent links to TARIC for the exact CN code, origin and date.",
-      "documents": [],
-      "volatility": "high",
-      "review_every_days": 30,
-      "source_url": "https://ec.europa.eu/taxation_customs/dds2/taric/taric_consultation.jsp",
-      "last_verified": "2026-09-25"
-    },
-    {
-      "id": "EU_CPR",
-      "jurisdiction": "EU",
-      "applies_to_destination": ["EU"],
-      "name": "Construction Products Regulation: CE marking and Declaration of Performance (and Conformity)",
-      "legal_ref": "Regulation (EU) 2024/3110 (general application from 8 Jan 2026), replacing Regulation (EU) No 305/2011 step by step",
-      "effective_from": "2026-01-08",
-      "hs_prefixes": [],
-      "flag": "cpr_hen",
-      "effect": "Construction products covered by a harmonised standard need CE marking and a Declaration of Performance (DoP), or the new Declaration of Performance and Conformity (DoPC), depending on the applicable technical specification during the transition. Importers must check both before placing the product on the EU market.",
-      "documents": [
-        {"name": "Declaration of Performance (DoP / DoPC)", "mandatory": true},
-        {"name": "CE marking evidence (label or photo)", "mandatory": true}
-      ],
-      "volatility": "low",
-      "review_every_days": 180,
-      "source_url": "https://eur-lex.europa.eu/eli/reg/2024/3110/oj/eng",
-      "last_verified": "2026-09-25"
-    },
-    {
-      "id": "EU_REACH_SDS",
-      "jurisdiction": "EU",
-      "applies_to_destination": ["EU"],
-      "name": "REACH: Safety Data Sheet for hazardous substances and mixtures",
-      "legal_ref": "Regulation (EC) No 1907/2006, Article 31",
-      "effective_from": "2007-06-01",
-      "hs_prefixes": [],
-      "flag": "reach_sds",
-      "effect": "Mixtures such as mortars, adhesives and sealants usually need a Safety Data Sheet in the language of the country where they are sold (German for Germany).",
-      "documents": [
-        {"name": "Safety Data Sheet (SDS, in German for the German market)", "mandatory": true}
-      ],
-      "volatility": "low",
-      "review_every_days": 365,
-      "source_url": "https://eur-lex.europa.eu/eli/reg/2006/1907/oj/eng",
-      "last_verified": "2026-09-25"
-    },
-    {
-      "id": "EU_TIMBER_DD",
-      "jurisdiction": "EU",
-      "applies_to_destination": ["EU"],
-      "name": "Timber due diligence (EU Timber Regulation, to be replaced by the EU Deforestation Regulation)",
-      "legal_ref": "Regulation (EU) No 995/2010 (EUTR); Regulation (EU) 2023/1115 (EUDR) - check the current application date",
-      "effective_from": "2013-03-03",
-      "hs_prefixes": [],
-      "flag": "timber_dd",
-      "effect": "Wood and wood products need due-diligence evidence on legal harvest (and, under EUDR, deforestation-free origin with geolocation).",
-      "documents": [
-        {"name": "Timber due-diligence statement / supplier evidence", "mandatory": true}
-      ],
-      "volatility": "high",
-      "review_every_days": 60,
-      "source_url": "https://environment.ec.europa.eu/topics/forests/deforestation/regulation-deforestation-free-products_en",
-      "last_verified": "2026-09-25"
-    },
-    {
-      "id": "EU_TR_CUSTOMS_UNION",
-      "jurisdiction": "EU",
-      "applies_to_destination": ["EU"],
-      "applies_to_origin": ["TR"],
-      "name": "EU-Turkiye customs union: proof for preferential treatment",
-      "legal_ref": "Decision No 1/95 of the EC-Turkey Association Council; ECSC products under the EU-Turkiye free trade agreement",
-      "effective_from": "1996-01-01",
-      "hs_prefixes": [],
-      "effect": "Industrial goods in free circulation in Turkiye use the A.TR movement certificate. Steel products (outside the customs union) need an origin proof such as EUR.1 to claim a preference.",
-      "documents": [
-        {"name": "A.TR movement certificate (or EUR.1 for steel products) to claim preferential treatment", "mandatory": false}
-      ],
-      "volatility": "low",
-      "review_every_days": 365,
-      "source_url": "https://trade.ec.europa.eu/access-to-markets/en/home",
-      "last_verified": "2026-09-25"
-    },
-    {
-      "id": "US_SECTION_232",
-      "jurisdiction": "US",
-      "applies_to_destination": ["US"],
-      "name": "US Section 232 duties on steel, aluminium and derivative products",
-      "legal_ref": "Section 232, Trade Expansion Act of 1962; presidential proclamations (changed several times in 2025-2026)",
-      "effective_from": "2018-03-23",
-      "hs_prefixes": ["72", "73", "76"],
-      "effect": "Articles made (almost) entirely of steel or aluminium pay 50%; since 6 Apr 2026 the duty is calculated on the full value of the product. Rates and product lists change often.",
-      "documents": [
-        {"name": "Country of melt and pour / smelt and cast declaration", "mandatory": true}
-      ],
-      "volatility": "very high",
-      "review_every_days": 14,
-      "source_url": "https://www.federalregister.gov/documents/search?conditions%5Bterm%5D=section+232+steel",
-      "last_verified": "2026-09-25"
-    },
-    {
-      "id": "US_GENERAL_TARIFFS",
-      "jurisdiction": "US",
-      "applies_to_destination": ["US"],
-      "name": "US general import surcharges after the Supreme Court IEEPA ruling",
-      "legal_ref": "Supreme Court, Learning Resources v. Trump (20 Feb 2026) ended IEEPA tariffs; replaced by a temporary surcharge under Section 122 of the Trade Act of 1974 (max. 150 days unless Congress extends)",
-      "effective_from": "2026-02-20",
-      "hs_prefixes": [""],
-      "effect": "A general surcharge on top of the normal duty may or may not apply on the shipment date. Always check the live HTS and Federal Register.",
-      "documents": [],
-      "volatility": "very high",
-      "review_every_days": 7,
-      "source_url": "https://hts.usitc.gov/",
-      "last_verified": "2026-09-25"
+     "name": "Embedded-emissions data from the producer/installation",
+     "mandatory": true
     }
-  ],
-  "watch_sources": [
-    {"id": "EC_CBAM_PAGE", "type": "page_hash", "url": "https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/cbam-definitive-regime_en", "measure": "EU_CBAM"},
-    {"id": "EC_STEEL_NEWS", "type": "page_hash", "url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries", "measure": "EU_STEEL_TRQ_2026"},
-    {"id": "EU_EUDR_PAGE", "type": "page_hash", "url": "https://environment.ec.europa.eu/topics/forests/deforestation/regulation-deforestation-free-products_en", "measure": "EU_TIMBER_DD"},
-    {"id": "US_FEDREG_TARIFFS", "type": "federal_register", "terms": ["section 232 steel", "section 232 aluminum", "section 122 import surcharge", "harmonized tariff schedule modification"], "measure": "US_SECTION_232"},
-    {"id": "US_HTS_RATES", "type": "usitc_hts", "hs": ["2523.29", "6806.10", "7214.20", "7308.90", "7610.10", "6907.21"], "measure": "US_GENERAL_TARIFFS"}
-  ]
+   ],
+   "volatility": "medium",
+   "review_every_days": 90,
+   "source_url": "https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/cbam-definitive-regime_en",
+   "last_verified": "2026-09-25",
+   "exclude_prefixes": [
+    "310560"
+   ]
+  },
+  {
+   "id": "EU_STEEL_TRQ_2026",
+   "jurisdiction": "EU",
+   "applies_to_destination": [
+    "EU"
+   ],
+   "name": "EU steel import measure (replaces the steel safeguard): tariff-rate quotas, 50% out-of-quota duty, melt-and-pour evidence",
+   "legal_ref": "Regulation (EU) 2026/1384",
+   "effective_from": "2026-07-01",
+   "hs_prefixes": [
+    "72",
+    "7306"
+   ],
+   "effect": "Duty-free volumes are limited by country quotas (total about 18.3 million tonnes per year); imports above the quota pay 50%. Importers must prove where the steel was melted and poured (e.g. mill certificate). Check whether the product is in one of the 30 product categories of Annex I.",
+   "documents": [
+    {
+     "name": "Mill certificate showing the country of melt and pour",
+     "mandatory": true
+    }
+   ],
+   "volatility": "high",
+   "review_every_days": 30,
+   "source_url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries",
+   "last_verified": "2026-09-25"
+  },
+  {
+   "id": "EU_TRADE_DEFENCE",
+   "jurisdiction": "EU",
+   "applies_to_destination": [
+    "EU"
+   ],
+   "name": "EU anti-dumping and anti-subsidy duties (depend on the country of origin)",
+   "legal_ref": "Regulation (EU) 2016/1036 and 2016/1037 (basic regulations); specific measures published in TARIC",
+   "effective_from": "2016-06-20",
+   "hs_prefixes": [
+    "72",
+    "73",
+    "76",
+    "6907",
+    "7005",
+    "7019"
+   ],
+   "effect": "Extra duties can apply to specific products from specific countries. They change often. The agent links to TARIC for the exact CN code, origin and date.",
+   "documents": [],
+   "volatility": "high",
+   "review_every_days": 30,
+   "source_url": "https://ec.europa.eu/taxation_customs/dds2/taric/taric_consultation.jsp",
+   "last_verified": "2026-09-25"
+  },
+  {
+   "id": "EU_CPR",
+   "jurisdiction": "EU",
+   "applies_to_destination": [
+    "EU"
+   ],
+   "name": "Construction Products Regulation: CE marking and Declaration of Performance (and Conformity)",
+   "legal_ref": "Regulation (EU) 2024/3110 (general application from 8 Jan 2026), replacing Regulation (EU) No 305/2011 step by step",
+   "effective_from": "2026-01-08",
+   "hs_prefixes": [],
+   "flag": "cpr_hen",
+   "effect": "Construction products covered by a harmonised standard need CE marking and a Declaration of Performance (DoP), or the new Declaration of Performance and Conformity (DoPC), depending on the applicable technical specification during the transition. Importers must check both before placing the product on the EU market.",
+   "documents": [
+    {
+     "name": "Declaration of Performance (DoP / DoPC)",
+     "mandatory": true
+    },
+    {
+     "name": "CE marking evidence (label or photo)",
+     "mandatory": true
+    }
+   ],
+   "volatility": "low",
+   "review_every_days": 180,
+   "source_url": "https://eur-lex.europa.eu/eli/reg/2024/3110/oj/eng",
+   "last_verified": "2026-09-25"
+  },
+  {
+   "id": "EU_REACH_SDS",
+   "jurisdiction": "EU",
+   "applies_to_destination": [
+    "EU"
+   ],
+   "name": "REACH: Safety Data Sheet for hazardous substances and mixtures",
+   "legal_ref": "Regulation (EC) No 1907/2006, Article 31",
+   "effective_from": "2007-06-01",
+   "hs_prefixes": [
+    "28",
+    "29",
+    "32",
+    "34",
+    "38"
+   ],
+   "flag": "reach_sds",
+   "effect": "Hazardous substances and mixtures (chemicals, paints, adhesives, mortars, sealants) need a Safety Data Sheet in the language of the country where they are sold (German for Germany). Whether a product is hazardous is decided by its classification (CLP), not by the HS code.",
+   "documents": [
+    {
+     "name": "Safety Data Sheet (SDS, in German for the German market)",
+     "mandatory": true
+    }
+   ],
+   "volatility": "low",
+   "review_every_days": 365,
+   "source_url": "https://eur-lex.europa.eu/eli/reg/2006/1907/oj/eng",
+   "last_verified": "2026-09-25"
+  },
+  {
+   "id": "EU_TIMBER_DD",
+   "jurisdiction": "EU",
+   "applies_to_destination": [
+    "EU"
+   ],
+   "name": "Timber due diligence (EU Timber Regulation, to be replaced by the EU Deforestation Regulation)",
+   "legal_ref": "Regulation (EU) No 995/2010 (EUTR); Regulation (EU) 2023/1115 (EUDR) - check the current application date",
+   "effective_from": "2013-03-03",
+   "hs_prefixes": [],
+   "flag": "timber_dd",
+   "effect": "Wood and wood products need due-diligence evidence on legal harvest (and, under EUDR, deforestation-free origin with geolocation).",
+   "documents": [
+    {
+     "name": "Timber due-diligence statement / supplier evidence",
+     "mandatory": true
+    }
+   ],
+   "volatility": "high",
+   "review_every_days": 60,
+   "source_url": "https://environment.ec.europa.eu/topics/forests/deforestation/regulation-deforestation-free-products_en",
+   "last_verified": "2026-09-25"
+  },
+  {
+   "id": "EU_TR_CUSTOMS_UNION",
+   "jurisdiction": "EU",
+   "applies_to_destination": [
+    "EU"
+   ],
+   "applies_to_origin": [
+    "TR"
+   ],
+   "name": "EU-Turkiye customs union: proof for preferential treatment",
+   "legal_ref": "Decision No 1/95 of the EC-Turkey Association Council; ECSC products under the EU-Turkiye free trade agreement",
+   "effective_from": "1996-01-01",
+   "hs_prefixes": [],
+   "effect": "Industrial goods in free circulation in Turkiye use the A.TR movement certificate. Steel products (outside the customs union) need an origin proof such as EUR.1 to claim a preference.",
+   "documents": [
+    {
+     "name": "A.TR movement certificate (or EUR.1 for steel products) to claim preferential treatment",
+     "mandatory": false
+    }
+   ],
+   "volatility": "low",
+   "review_every_days": 365,
+   "source_url": "https://trade.ec.europa.eu/access-to-markets/en/home",
+   "last_verified": "2026-09-25"
+  },
+  {
+   "id": "US_SECTION_232",
+   "jurisdiction": "US",
+   "applies_to_destination": [
+    "US"
+   ],
+   "name": "US Section 232 duties on steel, aluminium and derivative products",
+   "legal_ref": "Section 232, Trade Expansion Act of 1962; presidential proclamations (changed several times in 2025-2026)",
+   "effective_from": "2018-03-23",
+   "hs_prefixes": [
+    "72",
+    "73",
+    "76"
+   ],
+   "effect": "Articles made (almost) entirely of steel or aluminium pay 50%; since 6 Apr 2026 the duty is calculated on the full value of the product. Rates and product lists change often.",
+   "documents": [
+    {
+     "name": "Country of melt and pour / smelt and cast declaration",
+     "mandatory": true
+    }
+   ],
+   "volatility": "very high",
+   "review_every_days": 14,
+   "source_url": "https://www.federalregister.gov/documents/search?conditions%5Bterm%5D=section+232+steel",
+   "last_verified": "2026-09-25"
+  },
+  {
+   "id": "US_GENERAL_TARIFFS",
+   "jurisdiction": "US",
+   "applies_to_destination": [
+    "US"
+   ],
+   "name": "US general import surcharges after the Supreme Court IEEPA ruling",
+   "legal_ref": "Supreme Court, Learning Resources v. Trump (20 Feb 2026) ended IEEPA tariffs; replaced by a temporary surcharge under Section 122 of the Trade Act of 1974 (max. 150 days unless Congress extends)",
+   "effective_from": "2026-02-20",
+   "hs_prefixes": [
+    ""
+   ],
+   "effect": "A general surcharge on top of the normal duty may or may not apply on the shipment date. Always check the live HTS and Federal Register.",
+   "documents": [],
+   "volatility": "very high",
+   "review_every_days": 7,
+   "source_url": "https://hts.usitc.gov/",
+   "last_verified": "2026-09-25"
+  },
+  {
+   "id": "EU_MACHINERY",
+   "jurisdiction": "EU",
+   "applies_to_destination": [
+    "EU"
+   ],
+   "ce": true,
+   "name": "Machinery: CE marking and EU Declaration of Conformity",
+   "legal_ref": "Directive 2006/42/EC; replaced by Regulation (EU) 2023/1230, which applies from 20 Jan 2027",
+   "effective_from": "2009-12-29",
+   "hs_prefixes": [
+    "8413",
+    "8414",
+    "8418",
+    "8419",
+    "8421",
+    "8422",
+    "8424",
+    "8425",
+    "8426",
+    "8427",
+    "8428",
+    "8429",
+    "8430",
+    "8432",
+    "8433",
+    "8434",
+    "8435",
+    "8436",
+    "8437",
+    "8438",
+    "8439",
+    "8440",
+    "8441",
+    "8444",
+    "8445",
+    "8446",
+    "8447",
+    "8448",
+    "8449",
+    "8451",
+    "8452",
+    "8453",
+    "8454",
+    "8455",
+    "8456",
+    "8457",
+    "8458",
+    "8459",
+    "8460",
+    "8461",
+    "8462",
+    "8463",
+    "8464",
+    "8465",
+    "8467",
+    "8468",
+    "8474",
+    "8475",
+    "8477",
+    "8478",
+    "8479",
+    "8486"
+   ],
+   "effect": "Machines placed on the EU market need CE marking, an EU Declaration of Conformity and instructions in the language of the country (German for Germany). From 20 Jan 2027 the new Machinery Regulation applies. Spare parts are usually not machines themselves: a person checks.",
+   "documents": [
+    {
+     "name": "EU Declaration of Conformity (machinery) + CE marking",
+     "mandatory": true
+    },
+    {
+     "name": "Instructions for use in German",
+     "mandatory": true
+    }
+   ],
+   "volatility": "low",
+   "review_every_days": 180,
+   "source_url": "https://osha.europa.eu/en/legislation/directive/regulation-20231230eu-machinery",
+   "last_verified": "2026-09-25"
+  },
+  {
+   "id": "EU_ELECTRICAL",
+   "jurisdiction": "EU",
+   "applies_to_destination": [
+    "EU"
+   ],
+   "ce": true,
+   "name": "Electrical and radio equipment: CE (LVD, EMC, RoHS, RED) and WEEE registration in Germany",
+   "legal_ref": "Directives 2014/35/EU (LVD), 2014/30/EU (EMC), 2011/65/EU (RoHS), 2014/53/EU (RED), 2012/19/EU (WEEE); in Germany ElektroG (registration with stiftung ear)",
+   "effective_from": "2016-04-20",
+   "hs_prefixes": [
+    "8471",
+    "8504",
+    "8508",
+    "8509",
+    "8510",
+    "8516",
+    "8517",
+    "8518",
+    "8519",
+    "8521",
+    "8525",
+    "8527",
+    "8528",
+    "8539",
+    "8543",
+    "9405"
+   ],
+   "effect": "Electrical and electronic products need CE marking and an EU Declaration of Conformity. Whoever first places them on the German market must be registered for WEEE (ElektroG) and show the WEEE registration number.",
+   "documents": [
+    {
+     "name": "EU Declaration of Conformity (LVD / EMC / RoHS / RED) + CE marking",
+     "mandatory": true
+    },
+    {
+     "name": "WEEE registration number (ElektroG, Germany)",
+     "mandatory": true
+    }
+   ],
+   "volatility": "low",
+   "review_every_days": 180,
+   "source_url": "https://www.stiftung-ear.de/en/",
+   "last_verified": "2026-09-25"
+  },
+  {
+   "id": "EU_BATTERIES",
+   "jurisdiction": "EU",
+   "applies_to_destination": [
+    "EU"
+   ],
+   "ce": true,
+   "name": "Batteries Regulation: CE marking, labelling and producer registration",
+   "legal_ref": "Regulation (EU) 2023/1542 (applies since 18 Feb 2024); in Germany BattDG (registration with stiftung ear)",
+   "effective_from": "2024-02-18",
+   "hs_prefixes": [
+    "8506",
+    "8507"
+   ],
+   "effect": "Batteries, also inside products, need conformity documentation, labelling and CE marking; the producer (often the importer) must be registered in Germany before placing them on the market.",
+   "documents": [
+    {
+     "name": "EU Declaration of Conformity (batteries) + CE marking",
+     "mandatory": true
+    },
+    {
+     "name": "Battery producer registration (BattDG, Germany)",
+     "mandatory": true
+    }
+   ],
+   "volatility": "medium",
+   "review_every_days": 90,
+   "source_url": "https://eur-lex.europa.eu/eli/reg/2023/1542/oj/eng",
+   "last_verified": "2026-09-25"
+  },
+  {
+   "id": "EU_DUAL_USE",
+   "jurisdiction": "EU",
+   "direction": "export_from_eu",
+   "control": true,
+   "name": "Export control: possible dual-use item (EU control list)",
+   "legal_ref": "Regulation (EU) 2021/821, Annex I as updated by the Delegated Regulation of 8 Sep 2025 (adds semiconductor manufacturing and testing equipment)",
+   "effective_from": "2021-09-09",
+   "hs_prefixes": [
+    "8486",
+    "9031",
+    "9030",
+    "9012",
+    "901320",
+    "8401",
+    "2844",
+    "8526",
+    "8806",
+    "9014"
+   ],
+   "effect": "The goods may be on the EU dual-use list. Exports outside the EU can need a licence (in Germany from BAFA). The HS code alone never decides: an export-control specialist checks the technical parameters against Annex I.",
+   "documents": [
+    {
+     "name": "Export-control classification (Annex I entry or 'not listed') by the exporter",
+     "mandatory": true
+    },
+    {
+     "name": "Export licence from BAFA, if the item is listed",
+     "mandatory": false
+    }
+   ],
+   "volatility": "medium",
+   "review_every_days": 90,
+   "source_url": "https://policy.trade.ec.europa.eu/news/2025-update-eu-control-list-dual-use-items-2025-09-08_en",
+   "last_verified": "2026-09-25"
+  },
+  {
+   "id": "US_EAR",
+   "jurisdiction": "US",
+   "applies_to_origin": [
+    "US"
+   ],
+   "applies_to_destination": [
+    "*"
+   ],
+   "control": true,
+   "name": "US export controls (EAR): US-origin items and re-exports",
+   "legal_ref": "Export Administration Regulations, 15 CFR Parts 730-774 (Commerce Control List, ECCN)",
+   "effective_from": "1996-03-25",
+   "hs_prefixes": [
+    "8486",
+    "9031",
+    "9030",
+    "9012",
+    "901320",
+    "8471",
+    "8473",
+    "8542",
+    "8517"
+   ],
+   "effect": "Items made in the US (and some foreign items with US content) keep US export-control rules, also when re-exported from Germany. The supplier's ECCN is needed; some destinations and end users need a US licence.",
+   "documents": [
+    {
+     "name": "ECCN from the US supplier (or EAR99)",
+     "mandatory": true
+    }
+   ],
+   "volatility": "high",
+   "review_every_days": 30,
+   "source_url": "https://www.bis.gov/regulations/ear",
+   "last_verified": "2026-09-25"
+  },
+  {
+   "id": "EU_SPS_CONTROLS",
+   "jurisdiction": "EU",
+   "applies_to_destination": [
+    "EU"
+   ],
+   "control": true,
+   "name": "Food, feed, animals and plants: official border controls",
+   "legal_ref": "Regulation (EU) 2017/625 (official controls); Regulation (EU) 2016/2031 (plant health)",
+   "effective_from": "2019-12-14",
+   "hs_prefixes": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24"
+   ],
+   "effect": "Many food, feed, animal and plant products must be notified in advance (CHED in TRACES) and may need health or phytosanitary certificates and a border control post. Outside KlarSchiff's reviewed scope: a specialist decides.",
+   "documents": [
+    {
+     "name": "CHED pre-notification (TRACES) / health or phytosanitary certificate, if required",
+     "mandatory": false
+    }
+   ],
+   "volatility": "medium",
+   "review_every_days": 90,
+   "source_url": "https://food.ec.europa.eu/horizontal-topics/official-controls-and-enforcement_en",
+   "last_verified": "2026-09-25"
+  },
+  {
+   "id": "EU_EUDR",
+   "jurisdiction": "EU",
+   "applies_to_destination": [
+    "EU"
+   ],
+   "control": true,
+   "name": "EU Deforestation Regulation (EUDR): due-diligence statement",
+   "legal_ref": "Regulation (EU) 2023/1115 as amended in Dec 2025: applies from 30 Dec 2026 (large and medium operators) and 30 Jun 2027 (micro and small)",
+   "effective_from": "2026-12-30",
+   "hs_prefixes": [
+    "0102",
+    "0201",
+    "0202",
+    "0206",
+    "4101",
+    "4104",
+    "4107",
+    "1801",
+    "1802",
+    "1803",
+    "1804",
+    "1805",
+    "1806",
+    "0901",
+    "1201",
+    "1507",
+    "2304",
+    "1511",
+    "1513",
+    "120710",
+    "4001",
+    "4005",
+    "4006",
+    "4007",
+    "4008",
+    "4010",
+    "4011",
+    "4012",
+    "4013",
+    "4015",
+    "4016",
+    "4017",
+    "44",
+    "47",
+    "48",
+    "9401",
+    "9403",
+    "9406"
+   ],
+   "effect": "Cattle, cocoa, coffee, oil palm, rubber, soya and wood products need a due-diligence statement (reference number) proving deforestation-free and legal production, with geolocation of the plots. Main headings only: check Annex I of the regulation.",
+   "documents": [
+    {
+     "name": "EUDR due-diligence statement reference number",
+     "mandatory": true
+    }
+   ],
+   "volatility": "high",
+   "review_every_days": 30,
+   "source_url": "https://www.consilium.europa.eu/en/press/press-releases/2025/12/18/deforestation-council-signs-off-targeted-revision-to-simplify-and-postpone-the-regulation/",
+   "last_verified": "2026-09-25"
+  }
+ ],
+ "watch_sources": [
+  {
+   "id": "EC_CBAM_PAGE",
+   "type": "page_hash",
+   "url": "https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/cbam-definitive-regime_en",
+   "measure": "EU_CBAM"
+  },
+  {
+   "id": "EC_STEEL_NEWS",
+   "type": "page_hash",
+   "url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries",
+   "measure": "EU_STEEL_TRQ_2026"
+  },
+  {
+   "id": "EU_EUDR_PAGE",
+   "type": "page_hash",
+   "url": "https://environment.ec.europa.eu/topics/forests/deforestation/regulation-deforestation-free-products_en",
+   "measure": "EU_EUDR"
+  },
+  {
+   "id": "US_FEDREG_TARIFFS",
+   "type": "federal_register",
+   "terms": [
+    "section 232 steel",
+    "section 232 aluminum",
+    "section 122 import surcharge",
+    "harmonized tariff schedule modification"
+   ],
+   "measure": "US_SECTION_232"
+  },
+  {
+   "id": "US_HTS_RATES",
+   "type": "usitc_hts",
+   "hs": [
+    "2523.29",
+    "6806.10",
+    "7214.20",
+    "7308.90",
+    "7610.10",
+    "6907.21"
+   ],
+   "measure": "US_GENERAL_TARIFFS"
+  },
+  {
+   "id": "EU_DUAL_USE_PAGE",
+   "type": "page_hash",
+   "url": "https://policy.trade.ec.europa.eu/help-exporters-and-importers/exporting-dual-use-items_en",
+   "measure": "EU_DUAL_USE"
+  }
+ ]
 }

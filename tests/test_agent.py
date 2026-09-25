@@ -62,8 +62,14 @@ def test_us_export_gets_section_232():
 
 def test_measure_not_active_before_effective_date():
     s = Shipment(description="rebar", origin="TR", destination="DE")
-    hits = rules.applicable_measures("7214.20", {}, s, today=date(2026, 6, 1))
-    assert "EU_STEEL_TRQ_2026" not in {m.id for m in hits}
+    hits = {m.id: m for m in rules.applicable_measures("7214.20", {}, s, today=date(2026, 6, 1))}
+    # one month before: shown as UPCOMING (a warning), but not in force: no documents, no category change
+    assert hits["EU_STEEL_TRQ_2026"].upcoming
+    docs = rules.required_documents(list(hits.values()), [], [])
+    assert not any(d.reason == hits["EU_STEEL_TRQ_2026"].name for d in docs)
+    # more than 180 days before: not shown at all
+    far = {m.id for m in rules.applicable_measures("7214.20", {}, s, today=date(2025, 12, 1))}
+    assert "EU_STEEL_TRQ_2026" not in far
 
 
 def test_stale_rule_data_triggers_review():
@@ -208,10 +214,11 @@ def test_eu_provider_base_url_is_used(monkeypatch):
     assert "mistral.ai" in str(llm.client().base_url)
 
 
-def test_blind_test_runs_on_the_template():
+def test_blind_test_runs_on_the_template(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "llm_available", lambda: False)  # no API calls in unit tests
     sys.path.insert(0, str(ROOT / "evaluation"))
     import blind_test
-    summary = blind_test.run(ROOT / "evaluation" / "blind_test_template.csv")
+    summary = blind_test.run(ROOT / "evaluation" / "blind_test_template.csv", out_dir=tmp_path)
     assert summary["shipments"] == 2 and summary["false_all_clears"] == 0
 
 

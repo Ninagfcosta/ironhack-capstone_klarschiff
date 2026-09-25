@@ -12,12 +12,12 @@ from langsmith import traceable
 from . import config
 from .models import Candidate, Classification, Shipment
 
-SYSTEM_PROMPT = """You are KlarSchiff, a pre-shipment customs classification assistant for a construction-materials
-importer/exporter. You help a human reviewer; you never make the final decision.
+SYSTEM_PROMPT = """You are KlarSchiff, a pre-shipment customs classification assistant for importers and exporters of
+any kind of goods. You help a human reviewer; you never make the final decision.
 
 Rules:
-1. Choose the 6-digit HS code (format 0000.00) for the goods described. Prefer one of the CANDIDATE headings
-   from the knowledge base. Only propose a code outside the list if none fits; then say so in the reasoning
+1. Choose the 6-digit HS code (format 0000.00) for the goods described. Prefer one of the CANDIDATE subheadings
+   (HS 2022; those marked [reviewed] were checked by a person). Only propose a code outside the list if none fits; then say so in the reasoning
    and set confidence below 0.6.
 2. Base the choice on material, processing state and function (General Interpretative Rules 1 and 6).
 3. If the description is too vague to decide (e.g. material or form missing), set confidence below 0.6 and
@@ -27,9 +27,9 @@ Rules:
 
 
 def _user_prompt(s: Shipment, candidates: list[Candidate]) -> str:
-    cand = "\n".join(f"- {c.code}: {c.title}" for c in candidates) or "- (no candidate found)"
+    cand = "\n".join(f"- {c.code}: {c.title}{' [reviewed]' if c.reviewed else ''}" for c in candidates) or "- (no candidate found)"
     return (f"Shipment description:\n{s.description}\n\nOrigin: {s.origin or 'unknown'}  Destination: {s.destination}\n"
-            f"Intended use: {s.intended_use}\n\nCANDIDATE headings (knowledge base):\n{cand}")
+            f"Intended use: {s.intended_use}\n\nCANDIDATE subheadings (HS 2022):\n{cand}")
 
 
 _CODE = re.compile(r"^\d{4}\.\d{2}$")
