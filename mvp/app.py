@@ -14,7 +14,9 @@ import streamlit as st
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from klarschiff import agent, config, intake, monitor, report  # noqa: E402
+import hmac  # noqa: E402
+
+from klarschiff import agent, config, intake, monitor, report, vision  # noqa: E402
 from klarschiff.intake import DOC_PATTERNS  # noqa: E402
 from klarschiff.models import Shipment  # noqa: E402
 
@@ -31,6 +33,17 @@ st.markdown(f"""<style>
 st.markdown(f'<div style="font-size:44px;font-weight:800;color:{NAVY};line-height:1.1">Klar<span style="color:{TEAL}">Schiff</span></div>'
             '<div style="color:#5b6b7b;margin:4px 0 12px 0">AI pre-shipment co-pilot · HS code suggestion, document check and '
             'tariff monitor · <b>Clear answers. Human decisions.</b></div>', unsafe_allow_html=True)
+
+# ---------------------------------------------------------------- LOGIN (set KLARSCHIFF_APP_PASSWORD on any shared server)
+if config.APP_PASSWORD and not st.session_state.get("auth"):
+    pw = st.text_input("Password (Passwort)", type="password")
+    if st.button("Log in"):
+        if hmac.compare_digest(pw.encode(), config.APP_PASSWORD.encode()):
+            st.session_state["auth"] = True
+            st.rerun()
+        else:
+            st.error("Wrong password.")
+    st.stop()
 
 if not config.llm_available():
     st.info("Running in **offline mode** (no OpenAI key found): keyword matching only, every result goes to manual review. "
@@ -57,23 +70,46 @@ with tab_check:
         dest = c2.text_input("Destination (ISO)", base.get("destination", "DE"), max_chars=2).upper()
         use = c3.selectbox("Use", ["construction", "other"])
         docs = st.multiselect("Documents you have (Unterlagen vorhanden)", list(DOC_PATTERNS))
-        with st.expander("Optional: invoice, packing list, PDF or e-invoice"):
+        complete = st.checkbox("This list is complete: anything not selected is missing", value=False)
+        with st.expander("Optional: invoice, packing list, PDF, scan, photo or e-invoice"):
             inv_csv = st.file_uploader("Invoice lines (CSV)", type=["csv"], key="inv")
             pk_csv = st.file_uploader("Packing list lines (CSV)", type=["csv"], key="pk")
-            pdf = st.file_uploader("Invoice PDF (text PDF)", type=["pdf"], key="pdf")
+            pdf = st.file_uploader("Invoice PDF (text or scanned)", type=["pdf"], key="pdf")
+            photo = st.file_uploader("Scan or photo of the invoice (JPG / PNG)", type=["png", "jpg", "jpeg"], key="photo")
             xml = st.file_uploader("E-invoice (XRechnung / ZUGFeRD XML)", type=["xml"], key="xml")
-            st.caption("CSV columns: description, quantity, unit, gross_weight_kg, value_eur · examples in mvp/sample_data/")
+            st.caption("CSV columns: description, quantity, unit, gross_weight_kg, value_eur · examples in mvp/sample_data/ · "
+                       "Scans and photos are read by the AI model: cover names, signatures and addresses before uploading.")
         go = st.button("Check shipment", type="primary", width="stretch")
 
     if go:
+        st.session_state["vision"] = None
         try:
             inv = intake.lines_from_csv(inv_csv.getvalue().decode("utf-8")) if inv_csv else [
                 l for l in (base.get("invoice_lines") or [])]
             pk = intake.lines_from_csv(pk_csv.getvalue().decode("utf-8")) if pk_csv else [
                 l for l in (base.get("packing_lines") or [])]
-            text = desc
+            text, legible, unreadable, source = desc, True, [], "typed"
+
+            vr = None
             if pdf:
-                text = (desc + "\n" + intake.text_from_pdf(pdf.getvalue())).strip()
+                try:
+                    text = (desc + "\n" + intake.text_from_pdf(pdf.getvalue())).strip()
+                    source = "text PDF"
+                except ValueError:
+                    with st.spinner("Scanned PDF: reading it with the AI model…"):
+                        vr = vision.read_scanned_pdf(pdf.getvalue())
+                    source = "scanned PDF"
+            if photo:
+                with st.spinner("Reading the photo with the AI model…"):
+                    mime = "image/png" if photo.name.lower().endswith(".png") else "image/jpeg"
+                    vr = vision.read_image(photo.getvalue(), mime)
+                source = "photo"
+            if vr is not None:
+                text = (desc + "\n" + (vr.get("text") or "") + "\n" + ". ".join(vr.get("documents_mentioned") or [])).strip()
+                legible, unreadable = bool(vr.get("legible")), list(vr.get("unreadable_parts") or [])
+                if not inv and vr.lines:
+                    inv = vr.lines
+                st.session_state["vision"] = dict(vr)
             if xml:
                 inv = intake.lines_from_einvoice(xml.getvalue())
                 text = (text + "\n" + "; ".join(l.description for l in inv)).strip()
@@ -82,7 +118,7 @@ with tab_check:
                 st.stop()
             s = Shipment(shipment_id=(sample.split(" ·")[0] if SAMPLES[sample] else "manual"), description=text,
                          origin=origin, destination=dest, intended_use=use, documents_provided=docs,
-                         invoice_lines=inv, packing_lines=pk)
+                         invoice_lines=inv, packing_lines=pk, documents_list_complete=complete, legible=legible, unreadable_parts=unreadable, source=source)
             with st.spinner("Checking documents, rules and tariffs…"):
                 st.session_state["result"] = agent.run(s)
         except ValueError as e:
@@ -107,6 +143,16 @@ with tab_check:
             k2.markdown(f'<div class="ks-card">Confidence<br><span class="ks-big">{r.confidence:.0%}</span></div>', unsafe_allow_html=True)
             k3.markdown(f'<div class="ks-card">Category<br><span class="ks-big">{r.category}</span> / 3</div>', unsafe_allow_html=True)
             st.markdown(f"**{r.hs_title}**")
+            if r.translated_description:
+                with st.expander(f"🌐 Translated from '{r.source_language}': original and English", expanded=True):
+                    st.markdown(f"**Original:** {r.original_description}")
+                    st.markdown(f"**English (used for the check):** {r.translated_description}")
+            if st.session_state.get("vision"):
+                v = st.session_state["vision"]
+                with st.expander(f"📷 Read from the scan/photo ({v.get('document_type', 'document')}, legible: {v.get('legible')})"):
+                    st.write(v.get("text", ""))
+                    if v.get("unreadable_parts"):
+                        st.warning("Not readable: " + "; ".join(v["unreadable_parts"]))
             st.markdown(f"**Why:** {r.reasoning}")
             if r.evidence:
                 st.markdown("**Evidence:** " + ", ".join(f"`{e}`" for e in r.evidence))

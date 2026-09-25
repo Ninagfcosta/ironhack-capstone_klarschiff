@@ -5,7 +5,6 @@ If no API key is set (or the API fails), an offline fallback uses the best retri
 """
 from __future__ import annotations
 
-import json
 import re
 
 from langsmith import traceable
@@ -41,26 +40,18 @@ def _normalise_code(code: str) -> str:
     return f"{digits[:4]}.{digits[4:6]}" if len(digits) >= 6 else code
 
 
-@traceable(name="recommend_llm", run_type="llm")
+@traceable(name="recommend_llm", run_type="chain")
 def _call_llm(s: Shipment, candidates: list[Candidate]) -> Classification:
-    from openai import OpenAI
-    from langsmith.wrappers import wrap_openai
+    from . import llm
 
-    client = wrap_openai(OpenAI(api_key=config.OPENAI_API_KEY, timeout=30, max_retries=2))
-    resp = client.chat.completions.create(
-        model=config.MODEL,
-        temperature=config.TEMPERATURE,
-        response_format={"type": "json_object"},
-        messages=[{"role": "system", "content": SYSTEM_PROMPT},
-                  {"role": "user", "content": _user_prompt(s, candidates)}],
-    )
-    data = json.loads(resp.choices[0].message.content)
+    data = llm.chat_json(SYSTEM_PROMPT, _user_prompt(s, candidates))
     data["hs_code"] = _normalise_code(str(data.get("hs_code", "")))
     data["confidence"] = max(0.0, min(1.0, float(data.get("confidence", 0))))
+    data["reasoning"] = str(data.get("reasoning", ""))
     for k in ("evidence", "alternatives", "missing_information"):
         v = data.get(k) or []
         data[k] = [str(x) for x in v] if isinstance(v, list) else [str(v)]
-    return Classification(**data)
+    return Classification(**{k: data[k] for k in ("hs_code", "confidence", "reasoning", "evidence", "alternatives", "missing_information")})
 
 
 def _offline(s: Shipment, candidates: list[Candidate]) -> Classification:

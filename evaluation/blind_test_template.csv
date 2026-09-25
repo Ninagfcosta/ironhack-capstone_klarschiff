@@ -1,0 +1,3 @@
+shipment_id,description,origin,destination,documents_provided,broker_hs,broker_needs_review,broker_missing_docs,notes
+PILOT-001,"Invoice: 500 bags Portland cement CEM II/A-LL 42.5 R, 25 kg. Packing list attached.",TR,DE,Commercial invoice;Packing list,2523.29,yes,Declaration of Performance (DoP / DoPC),example row - replace with real anonymised shipments
+PILOT-002,"Invoice: mineral wool insulation boards 100 mm, 300 packs. DoP and CE label attached.",PL,DE,Commercial invoice;Packing list;Declaration of Performance (DoP / DoPC);CE marking evidence (label or photo),6806.10,no,,example row

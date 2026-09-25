@@ -14,8 +14,13 @@ DATA_DIR = Path(os.getenv("KLARSCHIFF_DATA_DIR", ROOT / "data"))
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+# Provider: OpenAI by default; any OpenAI-compatible API (e.g. Mistral AI, EU) via base URL + key. See llm.py.
+LLM_BASE_URL = os.getenv("KLARSCHIFF_LLM_BASE_URL", "")
+LLM_API_KEY = os.getenv("KLARSCHIFF_LLM_API_KEY", "") or OPENAI_API_KEY
 # Pinned model version: re-run the evaluation before changing it (model changes can change answers).
 MODEL = os.getenv("KLARSCHIFF_MODEL", "gpt-4o-mini")
+VISION_MODEL = os.getenv("KLARSCHIFF_VISION_MODEL", MODEL)   # reads scanned invoices and photos
+APP_PASSWORD = os.getenv("KLARSCHIFF_APP_PASSWORD", "")      # empty = no login (local demo only)
 TEMPERATURE = float(os.getenv("KLARSCHIFF_TEMPERATURE", "0"))
 
 # Review rules (business decisions, documented in use_case_definition.md)
@@ -34,4 +39,5 @@ EU_COUNTRIES = {
 
 
 def llm_available() -> bool:
-    return bool(OPENAI_API_KEY) and not OPENAI_API_KEY.startswith("your_")
+    key = LLM_API_KEY or OPENAI_API_KEY
+    return bool(key) and not key.startswith("your_")

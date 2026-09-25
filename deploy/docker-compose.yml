@@ -1,0 +1,23 @@
+# Start on the server:  docker compose -f deploy/docker-compose.yml up -d --build
+services:
+  klarschiff:
+    build: ..
+    env_file: ../.env            # keys + KLARSCHIFF_APP_PASSWORD, never in Git
+    volumes:
+      - klarschiff-data:/app/data  # decision log, alerts, monitor state (back this up)
+    ports:
+      - "127.0.0.1:8501:8501"      # only reachable through the HTTPS proxy below
+    restart: unless-stopped
+
+  caddy:                          # automatic HTTPS (Let's Encrypt) in front of the app
+    image: caddy:2
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on: [klarschiff]
+    restart: unless-stopped
+
+volumes:
+  klarschiff-data:
+  caddy-data:

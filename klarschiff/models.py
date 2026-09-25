@@ -21,9 +21,13 @@ class Shipment(BaseModel):
     origin: str = Field("", description="ISO country code of origin, e.g. TR")
     destination: str = Field("DE", description="ISO country code of destination, e.g. DE or US")
     documents_provided: list[str] = Field(default_factory=list)
+    documents_list_complete: bool = Field(False, description="True = every document not listed as provided is missing")
     invoice_lines: list[Line] = Field(default_factory=list)
     packing_lines: list[Line] = Field(default_factory=list)
     intended_use: str = Field("construction", description="construction / other")
+    legible: bool = Field(True, description="False when a scan or photo could not be read completely")
+    unreadable_parts: list[str] = Field(default_factory=list)
+    source: str = Field("typed", description="typed / text PDF / scan / photo / e-invoice")
 
 
 class Candidate(BaseModel):
@@ -91,6 +95,9 @@ class AgentResult(BaseModel):
     kb_version: str
     tariff_data_as_of: str
     generated_at: str
+    source_language: str = "en/de"
+    original_description: str = ""
+    translated_description: str = ""
     disclaimer: str = (
         "Decision support only. A qualified person must confirm the classification and the documents "
         "before any customs declaration. Check the live tariff (TARIC / HTS) for the shipment date."

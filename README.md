@@ -33,6 +33,8 @@ flowchart LR
 
 **The AI suggests; a person decides. Nothing is ever filed automatically.**
 
+> **v2.2 (branch `v2.2-pro`):** scans and photos, Turkish/Chinese invoices, EU model provider option, login + EU server setup, blind-test runner → [`PILOT_READINESS.md`](PILOT_READINESS.md)
+
 ## 3. Try it (5 minutes)
 
 ```bash

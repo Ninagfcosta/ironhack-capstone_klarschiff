@@ -145,3 +145,70 @@ def test_close_call_goes_to_review(monkeypatch):
     monkeypatch.setattr(recommend, "_call_llm", lambda s, c: Classification(hs_code="7214.20", confidence=0.9, reasoning="x" * 40))
     r = agent.run(Shipment(description="Rechnung: Betonstahl in Ringen, gerippt, 25 t.", origin="TR"))
     assert any("Close call" in x for x in r.review_reasons)
+
+
+# ---------------------------------------------------------------- v2.2: languages, scans, EU provider, blind test
+
+def test_turkish_invoice_is_translated_and_reviewed(monkeypatch):
+    from klarschiff import language
+    monkeypatch.setattr(config, "llm_available", lambda: True)
+    monkeypatch.setattr(language, "to_english", lambda t: {"language": "tr", "english": "Invoice: Portland cement CEM I 42.5 R, 500 bags of 25 kg. DoP and CE label attached.", "uncertain_terms": []})
+    monkeypatch.setattr(recommend, "_call_llm", lambda s, c: Classification(hs_code="2523.29", confidence=0.9, reasoning="x" * 40))
+    r = agent.run(Shipment(description="Fatura: Portland çimentosu CEM I 42,5 R, 500 torba x 25 kg. Performans Beyanı (DoP) ve CE etiketi ektedir.", origin="TR"))
+    assert r.source_language == "tr" and r.translated_description.startswith("Invoice")
+    assert r.hs_code == "2523.29" and any("Translated" in x for x in r.review_reasons)
+
+
+def test_chinese_without_llm_goes_to_review():
+    r = agent.run(Shipment(description="发票：瓷砖 60x60 厘米, 900 平方米", origin="CN"))
+    assert r.source_language == "zh" and r.manual_review
+    assert any("no AI model available" in x for x in r.review_reasons)
+
+
+def test_vision_reads_structured_lines(monkeypatch):
+    from klarschiff import llm, vision
+    monkeypatch.setattr(config, "llm_available", lambda: True)
+    monkeypatch.setattr(llm, "chat_json", lambda *a, **k: {"document_type": "invoice", "language": "tr", "legible": True,
+        "text": "Portland çimentosu CEM I 42,5 R", "lines": [{"description": "Portland çimentosu", "quantity": 500, "unit": "bag", "gross_weight_kg": 12600}],
+        "documents_mentioned": ["Performans Beyanı (DoP) ektedir"]})
+    v = vision.read_image(b"fake", "image/png")
+    assert v["legible"] and v.lines[0].quantity == 500
+
+
+def test_scanned_pdf_is_detected_and_rendered(tmp_path):
+    from PIL import Image
+    from klarschiff import vision
+    p = tmp_path / "scan.pdf"
+    Image.init()
+    Image.new("RGB", (400, 300), "white").save(p, "PDF")   # a PDF page with an image and no text layer
+    import pytest
+    with pytest.raises(ValueError):
+        intake.text_from_pdf(p.read_bytes())
+    pages = vision.pdf_pages_as_png(p.read_bytes())
+    assert len(pages) == 1 and pages[0][:4] == b"\x89PNG"
+
+
+def test_unreadable_document_goes_to_review():
+    r = agent.run(Shipment(description="Invoice: stone wool insulation rolls, DoP and CE marking attached", origin="RS",
+                           legible=False, unreadable_parts=["quantity column"]))
+    assert any("unreadable" in x for x in r.review_reasons)
+
+
+def test_complete_document_list_marks_the_rest_missing():
+    r = agent.run(Shipment(description="Invoice: paper-faced gypsum plasterboard 12.5 mm", origin="TR",
+                           documents_provided=["Commercial invoice", "Packing list"], documents_list_complete=True))
+    assert "Declaration of Performance (DoP / DoPC)" in r.missing_documents and r.manual_review
+
+
+def test_eu_provider_base_url_is_used(monkeypatch):
+    from klarschiff import llm
+    monkeypatch.setattr(config, "LLM_BASE_URL", "https://api.mistral.ai/v1")
+    monkeypatch.setattr(config, "LLM_API_KEY", "test-key")
+    assert "mistral.ai" in str(llm.client().base_url)
+
+
+def test_blind_test_runs_on_the_template():
+    sys.path.insert(0, str(ROOT / "evaluation"))
+    import blind_test
+    summary = blind_test.run(ROOT / "evaluation" / "blind_test_template.csv")
+    assert summary["shipments"] == 2 and summary["false_all_clears"] == 0

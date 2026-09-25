@@ -1,0 +1,10 @@
+.env
+.venv
+.git
+data
+__pycache__
+*.pyc
+Claude outputs
+00_origin_silvertrust
+charts
+research

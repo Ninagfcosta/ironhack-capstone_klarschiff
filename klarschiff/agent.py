@@ -8,7 +8,7 @@ from datetime import date, datetime, timezone
 
 from langsmith import traceable
 
-from . import config, intake, monitor, recommend, retrieval, rules, validate
+from . import config, intake, language, monitor, recommend, retrieval, rules, validate
 from .models import AgentResult, Shipment
 
 
@@ -23,8 +23,30 @@ def taric_link(hs_code: str, origin: str, on: date | None = None) -> str:
 @traceable(name="klarschiff_agent", run_type="chain")
 def run(s: Shipment, today: date | None = None) -> AgentResult:
     today = today or date.today()
+    pre_reasons: list[str] = []
 
-    # 1. Intake: documents mentioned in the text + structured lines
+    # 1. Intake: language, legibility, documents mentioned in the text + structured lines
+    original = s.description
+    lang = language.detect_language(original)
+    translated = ""
+    if lang != "en/de":
+        if config.llm_available():
+            try:
+                t = language.to_english(original)
+                translated = t.get("english", "")
+                note = f"Translated from '{t.get('language', lang)}': a person checks the translation."
+                if t.get("uncertain_terms"):
+                    note += " Uncertain terms: " + ", ".join(map(str, t["uncertain_terms"][:5])) + "."
+                pre_reasons.append(note)
+            except Exception as e:
+                pre_reasons.append(f"Text in '{lang}' could not be translated ({type(e).__name__}).")
+        else:
+            pre_reasons.append(f"Text in '{lang}' and no AI model available to translate it.")
+    if translated:
+        s = s.model_copy(update={"description": translated})
+    if not s.legible:
+        pre_reasons.append("Document partly unreadable: " + ("; ".join(s.unreadable_parts[:3]) or "check the original") + ".")
+
     provided_txt, missing_txt = intake.detect_documents(s.description)
     provided = list(dict.fromkeys(s.documents_provided + provided_txt))
     stated_missing = [d for d in missing_txt if d not in s.documents_provided]
@@ -48,6 +70,10 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
     # Rules: measures, documents, category
     measures = rules.applicable_measures(cls.hs_code, flags, s, today)
     docs = rules.required_documents(measures, provided, stated_missing)
+    if s.documents_list_complete:
+        for d in docs:
+            if d.status == "not stated":
+                d.status = "missing"
     cat, cat_reasons = rules.category(flags, measures)
     missing = [d.name for d in docs if d.mandatory and d.status == "missing"]
     not_stated = [d.name for d in docs if d.mandatory and d.status == "not stated"]
@@ -56,7 +82,7 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
     alerts = monitor.open_alerts_for(cls.hs_code)
 
     # Review triggers (a person decides whenever one is true)
-    reasons = []
+    reasons = list(pre_reasons)
     if cls.confidence < config.CONFIDENCE_THRESHOLD:
         reasons.append(f"Confidence {cls.confidence:.2f} is below {config.CONFIDENCE_THRESHOLD:.2f}.")
     if heading is None:
@@ -100,4 +126,5 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
         kb_version=retrieval.load_kb()["_meta"]["version"],
         tariff_data_as_of=f"rules {rules.load_measures()['_meta']['version']} · monitor last run {monitor.last_run()}",
         generated_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        source_language=lang, original_description=original, translated_description=translated,
     )
