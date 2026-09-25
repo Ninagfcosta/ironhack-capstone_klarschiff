@@ -159,7 +159,8 @@ def test_turkish_invoice_is_translated_and_reviewed(monkeypatch):
     assert r.hs_code == "2523.29" and any("Translated" in x for x in r.review_reasons)
 
 
-def test_chinese_without_llm_goes_to_review():
+def test_chinese_without_llm_goes_to_review(monkeypatch):
+    monkeypatch.setattr(config, "llm_available", lambda: False)  # simulate: no API key
     r = agent.run(Shipment(description="发票：瓷砖 60x60 厘米, 900 平方米", origin="CN"))
     assert r.source_language == "zh" and r.manual_review
     assert any("no AI model available" in x for x in r.review_reasons)
