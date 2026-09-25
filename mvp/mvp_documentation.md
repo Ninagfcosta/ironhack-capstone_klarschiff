@@ -21,6 +21,13 @@ A second tab shows the **tariff monitor** (open alerts, rules in force with thei
 | Decisions & metrics | Decision log (audit trail), override rate |
 | How it works | The five steps and the limits, in plain language |
 
+### Interface language (v2.2)
+The app opens in **English**. The switch **🌐 Language / Sprache** (top right) changes every screen to **German** in one click,
+because the pilot users are German customs, logistics and construction teams. Inputs and results stay on screen when switching.
+- All interface texts live in `mvp/i18n.py`; `tests/test_i18n.py` fails if a text has no German version.
+- The agent's review reasons are translated by pattern; anything unknown stays in English (never hidden).
+- Not translated on purpose: legal names (CBAM, CE, DoP, TARIC), HS titles from the knowledge base, and the model's free-text reasoning (the app says so).
+
 ## 3. Run it
 
 ```bash

@@ -28,3 +28,7 @@ python evaluation/blind_test.py evaluation/blind_test_template.csv
 2. Real, anonymised shipments from the client.
 3. Company form, terms with limitation of liability, professional indemnity insurance.
 4. Data-processing agreements with the model provider, LangSmith and the hosting company.
+
+
+## Interface language
+English by default, German with one click (`mvp/i18n.py`). German users see German labels, reasons and disclaimer; legal names stay as in the regulation.
