@@ -10,7 +10,7 @@ import re
 
 from langsmith import traceable
 
-from . import config
+from . import config, guard
 
 TURKISH = re.compile(r"[ğĞışŞİçÇ]")  # ç added 25/09 after the manual test (çimentosu was missed)
 CJK = re.compile(r"[㐀-鿿豈-﫿]")
@@ -22,7 +22,8 @@ GERMAN_WORDS = re.compile(r"\b(und|mit|ohne|für|fuer|aus|der|die|das|stück|stu
 TRANSLATE_PROMPT = """You translate shipping-document goods descriptions into English for customs classification.
 Keep every technical detail: material, grade (e.g. CEM I 42.5, B500B), dimensions, quantities, units, and statements
 about documents (e.g. 'Declaration of Performance missing'). Do not add or interpret anything.
-Reply with JSON only: {"language": "ISO 639-1 code", "english": "the translation", "uncertain_terms": ["terms you were not sure about"]}"""
+Reply with JSON only: {"language": "ISO 639-1 code", "english": "the translation", "uncertain_terms": ["terms you were not sure about"]}
+""" + guard.DATA_RULE
 
 
 def detect_language(text: str) -> str:
@@ -46,7 +47,7 @@ def to_english(text: str) -> dict:
 
     if not config.llm_available():
         raise RuntimeError("Translation needs the AI model (no API key found).")
-    data = llm.chat_json(TRANSLATE_PROMPT, text)
+    data = llm.chat_json(TRANSLATE_PROMPT, guard.wrap(text))
     data.setdefault("english", "")
     data.setdefault("uncertain_terms", [])
     return data

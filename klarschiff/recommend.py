@@ -9,7 +9,7 @@ import re
 
 from langsmith import traceable
 
-from . import config
+from . import config, guard
 from .models import Candidate, Classification, Shipment
 
 SYSTEM_PROMPT = """You are KlarSchiff, a pre-shipment customs classification assistant for importers and exporters of
@@ -23,13 +23,19 @@ Rules:
 3. If the description is too vague to decide (e.g. material or form missing), set confidence below 0.6 and
    list the missing information. Never invent facts that are not in the description.
 4. evidence = the exact words from the description that support your choice.
-5. Reply with JSON only, with keys: hs_code, confidence, reasoning, evidence, alternatives, missing_information."""
+5. Reply with JSON only, with keys: hs_code, confidence, reasoning, evidence, alternatives, missing_information.
+""" + guard.DATA_RULE
 
 
-def _user_prompt(s: Shipment, candidates: list[Candidate]) -> str:
+def _user_prompt(s: Shipment, candidates: list[Candidate], rulings: list[dict] | None = None) -> str:
+    rul = ""
+    if rulings:
+        rul = "\n\nOFFICIAL RULINGS added by the reviewer team (evidence; a BTI binds only its holder; check validity):\n" + \
+              "\n".join(f"- {r['reference']} ({r['source']}, code {r['code']}, {'valid' if r.get('valid') else 'EXPIRED'}): "
+                        f"{r['description'][:200]}" for r in rulings)
     cand = "\n".join(f"- {c.code}: {c.title}{' [reviewed]' if c.reviewed else ''}" for c in candidates) or "- (no candidate found)"
-    return (f"Shipment description:\n{s.description}\n\nOrigin: {s.origin or 'unknown'}  Destination: {s.destination}\n"
-            f"Intended use: {s.intended_use}\n\nCANDIDATE subheadings (HS 2022):\n{cand}")
+    return (f"Shipment description:\n{guard.wrap(s.description)}\n\nOrigin: {s.origin or 'unknown'}  Destination: {s.destination}\n"
+            f"Intended use: {s.intended_use}\n\nCANDIDATE subheadings (HS 2022):\n{cand}{rul}")
 
 
 _CODE = re.compile(r"^\d{4}\.\d{2}$")
@@ -41,10 +47,10 @@ def _normalise_code(code: str) -> str:
 
 
 @traceable(name="recommend_llm", run_type="chain")
-def _call_llm(s: Shipment, candidates: list[Candidate]) -> Classification:
+def _call_llm(s: Shipment, candidates: list[Candidate], rulings: list[dict] | None = None) -> Classification:
     from . import llm
 
-    data = llm.chat_json(SYSTEM_PROMPT, _user_prompt(s, candidates))
+    data = llm.chat_json(SYSTEM_PROMPT, _user_prompt(s, candidates, rulings))
     data["hs_code"] = _normalise_code(str(data.get("hs_code", "")))
     data["confidence"] = max(0.0, min(1.0, float(data.get("confidence", 0))))
     data["reasoning"] = str(data.get("reasoning", ""))
@@ -69,11 +75,11 @@ def _offline(s: Shipment, candidates: list[Candidate]) -> Classification:
                           alternatives=[c.code for c in candidates[1:3]])
 
 
-def classify(s: Shipment, candidates: list[Candidate]) -> tuple[Classification, str]:
+def classify(s: Shipment, candidates: list[Candidate], rulings: list[dict] | None = None) -> tuple[Classification, str]:
     """Returns (classification, mode). mode is 'llm' or 'offline'."""
     if config.llm_available():
         try:
-            c = _call_llm(s, candidates)
+            c = _call_llm(s, candidates, rulings) if rulings else _call_llm(s, candidates)
             if not _CODE.match(c.hs_code):
                 c.confidence = min(c.confidence, 0.4)
                 c.reasoning += " [Format check failed: code is not a valid 6-digit HS code.]"

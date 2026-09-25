@@ -8,6 +8,11 @@ requests>=2.31
 pandas>=2.0
 pdfplumber>=0.11
 pytest>=8.0
+# v2.3: REST API (free, open source)
+fastapi>=0.110
+uvicorn>=0.29
+python-multipart>=0.0.9
+httpx>=0.27
 # Round 1 charts
 matplotlib>=3.8
 numpy>=1.26

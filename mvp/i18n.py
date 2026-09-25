@@ -188,6 +188,34 @@ UI: dict[str, str] = {
     "Add to the master list (links the part number to the product)": "In den Produktstamm aufnehmen (verknüpft die Artikelnummer mit dem Produkt)",
     "Master list updated: product {}.": "Produktstamm aktualisiert: Produkt {}.",
     "from": "ab",
+    # v2.3: batch, full codes, rulings, cost
+    "📦 Batch": "📦 Stapelprüfung",
+    "Batch check": "Stapelprüfung",
+    "Check many shipments at once and download one report. Columns: shipment_id, description, origin, destination, part_number, documents_provided (separated by ;), intended_use · example: mvp/sample_data/batch_sample.csv":
+        "Viele Sendungen auf einmal prüfen und einen Bericht herunterladen. Spalten: shipment_id, description, origin, "
+        "destination, part_number, documents_provided (getrennt durch ;), intended_use · Beispiel: mvp/sample_data/batch_sample.csv",
+    "Shipments CSV": "Sendungen als CSV",
+    "Run the batch check": "Stapelprüfung starten",
+    "Shipments": "Sendungen",
+    "To review": "Zu prüfen",
+    "Master-list hits": "Treffer im Produktstamm",
+    "AI cost (estimate)": "KI-Kosten (Schätzung)",
+    "Per line: about ${} · categories 1/2/3: {} / {} / {} · {} s": "Pro Zeile: etwa ${} · Kategorien 1/2/3: {} / {} / {} · {} s",
+    "Download report (CSV)": "Bericht herunterladen (CSV)",
+    "📚 Rulings library (EBTI / CROSS)": "📚 Entscheidungsbibliothek (EBTI / CROSS)",
+    "Add official rulings your team looked up (EU EBTI, US CROSS). The agent shows similar ones as evidence. Columns: reference, source, code, description, issued, valid_until, url":
+        "Amtliche Entscheidungen hinzufügen, die Ihr Team recherchiert hat (EU-EBTI, US-CROSS). Der Agent zeigt ähnliche als "
+        "Beleg. Spalten: reference, source, code, description, issued, valid_until, url",
+    "Rulings CSV": "Entscheidungen als CSV",
+    "Add rulings": "Entscheidungen hinzufügen",
+    "{} rulings added · {} in the library": "{} Entscheidungen hinzugefügt · {} in der Bibliothek",
+    "Rulings in the library: {}": "Entscheidungen in der Bibliothek: {}",
+    "AI use for this check: {} calls · {} tokens · about ${}": "KI-Nutzung für diese Prüfung: {} Aufrufe · {} Tokens · etwa ${}",
+    "📚 Similar official rulings in your library ({})": "📚 Ähnliche amtliche Entscheidungen in Ihrer Bibliothek ({})",
+    "🔢 Full code ({})": "🔢 Vollständiger Code ({})",
+    "Suggested by word match; a person confirms the line.": "Per Wortabgleich vorgeschlagen; ein Mensch bestätigt die Position.",
+    "Several lines fit: a person chooses.": "Mehrere Positionen passen: ein Mensch wählt.",
+    "expired": "abgelaufen",
 }
 
 ABOUT = {
@@ -200,6 +228,8 @@ ABOUT = {
 3. **Recommend** searches the whole Harmonized System 2022 (5,613 subheadings, RAG) and the LLM picks one, with reasons. Codes not yet reviewed by a person always go to review.
 4. **Rules** (versioned, with legal references) decide category, documents and trade measures.
 5. **Monitor** watches official sources for tariff changes and raises alerts.
+   **Full code:** the 8-digit CN (EU) or HTS (US) line is suggested from free official data; similar official rulings
+   from your library are shown as evidence. **Guard:** hidden instructions in documents are ignored and flagged.
 6. **A person decides.** Every decision is logged. Nothing is ever filed automatically.
 
 Limits: any product can be classified, but only reviewed codes and master-list products can pass without extra review;
@@ -215,6 +245,9 @@ always go to a person; rules must be re-verified by a customs professional.
 3. **Vorschlag** durchsucht das gesamte Harmonisierte System 2022 (5.613 Unterpositionen, RAG), das Sprachmodell wählt eine aus, mit Begründung. Noch nicht von einem Menschen geprüfte Codes gehen immer in die Prüfung.
 4. **Regeln** (versioniert, mit Rechtsgrundlage) bestimmen Kategorie, Unterlagen und Handelsmaßnahmen.
 5. **Monitor** beobachtet amtliche Quellen auf Zolländerungen und öffnet Warnungen.
+   **Vollständiger Code:** die 8-stellige KN-Position (EU) oder HTS-Position (US) wird aus freien amtlichen Daten
+   vorgeschlagen; ähnliche amtliche Entscheidungen aus Ihrer Bibliothek werden als Beleg gezeigt. **Schutz:** versteckte
+   Anweisungen in Dokumenten werden ignoriert und gemeldet.
 6. **Ein Mensch entscheidet.** Jede Entscheidung wird protokolliert. Nichts wird automatisch angemeldet.
 
 Grenzen: jedes Produkt kann eingereiht werden, aber nur geprüfte Codes und Produkte aus dem Produktstamm kommen ohne
@@ -246,6 +279,8 @@ REASONS: list[tuple[str, str]] = [
      "CE-pflichtiges Produkt ({0}): EU-Konformitätserklärung + CE-Kennzeichnung."),
     (r"^Special controls apply: (.*)\.$", "Besondere Kontrollen gelten: {0}."),
     (r"^Upcoming rule: (\S+) applies from (\S+)\.$", "Kommende Regel: {0} gilt ab {1}."),
+    (r"^Possible hidden instructions for the AI in the document \((.*)\): they were ignored; a person checks the original\.$",
+     "Mögliche versteckte Anweisungen an die KI im Dokument ({0}): sie wurden ignoriert; ein Mensch prüft das Original."),
     (r"^New part number (\S+) matches product (\S+) by description: confirm the link \(HS (\S+)\)\.$",
      "Neue Artikelnummer {0} passt laut Beschreibung zu Produkt {1}: Verknüpfung bestätigen (HS {2})."),
     (r"^Known part number, but the description changed \((.*)\): check product (\S+)\.$",

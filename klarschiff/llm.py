@@ -16,6 +16,20 @@ import json
 from . import config
 
 
+# token usage of the current agent run (for the cost estimate); reset by the agent at the start of each run
+USAGE = {"prompt_tokens": 0, "completion_tokens": 0, "calls": 0}
+
+
+def reset_usage() -> None:
+    USAGE.update(prompt_tokens=0, completion_tokens=0, calls=0)
+
+
+def usage_with_cost() -> dict:
+    from . import config
+    cost = USAGE["prompt_tokens"] * config.PRICE_IN_PER_M / 1e6 + USAGE["completion_tokens"] * config.PRICE_OUT_PER_M / 1e6
+    return {**USAGE, "est_cost_usd": round(cost, 6)}
+
+
 def client():
     from openai import OpenAI
     from langsmith.wrappers import wrap_openai
@@ -37,6 +51,11 @@ def chat_json(system: str, user, model: str | None = None) -> dict:
         response_format={"type": "json_object"},
         messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
     )
+    u = getattr(resp, "usage", None)
+    if u is not None:
+        USAGE["prompt_tokens"] += int(getattr(u, "prompt_tokens", 0) or 0)
+        USAGE["completion_tokens"] += int(getattr(u, "completion_tokens", 0) or 0)
+    USAGE["calls"] += 1
     text = resp.choices[0].message.content or "{}"
     text = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     return json.loads(text)

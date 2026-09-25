@@ -71,6 +71,8 @@ Score = likelihood (1-5) × impact (1-5). ≥ 12 high, 8-11 medium, < 8 low.
 | R10 | **Value lower than assumed** (conservative scenario) | Business | 3 | 3 | 9 | Measure baseline first; volume-based subscription | CEO + consultant |
 | R11 | **Adoption**: the team keeps its old habits | Operational | 3 | 3 | 9 | Two users in the design of the review pack; 2-day training; weekly feedback in the pilot | Logistics lead |
 | R12 | **EU AI Act classification changes** (Digital Omnibus 2026 moved high-risk dates) | Regulatory | 1 | 3 | 3 | Re-check the classification at each milestone (`compliance/eu_ai_act_compliance.md`) | Consultant |
+| R13 | **Prompt injection**: hidden text in an invoice, PDF or photo tells the AI to change the code or skip the review | Security | 2 | 4 | 8 | v2.3 guard: instruction-like text and invisible characters are detected → person; documents wrapped as data; rules and review triggers outside the model | Consultant |
+| R14 | **Part-number drift**: the same product gets different codes after a part-number change | Operational / legal | 4 | 3 | **12** | v2.3 master list: product ID with many part numbers; conflicts found on import; new numbers linked, not re-classified | Logistics lead + broker |
 
 **Top 3 to discuss with Chleo:** R2 (tariff changes), R1 (wrong code accepted), R3 (automation bias). All three have a mitigation that is already built, not just promised.
 

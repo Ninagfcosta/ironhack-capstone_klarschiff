@@ -40,6 +40,10 @@ flowchart LR
 > - **Rule packs for all goods:** CE (machinery, electrical/radio + WEEE, batteries), export control (EU dual-use on export, US EAR for US-origin items), food/plants (official controls), EUDR (shown as *upcoming* until 30 Dec 2026), CBAM full scope, trade defence.
 > - **Master list (Produktstamm):** part numbers change, the product stays. A new part number with the same description reuses the approved HS code and German description; similar products show the differences; conflicts in the client's list are found on import → [`klarschiff/master_list.py`](klarschiff/master_list.py)
 > - **17 new test cases** from other industries: `python evaluation/run_eval.py --local --dataset universal`
+> - **Security:** prompt-injection guard (hidden instructions in documents are flagged and ignored) → [`klarschiff/guard.py`](klarschiff/guard.py)
+> - **Full codes:** 8-digit CN 2026 (EU) and US HTS lines from free official data (`python scripts/download_official_data.py`), rulings library (EBTI / CROSS) as evidence
+> - **Scale:** batch report (`python -m klarschiff.batch file.csv`) and REST API (`uvicorn api.main:app` → `/docs`), with token cost per line
+> - **Consulting deliverables:** [`consulting/one_pager.md`](consulting/one_pager.md) · [`consulting/pilot_proposal.md`](consulting/pilot_proposal.md) · [`consulting/roadmap_to_production.md`](consulting/roadmap_to_production.md)
 
 ## 3. Try it (5 minutes)
 

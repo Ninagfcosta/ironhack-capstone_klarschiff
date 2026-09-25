@@ -8,7 +8,7 @@ from datetime import date, datetime, timezone
 
 from langsmith import traceable
 
-from . import config, intake, language, master_list, monitor, recommend, retrieval, rules, validate
+from . import config, guard, intake, language, llm, master_list, monitor, precedents, recommend, retrieval, rules, tariff_lines, validate
 from .models import AgentResult, Candidate, Classification, Shipment
 
 
@@ -24,6 +24,14 @@ def taric_link(hs_code: str, origin: str, on: date | None = None) -> str:
 def run(s: Shipment, today: date | None = None) -> AgentResult:
     today = today or date.today()
     pre_reasons: list[str] = []
+    llm.reset_usage()
+
+    # 0. Guard: customer documents are data. Hidden instructions for the AI -> a person checks the original.
+    findings = guard.scan(s.description + " " + " ".join(l.description for l in s.invoice_lines + s.packing_lines))
+    if findings:
+        pre_reasons.append("Possible hidden instructions for the AI in the document (" + "; ".join(findings)
+                           + "): they were ignored; a person checks the original.")
+    s = s.model_copy(update={"description": guard.clean(s.description)})
 
     # 1. Intake: language, legibility, documents mentioned in the text + structured lines
     original = s.description
@@ -69,6 +77,7 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
     # 3. Recommend: retrieval (RAG) + LLM choice
     query = s.description + " " + " ".join(l.description for l in s.invoice_lines)
     candidates = retrieval.search(query, k=8)
+    rulings = precedents.search(query, k=3, today=today)
 
     # 3a. Master list (Produktstamm): the product, not the part number, carries the approved code
     master_reasons: list[str] = []
@@ -97,7 +106,7 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
                                   f"({'; '.join(m.differences) or 'wording'}): a person decides.")
             if p.hs_code and p.hs_code not in [c.code for c in candidates]:
                 candidates.insert(0, Candidate(code=p.hs_code, title=f"Master list: {p.description}", score=0.0, reviewed=True))
-        cls, mode = recommend.classify(s, candidates)
+        cls, mode = recommend.classify(s, candidates, rulings)
     heading = retrieval.get_heading(cls.hs_code)
     flags = (heading or {}).get("flags", {})
     if s.intended_use != "construction":
@@ -150,6 +159,8 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
     if mode == "offline":
         reasons.append("Offline mode (no LLM): keyword match only.")
 
+    national = tariff_lines.national_lines(cls.hs_code, rules.region(s.destination), s.description) if heading else {}
+
     return AgentResult(
         shipment_id=s.shipment_id, hs_code=cls.hs_code, hs_title=(heading or {}).get("title", "Not a valid HS 2022 code"),
         confidence=round(cls.confidence, 2), category=cat, category_reasons=cat_reasons,
@@ -159,9 +170,12 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
         alternatives=cls.alternatives, candidates=candidates,
         links={"TARIC (EU, live)": taric_link(cls.hs_code, s.origin, today),
                "EZT-online (German customs tariff)": "https://auskunft.ezt-online.de",
-               "HTS (US, live)": "https://hts.usitc.gov/search?query=" + cls.hs_code.replace(".", "")},
+               "HTS (US, live)": "https://hts.usitc.gov/search?query=" + cls.hs_code.replace(".", ""),
+               "EBTI (EU rulings)": "https://ec.europa.eu/taxation_customs/dds2/ebti/ebti_consultation.jsp?Lang=en",
+               "CROSS (US rulings)": "https://rulings.cbp.gov/"},
         mode=mode, model=config.MODEL if mode == "llm" else ("none (master list)" if mode == "master list" else "none (offline)"),
         master=(m.model_dump() if m.kind != "none" else None),
+        national=national, precedents=rulings, usage=llm.usage_with_cost(),
         kb_version=retrieval.load_kb()["_meta"]["version"] + " + " + retrieval.load_hs()["_meta"]["version"],
         tariff_data_as_of=f"rules {rules.load_measures()['_meta']['version']} · monitor last run {monitor.last_run()}",
         generated_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),

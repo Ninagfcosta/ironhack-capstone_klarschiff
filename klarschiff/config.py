@@ -22,6 +22,11 @@ MODEL = os.getenv("KLARSCHIFF_MODEL", "gpt-4o-mini")
 VISION_MODEL = os.getenv("KLARSCHIFF_VISION_MODEL", MODEL)   # reads scanned invoices and photos
 APP_PASSWORD = os.getenv("KLARSCHIFF_APP_PASSWORD", "")      # empty = no login (local demo only)
 TEMPERATURE = float(os.getenv("KLARSCHIFF_TEMPERATURE", "0"))
+# v2.3: look up US HTS lines live on the free USITC API (cached in data/hts_cache.json). "false" = cache only.
+LIVE_TARIFF = os.getenv("KLARSCHIFF_LIVE_TARIFF", "true").lower() == "true"
+# Model prices (USD per 1M tokens) for the cost estimate. Check the provider's price page when you change model.
+PRICE_IN_PER_M = float(os.getenv("KLARSCHIFF_PRICE_IN_PER_M", "0.15"))    # gpt-4o-mini, Sep 2026
+PRICE_OUT_PER_M = float(os.getenv("KLARSCHIFF_PRICE_OUT_PER_M", "0.60"))  # gpt-4o-mini, Sep 2026
 
 # Review rules (business decisions, documented in use_case_definition.md)
 CONFIDENCE_THRESHOLD = float(os.getenv("KLARSCHIFF_CONFIDENCE_THRESHOLD", "0.75"))

@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT))
 
 import hmac  # noqa: E402
 
-from klarschiff import agent, config, intake, master_list, monitor, report, vision  # noqa: E402
+from klarschiff import agent, batch, config, intake, master_list, monitor, precedents, report, tariff_lines, vision  # noqa: E402
 from klarschiff.intake import DOC_PATTERNS  # noqa: E402
 from klarschiff.models import Shipment  # noqa: E402
 
@@ -62,8 +62,9 @@ for line in (ROOT / "evaluation" / "dataset.jsonl").read_text(encoding="utf-8").
     c = json.loads(line)
     SAMPLES[f"{c['id']} · {c['inputs']['description'][:70]}"] = c["inputs"]
 
-tab_check, tab_master, tab_monitor, tab_log, tab_about = st.tabs(
-    [T(x) for x in ["🔎 Check a shipment", "📒 Master list", "📡 Tariff monitor", "🗂️ Decisions & metrics", "ℹ️ How it works"]])
+tab_check, tab_batch, tab_master, tab_monitor, tab_log, tab_about = st.tabs(
+    [T(x) for x in ["🔎 Check a shipment", "📦 Batch", "📒 Master list", "📡 Tariff monitor", "🗂️ Decisions & metrics",
+                    "ℹ️ How it works"]])
 
 # ---------------------------------------------------------------- CHECK
 with tab_check:
@@ -173,6 +174,20 @@ with tab_check:
                     st.caption(T("Part numbers") + ": " + (", ".join(mp.get("part_numbers") or []) or "-"))
                     for dff in r.master.get("differences") or []:
                         st.warning(dff)
+            if r.national:
+                nat = r.national
+                with st.expander(T("🔢 Full code ({})", nat["system"]) + (f": {nat['suggested']}" if nat.get("suggested") else ""),
+                                 expanded=True):
+                    if nat.get("suggested"):
+                        st.caption(T("Suggested by word match; a person confirms the line."))
+                    else:
+                        st.caption(T("Several lines fit: a person chooses."))
+                    st.dataframe(pd.DataFrame(nat["lines"]), hide_index=True, width="stretch")
+            if r.precedents:
+                with st.expander(T("📚 Similar official rulings in your library ({})", len(r.precedents))):
+                    for pr in r.precedents:
+                        badge = "✅" if pr.get("valid") else "⌛ " + T("expired")
+                        st.markdown(f"- **{pr['reference']}** ({pr['source']}) · HS {pr['code']} · {badge}: {pr['description'][:160]}")
             if r.translated_description:
                 with st.expander(T("🌐 Translated from '{}': original and English", r.source_language), expanded=True):
                     st.markdown(f"**{T('Original')}:** {r.original_description}")
@@ -215,6 +230,9 @@ with tab_check:
                 st.dataframe(pd.DataFrame([c.model_dump() for c in r.candidates]), hide_index=True)
                 st.write(T("Alternatives considered by the model:"), ", ".join(r.alternatives) or "-")
             st.caption(f"{T('Mode')}: {r.mode} · {T('model')}: {r.model} · {T('knowledge base')} {r.kb_version} · {r.tariff_data_as_of}")
+            if r.usage.get("calls"):
+                st.caption(T("AI use for this check: {} calls · {} tokens · about ${}", r.usage["calls"],
+                             r.usage["prompt_tokens"] + r.usage["completion_tokens"], f"{r.usage['est_cost_usd']:.5f}"))
 
             st.markdown("#### " + T("3 · Your decision"))
             d1, d2 = st.columns([1, 1])
@@ -243,6 +261,28 @@ with tab_check:
             b2.download_button(T("Download review pack for the broker"), report.review_pack(r, decision, final_hs, comment),
                                file_name=f"klarschiff_{r.shipment_id}_review_pack.md", width="stretch")
             st.caption(T(r.disclaimer))
+
+# ---------------------------------------------------------------- BATCH
+with tab_batch:
+    st.subheader(T("Batch check"))
+    st.write(T("Check many shipments at once and download one report. Columns: shipment_id, description, origin, "
+               "destination, part_number, documents_provided (separated by ;), intended_use · example: "
+               "mvp/sample_data/batch_sample.csv"))
+    bup = st.file_uploader(T("Shipments CSV"), type=["csv"], key="batch_csv")
+    if bup and st.button(T("Run the batch check"), type="primary"):
+        with st.spinner(T("Checking documents, rules and tariffs…")):
+            st.session_state["batch"] = batch.run_csv(bup.getvalue().decode("utf-8-sig"))
+    if st.session_state.get("batch"):
+        rows, summ = st.session_state["batch"]
+        b1, b2, b3, b4 = st.columns(4)
+        b1.metric(T("Shipments"), summ["shipments"])
+        b2.metric(T("To review"), summ["to_review"])
+        b3.metric(T("Master-list hits"), summ["master_list_hits"])
+        b4.metric(T("AI cost (estimate)"), f"${summ['est_cost_usd_total']:.4f}")
+        st.caption(T("Per line: about ${} · categories 1/2/3: {} / {} / {} · {} s", f"{summ['est_cost_usd_per_line']:.5f}",
+                     summ["by_category"][1], summ["by_category"][2], summ["by_category"][3], summ["seconds"]))
+        st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
+        st.download_button(T("Download report (CSV)"), batch.to_csv(rows), file_name="klarschiff_batch_report.csv")
 
 # ---------------------------------------------------------------- MASTER LIST
 with tab_master:
@@ -288,6 +328,17 @@ with tab_master:
                     st.warning(dff)
             else:
                 st.caption(T("No product found: the agent classifies it and, after approval, adds it to the list."))
+
+    st.markdown("#### " + T("📚 Rulings library (EBTI / CROSS)"))
+    st.caption(T("Add official rulings your team looked up (EU EBTI, US CROSS). The agent shows similar ones as evidence. "
+                 "Columns: reference, source, code, description, issued, valid_until, url"))
+    st.markdown("[EBTI](https://ec.europa.eu/taxation_customs/dds2/ebti/ebti_consultation.jsp?Lang=en) · "
+                "[CROSS](https://rulings.cbp.gov/)")
+    rl = st.file_uploader(T("Rulings CSV"), type=["csv"], key="rul_csv")
+    if rl and st.button(T("Add rulings")):
+        rep = precedents.import_csv(rl.getvalue().decode("utf-8-sig"))
+        st.success(T("{} rulings added · {} in the library", rep["imported"], rep["total"]))
+    st.caption(T("Rulings in the library: {}", len(precedents.load())))
 
 # ---------------------------------------------------------------- MONITOR
 with tab_monitor:

@@ -100,6 +100,9 @@ class AgentResult(BaseModel):
     tariff_data_as_of: str
     generated_at: str
     master: dict | None = None  # master-list match: kind, product, score, differences
+    national: dict = Field(default_factory=dict)  # v2.3: CN (EU, 8 digits) or HTS (US) lines under the HS code
+    precedents: list[dict] = Field(default_factory=list)  # v2.3: similar official rulings from the team's library
+    usage: dict = Field(default_factory=dict)  # v2.3: tokens and estimated cost of the AI calls for this check
     source_language: str = "en/de"
     original_description: str = ""
     translated_description: str = ""
