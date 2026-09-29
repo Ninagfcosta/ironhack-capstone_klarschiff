@@ -22,7 +22,7 @@ Janaina Hoffmann · AI Consultant · Berlin · capstone project, Ironhack AI Con
 ## Proof (honest numbers)
 - 20 construction cases, real GPT-4o-mini runs (24 Sep 2026): 0.95 exact 6-digit codes; with two added review rules, every case that needed a person was sent to one. Tuned on the same cases, so optimistic.
 - 17 cases from other industries: keyword-only baseline 0.75 exact codes; all routed to a person because none of those codes is reviewed yet.
-- 10 errors found and documented (E1–E10), each with a fix and a test. 56 automated tests.
+- 10 errors found and documented (E1–E10), each with a fix. Errors that remain are shown, not hidden.
 - Cost: about 2,000 tokens per check ≈ **$0.0005 per line** with GPT-4o-mini at list price (Sep 2026); measured per run in the batch report.
 
 ## What it is not

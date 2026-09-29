@@ -84,4 +84,4 @@ Keys only in `.env` / platform secrets, never in code or Git (`.gitignore`; secr
 - **Scans and photos** are sent to the model provider as whole images. They can contain names, signatures and addresses. Rule for the pilot: **cover or crop personal data before uploading**; the vision prompt also tells the model not to return names, signatures, phone numbers or e-mail addresses.
 - **Translation** sends only the goods description.
 - For clients who require EU processing, set an EU provider in `.env` (`KLARSCHIFF_LLM_BASE_URL`, see `klarschiff/llm.py`) and re-run the evaluation.
-- The pilot server runs in Germany behind HTTPS and a password (`deploy/DEPLOY_EU.md`).
+- For the pilot, the app runs on a server in Germany behind HTTPS and a password (set up with the client's IT).

@@ -48,7 +48,6 @@ cd capstone-round1-hoffmann
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env          # paste your own keys into .env
-python -m pytest -q           # 16 offline tests
 python evaluation/run_eval.py --local      # 20 cases, results in evaluation/results/
 streamlit run mvp/app.py      # the MVP
 ```

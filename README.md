@@ -42,7 +42,7 @@ flowchart LR
 > - **17 new test cases** from other industries: `python evaluation/run_eval.py --local --dataset universal`
 > - **Security:** prompt-injection guard (hidden instructions in documents are flagged and ignored) → [`klarschiff/guard.py`](klarschiff/guard.py)
 > - **Full codes:** 8-digit CN 2026 (EU) and US HTS lines from free official data (`python scripts/download_official_data.py`), rulings library (EBTI / CROSS) as evidence
-> - **Scale:** batch report (`python -m klarschiff.batch file.csv`) and REST API (`uvicorn api.main:app` → `/docs`), with token cost per line
+> - **Scale:** batch check of many shipments in the app (tab 📦 Batch) or `python -m klarschiff.batch file.csv`, with token cost per line
 > - **Consulting deliverables:** [`consulting/one_pager.md`](consulting/one_pager.md) · [`consulting/pilot_proposal.md`](consulting/pilot_proposal.md) · [`consulting/roadmap_to_production.md`](consulting/roadmap_to_production.md)
 
 ## 3. Try it (5 minutes)
@@ -51,7 +51,6 @@ flowchart LR
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env            # add your own OPENAI_API_KEY and LANGSMITH_API_KEY (never commit .env)
-python -m pytest -q             # offline tests (never call a paid model)
 streamlit run mvp/app.py        # the MVP (works offline too, in keyword mode)
 python evaluation/run_eval.py --langsmith   # 20-case LangSmith experiment
 python -m klarschiff.monitor    # tariff monitor (also runs daily via GitHub Actions)
@@ -93,7 +92,6 @@ python -m klarschiff.monitor    # tariff monitor (also runs daily via GitHub Act
 ├── evaluation/            # dataset (20 cases), evaluators, runner, LangSmith doc, results
 ├── poc/                   # n8n batch POC v2
 ├── compliance/            # EU AI Act, GDPR
-├── tests/                 # 16 unit tests (offline)
 ├── data/                  # decision log, monitor state, alerts (created at runtime)
 ├── .github/workflows/     # daily tariff monitor
 ├── research/ charts/ n8n/ cost_estimation/ feedback/ 00_origin_silvertrust/

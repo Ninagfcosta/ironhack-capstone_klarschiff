@@ -61,7 +61,7 @@ Because a wrong code can cost money and penalties, KlarSchiff follows the spirit
 | Record-keeping (Art. 12) | LangSmith traces + decision log with model and knowledge-base version |
 | Transparency to users (Art. 13) | Every result shows reasons, evidence, sources, data date and limits |
 | Human oversight (Art. 14) | A person approves, corrects or rejects every result; 13 review triggers; nothing is filed automatically |
-| Accuracy and robustness (Art. 15) | 20-case evaluation, 16 unit tests, offline fallback, format checks, error analysis |
+| Accuracy and robustness (Art. 15) | 20-case evaluation (+17 cases from other industries), offline fallback, format checks, error analysis, prompt-injection guard |
 
 ## 7. Technical documentation outline
 
@@ -70,6 +70,6 @@ Because a wrong code can cost money and penalties, KlarSchiff follows the spirit
 3. Data: knowledge base, rules, sources, update process → `klarschiff/knowledge/`, `klarschiff/monitor.py`
 4. Model: provider, version, prompt, settings → `klarschiff/recommend.py`, `.env.example`
 5. Human oversight design → `mvp/mvp_documentation.md`
-6. Testing and metrics, known errors → `evaluation/langsmith.md`, `tests/`
+6. Testing and metrics, known errors → `evaluation/langsmith.md`, `evaluation/results/`
 7. Risk management → `roi_risk_assessment.md`
 8. Change log and re-evaluation rule (re-run the evaluation before any model or rule change) → `README.md`
