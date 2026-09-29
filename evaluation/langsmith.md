@@ -81,15 +81,16 @@ Runs on 24 Sep 2026 (`evaluation/results/offline-baseline.json`, `llm-gpt-4o-min
 
 ## v2.3: universal cases (other industries)
 
-`evaluation/dataset_universal.jsonl`: 17 shipments outside construction (semiconductor inspection tools and spare parts,
+`evaluation/dataset_universal.jsonl`: 17 fictional shipments outside construction (a laser cutting machine and a spare part,
 batteries, laptops, coffee, T-shirts, chairs, bicycles, plastics, aluminium profiles, pumps, cocoa, smartphones, bolts,
-bearings, an export to China, one vague case). Written by the same person as the agent: optimistic, like E6.
+bearings, a drone exported to China, one vague case). Written by the same person as the agent: optimistic, like E6.
 
 | Run | HS exact | Routing | No false all-clear | Category |
 |---|---|---|---|---|
-| Offline keyword baseline (no LLM), 25 Sep 2026 | 0.75 | 1.00 | 1.00 | 0.94 |
+| Offline keyword baseline (no LLM), 29 Sep 2026 | 0.75 | 1.00 | 1.00 | 0.88 |
 | GPT-4o-mini | run on the Mac: `python evaluation/run_eval.py --local --dataset universal` | | | |
 
 Every universal case goes to a person, because none of these codes is in the reviewed layer yet: this is by design.
-Misses in the offline run: wafer inspection system → 9030.82 (expected 9031.41), T-shirts → 6105.10 (6109.10),
-bicycle with aluminium frame → 7610.10 (8712.00): keyword search is misled by material words; the LLM step exists for this.
+Misses in the offline run: spare laser cutting head → 8456.11 (the machine, expected 8466.93 for parts), T-shirts → 6105.10
+(6109.10), bicycle with aluminium frame → 7610.10 (8712.00), drone → 8806.99 (8806.22, weight class): keyword search is
+misled by material words and cannot apply the rules for parts; the LLM step and the review exist for this.

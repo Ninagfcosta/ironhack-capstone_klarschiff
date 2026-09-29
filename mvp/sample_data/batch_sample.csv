@@ -1,7 +1,7 @@
 shipment_id,description,origin,destination,part_number,documents_provided,intended_use
 B01,"Invoice: 500 bags Portland cement CEM I 42.5 R, 25 kg each. DoP and CE label attached.",TR,DE,,Commercial invoice;Packing list,construction
-B02,"Wafer stage assembly, spare part for optical wafer inspection system",US,DE,0100-30999,Commercial invoice,other
+B02,"Mineral wool insulation slab 100 mm, 1200 x 600 mm",PL,DE,INS-100-Z,Commercial invoice,construction
 B03,"Rechargeable lithium-ion battery packs for notebook computers, 200 pieces",CN,DE,,Commercial invoice;Packing list,other
 B04,"Roasted coffee beans, not decaffeinated, 60 bags of 20 kg",BR,DE,,Commercial invoice,other
-B05,"Hex bolt M10x40 stainless A2",CN,DE,0400-10010,Commercial invoice;Packing list,other
+B05,"Hex bolt M10x40 stainless A2",CN,DE,BLT-1040,Commercial invoice;Packing list,other
 B06,"Parts, 50 pcs",CN,DE,,,other

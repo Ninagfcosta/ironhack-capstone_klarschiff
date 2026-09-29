@@ -26,7 +26,7 @@ def test_every_reviewed_code_exists_in_hs_2022():
 
 
 def test_retrieval_outside_construction():
-    assert retrieval.search("optical inspection system for semiconductor wafers")[0].code == "9031.41"
+    assert retrieval.search("laser cutting machine for metal sheets")[0].code == "8456.11"
     assert retrieval.search("rechargeable lithium-ion battery")[0].code == "8507.60"
 
 
@@ -39,13 +39,13 @@ def test_unreviewed_code_always_goes_to_a_person(monkeypatch):
 
 
 def test_dual_use_only_on_export_from_the_eu():
-    imp = {m.id for m in rules.applicable_measures("9031.41", {}, Shipment(description="x", origin="JP", destination="DE"), TODAY)}
-    exp = {m.id for m in rules.applicable_measures("9031.41", {}, Shipment(description="x", origin="DE", destination="CN"), TODAY)}
+    imp = {m.id for m in rules.applicable_measures("8806.22", {}, Shipment(description="x", origin="JP", destination="DE"), TODAY)}
+    exp = {m.id for m in rules.applicable_measures("8806.22", {}, Shipment(description="x", origin="DE", destination="CN"), TODAY)}
     assert "EU_DUAL_USE" not in imp and "EU_DUAL_USE" in exp
 
 
 def test_us_origin_items_get_an_ear_check():
-    ids = {m.id for m in rules.applicable_measures("9031.90", {}, Shipment(description="x", origin="US", destination="DE"), TODAY)}
+    ids = {m.id for m in rules.applicable_measures("8471.30", {}, Shipment(description="x", origin="US", destination="DE"), TODAY)}
     assert "US_EAR" in ids
 
 

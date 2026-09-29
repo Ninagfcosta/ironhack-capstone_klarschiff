@@ -2,7 +2,7 @@
 
 **AI pre-shipment co-pilot for customs teams: clear answers, human decisions.**
 Janaina Hoffmann · AI Consultant · Berlin · capstone project, Ironhack AI Consulting & Integration (Oct 2026)
-*Client names are withheld; all demo data is fictional.*
+*Client: I&E LLC (fictional). All names and data in this project are fictional.*
 
 ## The problem
 - **Errors are made at the desk and found at the border.** A wrong HS code or a missing document surfaces at customs, when the goods are already waiting (illustrative: 2+ days, ~€1,500 per hold).

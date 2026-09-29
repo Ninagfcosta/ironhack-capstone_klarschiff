@@ -1,10 +1,10 @@
 part_number,description,description_de,hs_code
-0100-12345,"Wafer stage assembly, spare part for optical wafer inspection system","Wafer-Tisch-Baugruppe, Ersatzteil für optisches Wafer-Inspektionssystem",9031.90
-0100-12345-B,"Wafer stage assembly, spare part for optical wafer inspection system","Wafer-Tisch-Baugruppe, Ersatzteil für optisches Wafer-Inspektionssystem",9031.90
-0100-20417,"Wafer stage assembly, spare part for optical wafer inspection system, Rev C",,9031.90
-0200-55120,"Linear motor 24 V for positioning stage",,8501.10
-0200-55120-A,"Linear motor 24 V for positioning stage","Linearmotor 24 V für Positioniertisch",8501.31
-0300-77001,"Optical inspection system for semiconductor wafers","Optisches Inspektionssystem für Halbleiterwafer",9031.41
-0400-10010,"Hex bolt M10x40 stainless A2","Sechskantschraube M10x40 Edelstahl A2",7318.15
-0400-10011,"Hex bolt M12x40 stainless A4","Sechskantschraube M12x40 Edelstahl A4",7318.15
-0500-00077,"Rechargeable lithium-ion battery pack 14.4 V for service laptop",,8507.60
+INS-100-A,"Mineral wool insulation slab 100 mm, 1200 x 600 mm","Mineralwolle-Dämmplatte 100 mm, 1200 x 600 mm",6806.10
+INS-100-B,"Mineral wool insulation slab 100 mm, 1200 x 600 mm","Mineralwolle-Dämmplatte 100 mm, 1200 x 600 mm",6806.10
+INS-100-C,"Mineral wool insulation slab 100 mm, 1200 x 600 mm, Rev C",,6806.10
+WIN-7001,"Aluminium window profile, thermally broken",,7604.29
+WIN-7001-A,"Aluminium window profile, thermally broken","Aluminium-Fensterprofil, thermisch getrennt",7610.10
+PC-3025,"Precast concrete wall element 3.0 x 2.5 m","Betonfertigteil-Wandelement 3,0 x 2,5 m",6810.91
+BLT-1040,"Hex bolt M10x40 stainless A2","Sechskantschraube M10x40 Edelstahl A2",7318.15
+BLT-1240,"Hex bolt M12x40 stainless A4","Sechskantschraube M12x40 Edelstahl A4",7318.15
+BAT-0018,"Rechargeable lithium-ion battery pack 18 V for cordless drill",,8507.60

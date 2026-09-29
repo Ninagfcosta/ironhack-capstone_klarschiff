@@ -1,6 +1,6 @@
 """Master list (Produktstamm): one product, many part numbers.
 
-The problem (seen at a manufacturer and its logistics provider): the master list is keyed by PART NUMBER.
+The problem (fictional client scenario, I&E LLC; a common pattern in trade): the master list is keyed by PART NUMBER.
 Part numbers change (new revision, new supplier, new ERP), the description stays the same, and the lookup
 by part number finds nothing, so the approved HS code and the approved German description are lost.
 People classify again, and sometimes the SAME product gets a DIFFERENT code (an audit risk).
@@ -32,7 +32,7 @@ from . import config
 STORE_NAME = "master_list.json"
 SIMILAR = 0.80  # description similarity (0-1) from which we suggest a product
 
-# part-number-like tokens: letters+digits with dashes or long digit runs (0100-12345, PN12345-A, 740-613520-00)
+# part-number-like tokens: letters+digits with dashes or long digit runs (INS-100-A, PN12345-A, 740-613520-00)
 _PN = re.compile(r"\b(?:p/?n|part\s*(?:no|number)|art(?:ikel)?[.\s-]*nr)\b[:.\s]*\S+|\b(?=[a-z0-9-]*\d)[a-z0-9]+(?:-[a-z0-9]+){1,}\b|\b\d{7,}\b", re.I)
 _REV = re.compile(r"\brev(?:ision)?\.?\s*[a-z0-9]{1,3}\b", re.I)
 _UNITS = {"millimeter": "mm", "millimetre": "mm", "centimeter": "cm", "centimetre": "cm", "kilogram": "kg", "kilo": "kg",

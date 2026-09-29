@@ -29,7 +29,7 @@ because the pilot users are German customs, logistics and construction teams. In
 - Not translated on purpose: legal names (CBAM, CE, DoP, TARIC), HS titles from the knowledge base, and the model's free-text reasoning (the app says so).
 
 ### Master list / Produktstamm (v2.3)
-Problem seen at a manufacturer and its logistics provider (names withheld): the product master list is keyed by part number.
+Problem in the fictional client scenario (I&E LLC): the product master list is keyed by the supplier's part number.
 Part numbers change (revision, new supplier, new ERP) while the description stays the same, so the lookup finds nothing and
 the approved HS code and German description are lost. People re-classify, and the same product can get different codes.
 - Tab **📒 Master list**: import the client's CSV (`part_number, description, description_de, hs_code`). Rows with the same

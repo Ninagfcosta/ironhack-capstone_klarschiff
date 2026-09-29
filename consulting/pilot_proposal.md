@@ -1,10 +1,10 @@
-# Pilot proposal: master-list continuity and pre-shipment checks
+# Pilot proposal: master-list continuity and pre-shipment checks (fictional scenario)
 
-**For:** a global freight forwarder and customs broker (customs / trade-compliance team, Germany) · **By:** Janaina Hoffmann
+**For:** I&E LLC (fictional client) and its customs broker · **By:** Janaina Hoffmann
 **Status:** proposal for discussion · all data in this document is fictional
 
 ## 1. Why a pilot
-Large forwarders say it publicly: technology can assist the customs process, it cannot replace compliance judgment. KlarSchiff is built that way. The pilot proves value on **your** data before any contract for a product.
+Technology can assist the customs process; it cannot replace compliance judgment. KlarSchiff is built that way. This module pilot is part of the 3-month pilot in `strategic_plan.md` and proves value on I&E's own (anonymised) data before any subscription.
 
 ## 2. Scope (4–6 weeks)
 | In scope | Out of scope |

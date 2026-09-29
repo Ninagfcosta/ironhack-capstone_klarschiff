@@ -63,10 +63,10 @@ def test_master_list_reasons_translate(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "DATA_DIR", tmp_path)
     monkeypatch.setattr(config, "llm_available", lambda: False)
     master_list.import_csv((ROOT / "mvp" / "sample_data" / "master_list_sample.csv").read_text(encoding="utf-8"))
-    cases = [("Wafer stage assembly, spare part for optical wafer inspection system", "0100-77777"),
-             ("Linear motor 24 V for positioning stage", "0200-55120"),
-             ("Hex bolt M16x40 stainless A2", "0400-99999"),
-             ("Ceramic heater plate 230 V for vacuum chamber", "0400-10010")]
+    cases = [("Mineral wool insulation slab 100 mm, 1200 x 600 mm", "INS-100-Z"),
+             ("Aluminium window profile, thermally broken", "WIN-7001"),
+             ("Hex bolt M16x40 stainless A2", "BLT-9999"),
+             ("Glazed ceramic floor tiles 60 x 60 cm", "BLT-1040")]
     reasons = set()
     for d, pn in cases:
         r = agent.run(Shipment(description=d, part_number=pn))

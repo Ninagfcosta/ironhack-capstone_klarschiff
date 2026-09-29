@@ -1,6 +1,6 @@
 {
   "label": "offline-baseline-universal",
-  "run_at": "2026-09-25T10:39:34",
+  "run_at": "2026-09-29T15:21:24",
   "model": "gpt-4o-mini",
   "llm": false,
   "summary": {
@@ -25,54 +25,125 @@
       "n": 17
     },
     "category_correct": {
-      "mean": 0.938,
+      "mean": 0.875,
       "n": 16
     }
   },
   "cases": [
     {
       "id": "U01",
-      "description": "Optical wafer inspection system for detecting defects on semiconductor wafers, 1 unit",
+      "description": "Laser cutting machine for metal sheets, 6 kW fibre laser, 1 unit",
       "reference": {
         "accepted_hs": [
-          "9031.41"
+          "8456.11"
         ],
-        "category": 3,
+        "category": 2,
         "manual_review": true,
         "missing": []
       },
       "meta": {
-        "note": "US-origin: EAR check",
+        "note": "Machinery CE",
         "tags": [
           "universal"
         ]
       },
       "output": {
-        "hs_code": "9030.82",
-        "hs_title": "Instruments and apparatus; for measuring or checking semiconductor wafers or devices (including integrated circuits)",
-        "confidence": 0.5,
-        "category": 3,
+        "hs_code": "8456.11",
+        "hs_title": "Machine-tools; for working any material by removal of material; operated by laser",
+        "confidence": 0.47,
+        "category": 2,
         "manual_review": true,
         "missing_documents": [
           "(not stated) Commercial invoice",
           "(not stated) Packing list",
-          "(not stated) ECCN from the US supplier (or EAR99)"
+          "(not stated) EU Declaration of Conformity (machinery) + CE marking",
+          "(not stated) Instructions for use in German"
         ],
         "review_reasons": [
-          "Confidence 0.50 is below 0.75.",
-          "Code 9030.82 is not in the reviewed knowledge base.",
-          "Close call between 9030.82 and 9031.41: a person must choose.",
-          "Category 3: additional trade measures or controls always need a person.",
+          "Confidence 0.47 is below 0.75.",
+          "Code 8456.11 is not in the reviewed knowledge base.",
+          "Close call between 8456.11 and 8457.20: a person must choose.",
           "Offline mode (no LLM): keyword match only."
         ],
-        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 9030.82 'Instruments and apparatus; for measuring or checking semiconductor wafers or devices (including integrated circuits)'. Confidence is based on how clearly it beats the next match.",
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 8456.11 'Machine-tools; for working any material by removal of material; operated by laser'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "8456.11 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "U02",
+      "description": "Laser cutting head, spare part for a laser cutting machine",
+      "reference": {
+        "accepted_hs": [
+          "8466.93"
+        ],
+        "category": 1,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "parts of machine-tools",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "8456.11",
+        "hs_title": "Machine-tools; for working any material by removal of material; operated by laser",
+        "confidence": 0.48,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list",
+          "(not stated) EU Declaration of Conformity (machinery) + CE marking",
+          "(not stated) Instructions for use in German"
+        ],
+        "review_reasons": [
+          "Confidence 0.48 is below 0.75.",
+          "Code 8456.11 is not in the reviewed knowledge base.",
+          "Close call between 8456.11 and 8456.12: a person must choose.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 8456.11 'Machine-tools; for working any material by removal of material; operated by laser'. Confidence is based on how clearly it beats the next match.",
         "mode": "offline"
       },
       "scores": {
         "hs_code_correct": {
           "key": "hs_code_correct",
           "score": 0.0,
-          "comment": "Wrong code: 9030.82 vs ['9031.41']."
+          "comment": "Wrong code: 8456.11 vs ['8466.93']."
         },
         "missing_document_flagged": {
           "key": "missing_document_flagged",
@@ -96,79 +167,8 @@
         },
         "category_correct": {
           "key": "category_correct",
-          "score": 1.0,
-          "comment": "got 3, expected 3"
-        }
-      }
-    },
-    {
-      "id": "U02",
-      "description": "Replacement stage assembly, spare part for an optical semiconductor wafer inspection system",
-      "reference": {
-        "accepted_hs": [
-          "9031.90"
-        ],
-        "category": 3,
-        "manual_review": true,
-        "missing": []
-      },
-      "meta": {
-        "note": "parts of 9031; EAR",
-        "tags": [
-          "universal"
-        ]
-      },
-      "output": {
-        "hs_code": "9031.41",
-        "hs_title": "Optical instruments and appliances; for inspecting semiconductor wafers or devices or for inspecting photomasks or reticles used in manufacturing semiconductor devices, n.e.c. in chapter 90",
-        "confidence": 0.52,
-        "category": 3,
-        "manual_review": true,
-        "missing_documents": [
-          "(not stated) Commercial invoice",
-          "(not stated) Packing list",
-          "(not stated) ECCN from the US supplier (or EAR99)"
-        ],
-        "review_reasons": [
-          "Confidence 0.52 is below 0.75.",
-          "Code 9031.41 is not in the reviewed knowledge base.",
-          "Close call between 9031.41 and 8486.10: a person must choose.",
-          "Category 3: additional trade measures or controls always need a person.",
-          "Offline mode (no LLM): keyword match only."
-        ],
-        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 9031.41 'Optical instruments and appliances; for inspecting semiconductor wafers or devices or for inspecting photomasks or reticles used in manufacturing semiconductor devices, n.e.c. in chapter 90'. Confidence is based on how clearly it beats the next match.",
-        "mode": "offline"
-      },
-      "scores": {
-        "hs_code_correct": {
-          "key": "hs_code_correct",
-          "score": 0.5,
-          "comment": "Right heading, wrong subheading: 9031.41 vs ['9031.90']."
-        },
-        "missing_document_flagged": {
-          "key": "missing_document_flagged",
-          "score": null,
-          "comment": "No missing document in this case."
-        },
-        "source_shown": {
-          "key": "source_shown",
-          "score": 1.0,
-          "comment": "reason=True trace=True links=True"
-        },
-        "review_routing": {
-          "key": "review_routing",
-          "score": 1.0,
-          "comment": "Correct routing."
-        },
-        "no_false_all_clear": {
-          "key": "no_false_all_clear",
-          "score": 1.0,
-          "comment": "ok"
-        },
-        "category_correct": {
-          "key": "category_correct",
-          "score": 1.0,
-          "comment": "got 3, expected 3"
+          "score": 0.0,
+          "comment": "got 2, expected 1"
         }
       }
     },
@@ -1088,10 +1088,10 @@
     },
     {
       "id": "U16",
-      "description": "Optical inspection system for semiconductor wafers, export from Germany to China",
+      "description": "Unmanned aircraft (drone) with camera, take-off weight 2 kg, export from Germany to China",
       "reference": {
         "accepted_hs": [
-          "9031.41"
+          "8806.22"
         ],
         "category": 3,
         "manual_review": true,
@@ -1104,9 +1104,9 @@
         ]
       },
       "output": {
-        "hs_code": "9031.41",
-        "hs_title": "Optical instruments and appliances; for inspecting semiconductor wafers or devices or for inspecting photomasks or reticles used in manufacturing semiconductor devices, n.e.c. in chapter 90",
-        "confidence": 0.52,
+        "hs_code": "8806.99",
+        "hs_title": "Unmanned aircraft; for other than remote-controlled flight and other than for carriage of passengers with a maximum take-off weight more than 150kg",
+        "confidence": 0.45,
         "category": 3,
         "manual_review": true,
         "missing_documents": [
@@ -1115,20 +1115,20 @@
           "(not stated) Export-control classification (Annex I entry or 'not listed') by the exporter"
         ],
         "review_reasons": [
-          "Confidence 0.52 is below 0.75.",
-          "Code 9031.41 is not in the reviewed knowledge base.",
-          "Close call between 9031.41 and 8486.10: a person must choose.",
+          "Confidence 0.45 is below 0.75.",
+          "Code 8806.99 is not in the reviewed knowledge base.",
+          "Close call between 8806.99 and 8806.29: a person must choose.",
           "Category 3: additional trade measures or controls always need a person.",
           "Offline mode (no LLM): keyword match only."
         ],
-        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 9031.41 'Optical instruments and appliances; for inspecting semiconductor wafers or devices or for inspecting photomasks or reticles used in manufacturing semiconductor devices, n.e.c. in chapter 90'. Confidence is based on how clearly it beats the next match.",
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 8806.99 'Unmanned aircraft; for other than remote-controlled flight and other than for carriage of passengers with a maximum take-off weight more than 150kg'. Confidence is based on how clearly it beats the next match.",
         "mode": "offline"
       },
       "scores": {
         "hs_code_correct": {
           "key": "hs_code_correct",
-          "score": 1.0,
-          "comment": "9031.41 is correct."
+          "score": 0.5,
+          "comment": "Right heading, wrong subheading: 8806.99 vs ['8806.22']."
         },
         "missing_document_flagged": {
           "key": "missing_document_flagged",

@@ -1,4 +1,4 @@
-"""KlarSchiff REST API: the "plug" other systems (TMS, ERP, a forwarder's platform) can call.
+"""KlarSchiff REST API: the "plug" other systems (TMS, ERP, a customs broker's software) can call.
 
 Run:   uvicorn api.main:app --port 8000        then open http://localhost:8000/docs (interactive docs)
 Auth:  set KLARSCHIFF_API_KEY in .env; clients send it in the header  X-API-Key.  Empty = local demo only.
