@@ -1,4 +1,0 @@
-# Replace with your domain. Caddy gets the HTTPS certificate by itself.
-klarschiff.example.de {
-    reverse_proxy klarschiff:8501
-}
