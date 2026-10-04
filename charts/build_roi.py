@@ -30,16 +30,20 @@ def roi(rows, m):
 
 
 out = {}
+# Colours: the same palette as the presentation (deep plum background, cream text, sunset accents)
+BG, INK, MUTED = "#231640", "#FFF4EA", "#CDBBD6"
+plt.rcParams.update({"text.color": INK, "axes.labelcolor": MUTED, "xtick.color": MUTED, "ytick.color": MUTED, "axes.edgecolor": MUTED})
 fig, ax = plt.subplots(figsize=(10, 5.2), dpi=150)
-colors = {"Conservative": "#A8B4C2", "Base": "#00B8C8", "Optimistic": "#1769E0"}
+fig.patch.set_facecolor(BG); ax.set_facecolor(BG)
+colors = {"Conservative": "#CDBBD6", "Base": "#FF8A3D", "Optimistic": "#FFC857"}
 for name, v in SCENARIOS.items():
     rows, be = model(v)
     out[name] = {"monthly_value": v, "breakeven_month": be, "roi_12": roi(rows, 12), "roi_36": roi(rows, 36)}
     ax.plot([r[0] for r in rows], [(r[2] - r[1]) / 1000 for r in rows], lw=2.6, color=colors[name], label=f"{name} (€{v:,}/month)")
-ax.axhline(0, color="#081A2B", lw=1)
+ax.axhline(0, color=MUTED, lw=1)
 ax.set_xlabel("Month"); ax.set_ylabel("Cumulative net value (€ thousand)")
-ax.set_title("KlarSchiff: cumulative net value by scenario (illustrative)", loc="left", fontsize=13, color="#081A2B", fontweight="bold")
-ax.spines[["top", "right"]].set_visible(False); ax.grid(axis="y", alpha=.25); ax.legend(frameon=False)
-plt.tight_layout(); plt.savefig("charts/06_roi_scenarios.png")
+ax.set_title("KlarSchiff: cumulative net value by scenario (illustrative)", loc="left", fontsize=13, color=INK, fontweight="bold")
+ax.spines[["top", "right"]].set_visible(False); ax.grid(axis="y", alpha=.25); ax.legend(frameon=False, labelcolor=INK)
+plt.tight_layout(); plt.savefig("charts/06_roi_scenarios.png", facecolor=BG)
 json.dump(out, open("charts/roi_results.json", "w"), indent=2)
 print(json.dumps(out, indent=1))
