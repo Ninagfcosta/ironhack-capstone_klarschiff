@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT))
 import hmac  # noqa: E402
 
 from klarschiff import agent, batch, config, intake, master_list, monitor, precedents, report, tariff_lines, vision  # noqa: E402
+from klarschiff import quality, recheck, review_queue, semantic_search, supplier_request, voice  # noqa: E402
 from klarschiff.intake import DOC_PATTERNS  # noqa: E402
 from klarschiff.models import Shipment  # noqa: E402
 
@@ -24,29 +25,31 @@ sys.path.insert(0, str(ROOT / "mvp"))
 from i18n import ABOUT, LANGS, reason, t  # noqa: E402
 
 # Brand colours: the same "sunset" palette as the presentation
-INK, PLUM, ORANGE, AMBER, CORAL, GREEN = "#1E1433", "#3B1838", "#E8622C", "#F5A524", "#E2475A", "#1F9D6B"
-st.set_page_config(page_title="KlarSchiff · Pre-shipment co-pilot", page_icon="⚓", layout="wide")
+# Brand colours: the same palette as the presentation (deep plum background, cream text, sunset orange)
+INK, CREAM, MUTED, CARD, LINE = "#170F2E", "#FFF4EA", "#CDBBD6", "#231640", "#4B2E66"
+ORANGE, AMBER, CORAL, GREEN, VIOLET = "#FF8A3D", "#FFC857", "#FF5F6D", "#5BE0A0", "#B87CFF"
+st.set_page_config(page_title="KlarSchiff · Pre-shipment co-pilot", page_icon="✅", layout="wide")
 st.markdown(f"""<style>
-.ks-bar {{height:6px;border-radius:6px;background:linear-gradient(90deg,{AMBER},{ORANGE},{CORAL},#9B5DE5);margin:6px 0 14px 0}}
-.ks-pill {{display:inline-block;border:1px solid #F1D9C8;background:#FFF6EF;color:{INK};border-radius:999px;padding:3px 12px;margin:2px 6px 2px 0;font-size:.85rem}}
-.ks-card {{border:1px solid #F1D9C8;border-radius:14px;padding:14px 16px;background:#FFFFFF;box-shadow:0 1px 2px rgba(30,20,51,.06);min-height:150px}}
-.ks-label {{color:#7A6A80;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em}}
-.ks-big {{font-size:2rem;font-weight:800;color:{INK};line-height:1.15}}
-.ks-small {{color:#7A6A80;font-size:.85rem}}
-.ks-ok {{background:#E9F7F0;border:1px solid #BFE6D3;border-left:8px solid {GREEN};padding:14px 18px;border-radius:12px;color:{INK}}}
-.ks-warn {{background:#FFF4E6;border:1px solid #F7D7AE;border-left:8px solid {ORANGE};padding:14px 18px;border-radius:12px;color:{INK}}}
+.ks-bar {{height:6px;border-radius:6px;background:linear-gradient(90deg,{AMBER},{ORANGE},{CORAL},{VIOLET});margin:6px 0 14px 0}}
+.ks-pill {{display:inline-block;border:1px solid {LINE};background:{CARD};color:{CREAM};border-radius:999px;padding:3px 12px;margin:2px 6px 2px 0;font-size:.85rem}}
+.ks-card {{border:1px solid {LINE};border-radius:14px;padding:14px 16px;background:{CARD};min-height:150px}}
+.ks-label {{color:{MUTED};font-size:.8rem;text-transform:uppercase;letter-spacing:.08em}}
+.ks-big {{font-size:2rem;font-weight:800;color:{CREAM};line-height:1.15}}
+.ks-small {{color:{MUTED};font-size:.85rem}}
+.ks-ok {{background:#173A33;border:1px solid #2F6B5A;border-left:8px solid {GREEN};padding:14px 18px;border-radius:12px;color:{CREAM}}}
+.ks-warn {{background:#3B1838;border:1px solid #6B2F4F;border-left:8px solid {ORANGE};padding:14px 18px;border-radius:12px;color:{CREAM}}}
 .ks-verdict {{font-size:1.35rem;font-weight:800}}
-.ks-step {{border:1px solid #F1D9C8;border-radius:12px;padding:10px 10px;background:#FFFFFF;text-align:center;min-height:104px}}
-.ks-step b {{display:block;color:{INK}}}
-.ks-track {{height:10px;border-radius:6px;background:#F3E6DC;position:relative;margin-top:8px}}
+.ks-step {{border:1px solid {LINE};border-radius:12px;padding:10px 10px;background:{CARD};text-align:center;min-height:104px}}
+.ks-step b {{display:block;color:{CREAM}}}
+.ks-track {{height:10px;border-radius:6px;background:#3A2A55;position:relative;margin-top:8px}}
 .ks-fill {{height:10px;border-radius:6px}}
-.ks-mark {{position:absolute;top:-4px;width:2px;height:18px;background:{INK}}}
+.ks-mark {{position:absolute;top:-4px;width:2px;height:18px;background:{CREAM}}}
 </style>""", unsafe_allow_html=True)
-# KlarSchiff mark: a check (shipment cleared) above a route line, on a dark rounded square
+# KlarSchiff mark (same as the presentation): a check (shipment cleared) above an orange route line
 LOGO = (f'<svg width="60" height="60" viewBox="0 0 120 120" aria-label="KlarSchiff logo">'
-        f'<rect width="120" height="120" rx="28" fill="{INK}"/>'
-        f'<path d="M30 58 L52 80 L92 34" fill="none" stroke="#FFFFFF" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>'
-        f'<path d="M28 98 H92" stroke="{ORANGE}" stroke-width="7" stroke-linecap="round"/></svg>')
+        f'<rect width="120" height="120" rx="28" fill="{CREAM}"/>'
+        f'<path d="M30 58 L52 80 L92 34" fill="none" stroke="{INK}" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>'
+        f'<path d="M28 98 H92" stroke="#E8622C" stroke-width="7" stroke-linecap="round"/></svg>')
 def short(text, n=70):
     """Shorten a long title at a word boundary."""
     return text if len(text) <= n else text[:n].rsplit(" ", 1)[0] + " …"
@@ -60,9 +63,9 @@ with switch:
     L = st.radio("🌐 Language / Sprache", list(LANGS), format_func=LANGS.get, horizontal=True, key="lang")
 T = lambda text, *a: t(text, L, *a)  # noqa: E731
 head.markdown(f'<div style="display:flex;align-items:center;gap:14px">{LOGO}'
-              f'<div><div style="font-size:42px;font-weight:800;color:{INK};line-height:1.05">Klar<span style="color:{ORANGE}">Schiff</span></div>'
-              f'<div style="color:#7A6A80;margin-top:2px">{T("AI pre-shipment co-pilot · HS code suggestion, document check and tariff monitor")}'
-              f' · <b style="color:{INK}">{T("Clear answers. Human decisions.")}</b></div></div></div>', unsafe_allow_html=True)
+              f'<div><div style="font-size:42px;font-weight:800;color:{CREAM};line-height:1.05">Klar<span style="color:{ORANGE}">Schiff</span></div>'
+              f'<div style="color:{MUTED};margin-top:2px">{T("AI pre-shipment co-pilot · HS code suggestion, document check and tariff monitor")}'
+              f' · <b style="color:{CREAM}">{T("Clear answers. Human decisions.")}</b></div></div></div>', unsafe_allow_html=True)
 head.markdown('<div class="ks-bar"></div>' + "".join(f'<span class="ks-pill">{T(x)}</span>' for x in
               ["Suggests the customs code", "Checks the documents", "Applies official rules", "You decide"]),
               unsafe_allow_html=True)
@@ -87,9 +90,9 @@ for line in (ROOT / "evaluation" / "dataset.jsonl").read_text(encoding="utf-8").
     c = json.loads(line)
     SAMPLES[f"{c['id']} · {c['inputs']['description'][:70]}"] = c["inputs"]
 
-tab_check, tab_batch, tab_master, tab_monitor, tab_log, tab_about = st.tabs(
-    [T(x) for x in ["🔎 Check a shipment", "📦 Batch", "📒 Master list", "📡 Tariff monitor", "🗂️ Decisions & metrics",
-                    "ℹ️ How it works"]])
+tab_check, tab_queue, tab_batch, tab_master, tab_monitor, tab_log, tab_about = st.tabs(
+    [T(x) for x in ["🔎 Check a shipment", "📋 Review queue", "📦 Batch", "📒 Master list", "📡 Tariff monitor",
+                    "📊 Dashboard", "ℹ️ How it works"]])
 
 # ---------------------------------------------------------------- CHECK
 with tab_check:
@@ -114,12 +117,14 @@ with tab_check:
                                 help=T("Used to find the product in the master list, even when the part number changed."))
         docs = st.multiselect(T("Documents you have"), list(DOC_PATTERNS), key="docs", placeholder=T("Choose options"))
         complete = st.checkbox(T("This list is complete: anything not selected is missing"), value=False, key="complete")
+        new_client = st.checkbox(T("New client (first 30 days): a person reviews every shipment"), value=False, key="new_client")
         with st.expander(T("Optional: invoice, packing list, PDF, scan, photo or e-invoice")):
             inv_csv = st.file_uploader(T("Invoice lines (CSV)"), type=["csv"], key="inv")
             pk_csv = st.file_uploader(T("Packing list lines (CSV)"), type=["csv"], key="pk")
             pdf = st.file_uploader(T("Invoice PDF (text or scanned)"), type=["pdf"], key="pdf")
             photo = st.file_uploader(T("Scan or photo of the invoice (JPG / PNG)"), type=["png", "jpg", "jpeg"], key="photo")
             xml = st.file_uploader(T("E-invoice (XRechnung / ZUGFeRD XML)"), type=["xml"], key="xml")
+            audio = st.file_uploader(T("Voice note from the warehouse (MP3 / M4A / WAV)"), type=["mp3", "m4a", "wav"], key="audio")
             st.caption(T("CSV columns: description, quantity, unit, gross_weight_kg, value_eur · examples in mvp/sample_data/ · "
                          "Scans and photos are read by the AI model: cover names, signatures and addresses before uploading."))
         go = st.button(T("Check shipment"), type="primary", width="stretch")
@@ -153,6 +158,11 @@ with tab_check:
                 if not inv and vr.lines:
                     inv = vr.lines
                 st.session_state["vision"] = dict(vr)
+            if audio:
+                with st.spinner(T("Turning the voice note into text…")):
+                    spoken = voice.transcribe(audio.getvalue(), audio.name)
+                st.session_state["voice_text"] = spoken
+                text = (text + "\n" + spoken).strip()
             if xml:
                 inv = intake.lines_from_einvoice(xml.getvalue())
                 text = (text + "\n" + "; ".join(l.description for l in inv)).strip()
@@ -162,11 +172,14 @@ with tab_check:
             s = Shipment(shipment_id=(sample.split(" ·")[0] if SAMPLES[sample] else "manual"), description=text,
                          origin=origin, destination=dest, intended_use=use, documents_provided=docs,
                          invoice_lines=inv, packing_lines=pk, documents_list_complete=complete, legible=legible, unreadable_parts=unreadable, source=source,
-                         part_number=part_no)
+                         part_number=part_no, new_client=new_client)
             st.session_state["shipment"] = s
             with st.spinner(T("Checking documents, rules and tariffs…")):
                 st.session_state["result"] = agent.run(s)
-        except ValueError as e:
+            res = st.session_state["result"]
+            st.session_state["ticket"] = review_queue.add(res, text) if res.manual_review else None
+            st.session_state.pop("supplier_draft", None)
+        except (ValueError, RuntimeError) as e:
             st.error(str(e))
         except Exception as e:  # never show a stack trace to the user
             st.error(T("Something went wrong ({}). The shipment was not checked; please try again or check it manually.", type(e).__name__))
@@ -189,6 +202,11 @@ with tab_check:
                 st.markdown(f'<div class="ks-ok"><div class="ks-verdict">🟢 {T("All checks passed")}</div>'
                             f'<div>{T("A person still approves before filing.")}</div></div>', unsafe_allow_html=True)
 
+            tk = st.session_state.get("ticket")
+            if tk:
+                st.caption(T("Review ticket {} opened · due {} · see the Review queue tab", tk["id"], tk["due"]))
+            if st.session_state.get("voice_text"):
+                st.caption(T("Voice note") + ": " + st.session_state["voice_text"])
             # --- the agent's steps, made visible
             missing = [d for d in r.required_documents if d.status == "missing" and d.mandatory]
             unknown = [d for d in r.required_documents if d.status == "not stated" and d.mandatory]
@@ -214,7 +232,7 @@ with tab_check:
             k2.markdown(f'<div class="ks-card"><div class="ks-label">{T("Confidence")}</div><div class="ks-big">{pct:.0%}</div>'
                         f'<div class="ks-track"><div class="ks-fill" style="width:{pct*100:.0f}%;background:{colour}"></div>'
                         f'<div class="ks-mark" style="left:{thr*100:.0f}%"></div></div>'
-                        f'<div class="ks-small">{T("Below {:.0%}: a person reviews", thr)}</div></div>', unsafe_allow_html=True)
+                        f'<div class="ks-small">{T("Band: {}", T(r.confidence_band or "-"))} · {T("below {:.0%}: a person reviews", thr)}</div></div>', unsafe_allow_html=True)
             k3.markdown(f'<div class="ks-card"><div class="ks-label">{T("Category")}</div><div class="ks-big">{r.category} / 3</div>'
                         f'<div class="ks-small">{T(CATEGORY.get(r.category, ""))}</div></div>', unsafe_allow_html=True)
             st.write("")
@@ -261,6 +279,15 @@ with tab_check:
                 st.dataframe(pd.DataFrame([{T("Document"): d.name, T("Type"): T("required" if d.mandatory else "recommended"),
                                             T("Status"): T(status[d.status]), T("Legal basis"): d.legal_ref} for d in r.required_documents]),
                              hide_index=True, width="stretch")
+                if supplier_request.missing_items(r):
+                    if st.button(T("✉️ Draft an e-mail to the supplier"), key="draft_btn"):
+                        st.session_state["supplier_draft"] = supplier_request.draft(r, L)
+                    dr = st.session_state.get("supplier_draft")
+                    if dr:
+                        st.caption(T("Draft only: a person reads, edits and sends it. Nothing is sent automatically."))
+                        subj = st.text_input(T("Subject"), dr["subject"], key="draft_subj")
+                        body = st.text_area(T("Message"), dr["body"], height=230, key="draft_body")
+                        st.download_button(T("Download the draft (.txt)"), f"{subj}\n\n{body}", file_name=f"request_{r.shipment_id}.txt")
                 if r.validation_issues:
                     st.markdown("#### " + T("Invoice vs packing list"))
                     for i in r.validation_issues:
@@ -324,6 +351,35 @@ with tab_check:
             b2.download_button(T("Download review pack for the broker"), report.review_pack(r, decision, final_hs, comment),
                                file_name=f"klarschiff_{r.shipment_id}_review_pack.md", width="stretch")
             st.caption(T(r.disclaimer))
+
+# ---------------------------------------------------------------- REVIEW QUEUE
+with tab_queue:
+    st.subheader(T("Review queue"))
+    st.write(T("Every shipment that needs a person gets a ticket with an owner and a due date, so nothing is forgotten. "
+               "Optional: an n8n workflow (n8n/review_queue_workflow.json) copies each ticket to Airtable and alerts the team on Telegram."))
+    qs = review_queue.stats()
+    q1, q2, q3 = st.columns(3)
+    q1.metric(T("Open"), qs["open"])
+    q2.metric(T("Overdue"), qs["overdue"])
+    q3.metric(T("Average time to close (hours)"), "-" if qs["avg_hours_to_close"] is None else qs["avg_hours_to_close"])
+    st.caption(T("n8n alerts: on") if review_queue.WEBHOOK else T("n8n alerts: off (set KLARSCHIFF_N8N_WEBHOOK in .env to turn them on)"))
+    tickets = review_queue.load()
+    open_t = [x for x in tickets if x["status"] != "done"]
+    for x in open_t[::-1][:30]:
+        with st.expander(f"{x['id']} · {x['shipment_id']} · HS {x['hs_code']} · {T('due')} {x['due']}"):
+            for rr in x["reasons"]:
+                st.markdown(f"- {reason(rr, L)}")
+            o1, o2, o3 = st.columns([2, 1, 1])
+            owner = o1.text_input(T("Owner (team or role)"), x["owner"], key="own" + x["id"])
+            if o2.button(T("Save owner"), key="so" + x["id"]):
+                review_queue.update(x["id"], owner=owner)
+                st.rerun()
+            if o3.button(T("Mark as done"), key="done" + x["id"]):
+                review_queue.update(x["id"], status="done")
+                st.rerun()
+    if tickets:
+        st.download_button(T("Download the queue (JSON)"), json.dumps(tickets, indent=1, ensure_ascii=False),
+                           file_name="klarschiff_review_queue.json")
 
 # ---------------------------------------------------------------- BATCH
 with tab_batch:
@@ -392,6 +448,16 @@ with tab_master:
             else:
                 st.caption(T("No product found: the agent classifies it and, after approval, adds it to the list."))
 
+    st.markdown("#### " + T("🔍 Search by meaning"))
+    st.caption(T("Finds the same product even when it is written differently (also German). Uses embeddings when an AI key is set."))
+    sq = st.text_input(T("Describe the product"), key="sem_q", placeholder="Steinwolle-Platte 100 mm")
+    if sq:
+        hits = semantic_search.search(sq)
+        if hits:
+            st.dataframe(pd.DataFrame(hits), hide_index=True, width="stretch")
+        else:
+            st.caption(T("The master list is empty: import it above first."))
+
     st.markdown("#### " + T("📚 Rulings library (EBTI / CROSS)"))
     st.caption(T("Add official rulings your team looked up (EU EBTI, US CROSS). The agent shows similar ones as evidence. "
                  "Columns: reference, source, code, description, issued, valid_until, url"))
@@ -427,6 +493,18 @@ with tab_monitor:
             if st.button(T("Mark as reviewed"), key="b" + a["id"]):
                 monitor.mark_reviewed(a["id"], note)
                 st.rerun()
+    st.markdown("#### " + T("🔁 Re-check after a rule change"))
+    st.caption(T("Lists the approved products in the master list whose HS code is affected by an open alert, so a person reviews them."))
+    if st.button(T("Find affected products")):
+        st.session_state["affected"] = recheck.affected_products()
+    aff = st.session_state.get("affected")
+    if aff is not None:
+        if aff:
+            st.dataframe(pd.DataFrame(aff), hide_index=True, width="stretch")
+            st.download_button(T("Download for the batch check (CSV)"), pd.DataFrame(aff).to_csv(index=False),
+                               file_name="klarschiff_recheck.csv")
+        else:
+            st.success(T("No approved product is affected by an open alert."))
     from klarschiff.rules import load_measures
     st.markdown("#### " + T("Rules in force (versioned)"))
     st.dataframe(pd.DataFrame([{T("Measure"): m["name"], T("Legal reference"): m["legal_ref"], T("From"): m["effective_from"],
@@ -436,14 +514,34 @@ with tab_monitor:
 
 # ---------------------------------------------------------------- LOG
 with tab_log:
-    st.subheader(T("Decisions and quality metrics"))
+    st.subheader(T("Dashboard: decisions and quality"))
     stats = report.override_rate()
     c1, c2 = st.columns(2)
     c1.metric(T("Decisions logged"), stats["decisions"])
     c2.metric(T("Override rate (team level)"), "-" if stats["override_rate"] is None else f"{stats['override_rate']:.0%}")
     st.caption(T("A very low override rate over time can mean automation bias (people stop checking). "
                  "Measured per team, not per person (works-council rules in Germany, §87 BetrVG)."))
+    sm = quality.summary()
+    d1, d2, d3 = st.columns(3)
+    d1.metric(T("Open reviews"), sm["queue"]["open"])
+    d2.metric(T("Overdue reviews"), sm["queue"]["overdue"])
+    d3.metric(T("Average time to close (hours)"), "-" if sm["queue"]["avg_hours_to_close"] is None else sm["queue"]["avg_hours_to_close"])
+    if sm["top_reasons"]:
+        st.markdown("#### " + T("Why shipments go to a person"))
+        st.bar_chart(pd.DataFrame(sm["top_reasons"], columns=[T("Reason"), T("Count")]).set_index(T("Reason")), horizontal=True)
+    st.markdown("#### " + T("Weekly second look (5–10% sample)"))
+    st.caption(T("A second person re-checks a random sample of last week's approved decisions. The broker stays responsible."))
+    if st.button(T("Draw this week's sample (10%)")):
+        st.session_state["sample_rows"] = quality.weekly_sample(0.1)
+    srows = st.session_state.get("sample_rows")
+    if srows is not None:
+        if srows:
+            st.dataframe(pd.DataFrame(srows), hide_index=True, width="stretch")
+            st.download_button(T("Download the sample (CSV)"), pd.DataFrame(srows).to_csv(index=False), file_name="klarschiff_weekly_sample.csv")
+        else:
+            st.caption(T("No approved decisions in the last 7 days."))
     if report.LOG.exists():
+        st.markdown("#### " + T("Decision log"))
         st.dataframe(pd.read_csv(report.LOG), hide_index=True, width="stretch")
 
 # ---------------------------------------------------------------- ABOUT

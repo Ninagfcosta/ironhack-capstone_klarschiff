@@ -1,0 +1,50 @@
+{
+  "name": "KlarSchiff - review queue alert (Webhook -> Set -> Airtable -> Telegram)",
+  "nodes": [
+    {
+      "parameters": {"httpMethod": "POST", "path": "klarschiff-review", "options": {}},
+      "id": "a1", "name": "Webhook (new review ticket)", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "assignments": {"assignments": [
+          {"id": "f1", "name": "Ticket", "value": "={{ $json.body.id }}", "type": "string"},
+          {"id": "f2", "name": "Shipment", "value": "={{ $json.body.shipment_id }}", "type": "string"},
+          {"id": "f3", "name": "HS code", "value": "={{ $json.body.hs_code }}", "type": "string"},
+          {"id": "f4", "name": "Reasons", "value": "={{ $json.body.reasons.join('; ') }}", "type": "string"},
+          {"id": "f5", "name": "Due", "value": "={{ $json.body.due }}", "type": "string"},
+          {"id": "f6", "name": "Status", "value": "Open", "type": "string"}
+        ]},
+        "options": {}
+      },
+      "id": "a2", "name": "Set (map fields)", "type": "n8n-nodes-base.set", "typeVersion": 3.4, "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {"__rl": true, "mode": "list", "value": ""},
+        "table": {"__rl": true, "mode": "list", "value": ""},
+        "columns": {"mappingMode": "autoMapInputData", "value": {}},
+        "options": {}
+      },
+      "id": "a3", "name": "Airtable (create record)", "type": "n8n-nodes-base.airtable", "typeVersion": 2.1, "position": [480, 0],
+      "notes": "Choose your Airtable credential, base 'KlarSchiff review queue' and the table. Columns: Ticket, Shipment, HS code, Reasons, Due, Status."
+    },
+    {
+      "parameters": {
+        "chatId": "",
+        "text": "=New KlarSchiff review {{ $('Set (map fields)').item.json.Ticket }}: shipment {{ $('Set (map fields)').item.json.Shipment }}, HS {{ $('Set (map fields)').item.json['HS code'] }}, due {{ $('Set (map fields)').item.json.Due }}. Reasons: {{ $('Set (map fields)').item.json.Reasons }}",
+        "additionalFields": {}
+      },
+      "id": "a4", "name": "Telegram (alert the team)", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [720, 0],
+      "notes": "Choose your Telegram credential (bot token from @BotFather) and the team group chat id."
+    }
+  ],
+  "connections": {
+    "Webhook (new review ticket)": {"main": [[{"node": "Set (map fields)", "type": "main", "index": 0}]]},
+    "Set (map fields)": {"main": [[{"node": "Airtable (create record)", "type": "main", "index": 0}]]},
+    "Airtable (create record)": {"main": [[{"node": "Telegram (alert the team)", "type": "main", "index": 0}]]}
+  },
+  "settings": {},
+  "pinData": {}
+}

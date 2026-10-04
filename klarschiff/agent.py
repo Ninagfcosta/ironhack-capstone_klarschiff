@@ -158,12 +158,16 @@ def run(s: Shipment, today: date | None = None) -> AgentResult:
         reasons.append(f"{len(alerts)} open tariff/regulation alert(s) for this code.")
     if mode == "offline":
         reasons.append("Offline mode (no LLM): keyword match only.")
+    if s.new_client:
+        reasons.append("New client (first 30 days): every shipment is reviewed by a person.")
 
     national = tariff_lines.national_lines(cls.hs_code, rules.region(s.destination), s.description) if heading else {}
 
     return AgentResult(
         shipment_id=s.shipment_id, hs_code=cls.hs_code, hs_title=(heading or {}).get("title", "Not a valid HS 2022 code"),
-        confidence=round(cls.confidence, 2), category=cat, category_reasons=cat_reasons,
+        confidence=round(cls.confidence, 2),
+        confidence_band=("high" if cls.confidence >= config.HIGH_CONFIDENCE else "medium" if cls.confidence >= config.CONFIDENCE_THRESHOLD else "low"),
+        category=cat, category_reasons=cat_reasons,
         required_documents=docs, missing_documents=missing + [f"(not stated) {n}" for n in not_stated],
         validation_issues=issues, measures=measures, alerts=alerts,
         manual_review=bool(reasons), review_reasons=reasons, reasoning=cls.reasoning, evidence=cls.evidence,

@@ -29,6 +29,7 @@ class Shipment(BaseModel):
     unreadable_parts: list[str] = Field(default_factory=list)
     source: str = Field("typed", description="typed / text PDF / scan / photo / e-invoice")
     part_number: str = Field("", description="Client part number (Artikelnummer), optional; used for the master list")
+    new_client: bool = Field(False, description="True in the first 30 days with a new client: every shipment goes to a person")
 
 
 class Candidate(BaseModel):
@@ -80,6 +81,7 @@ class AgentResult(BaseModel):
     hs_code: str
     hs_title: str
     confidence: float
+    confidence_band: str = ""  # high / medium / low (see config)
     category: int
     category_reasons: list[str]
     required_documents: list[RequiredDocument]

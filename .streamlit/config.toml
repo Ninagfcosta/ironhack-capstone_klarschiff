@@ -1,9 +1,10 @@
 [theme]
-# "sunset" palette, the same as the presentation
-primaryColor = "#E8622C"
-backgroundColor = "#FFFDFB"
-secondaryBackgroundColor = "#FFF6EF"
-textColor = "#1E1433"
+# The same colours as the presentation: deep plum, warm cream text, sunset orange
+base = "dark"
+primaryColor = "#FF8A3D"
+backgroundColor = "#170F2E"
+secondaryBackgroundColor = "#231640"
+textColor = "#FFF4EA"
 font = "sans serif"
 
 [server]

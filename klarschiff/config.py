@@ -30,6 +30,9 @@ PRICE_OUT_PER_M = float(os.getenv("KLARSCHIFF_PRICE_OUT_PER_M", "0.60"))  # gpt-
 
 # Review rules (business decisions, documented in use_case_definition.md)
 CONFIDENCE_THRESHOLD = float(os.getenv("KLARSCHIFF_CONFIDENCE_THRESHOLD", "0.75"))
+# Three bands (industry practice): high = light check, medium = normal review, low = full review.
+# Calibrate both numbers with the pilot data (blind test) before trusting them.
+HIGH_CONFIDENCE = float(os.getenv("KLARSCHIFF_HIGH_CONFIDENCE", "0.90"))
 LARGE_SHIPMENT_TONNES = float(os.getenv("KLARSCHIFF_LARGE_SHIPMENT_TONNES", "100"))
 CBAM_THRESHOLD_TONNES = 50.0
 # Added in v2.1 after error analysis (TC14 false all-clear, TC16 close call). The LLM's own confidence was

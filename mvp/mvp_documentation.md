@@ -78,3 +78,19 @@ Without an OpenAI key the app still runs in **offline mode**: keyword match only
 ## 7. Known limits
 
 v2.3: any product can be classified (full HS 2022), but only reviewed headings and master-list products pass without extra review; translations and scans always go to a person; rules must be re-verified by a licensed customs professional; duty rates are linked, not calculated.
+
+## v2.4 (Oct 2026): pilot features, built with the course tools
+
+| Need (from customs brokers and importers) | What the app does now | Course tool |
+|---|---|---|
+| Reviews get forgotten | **Review queue** tab: every orange result opens a ticket (owner, due date, status). Optional n8n workflow `n8n/review_queue_workflow.json`: Webhook → Set → Airtable → Telegram alert | n8n, Airtable, Telegram |
+| Chasing missing documents | **Draft an e-mail to the supplier** (EN/DE) in the Documents tab. A person edits and sends it; nothing is sent automatically | OpenAI |
+| Rules change, old codes go stale | **Re-check after a rule change** (Tariff monitor tab): approved products affected by an open alert | Python, monitor |
+| Same product, different codes | **Search by meaning** in the master list (embeddings, local cache; Pinecone is the production option) | RAG, OpenAI embeddings |
+| Proof of quality | **Weekly second look**: 10% random sample of approved decisions (Dashboard tab) and an optional **LLM-as-judge** (`python evaluation/run_eval.py --local --judge`) | LangSmith, LLM judges |
+| Confidence is not yes/no | **Three bands**: high ≥ 0.90, medium ≥ 0.75, low < 0.75 (to calibrate in the pilot) | Python |
+| Management wants numbers | **Dashboard**: open and overdue reviews, time to close, why shipments go to a person, decision log | Streamlit |
+| Warehouse staff do not type | **Voice note** upload → Whisper transcript → checked like typed text | Whisper |
+| New clients are a risk | **New client (first 30 days)** checkbox: every shipment goes to a person | Python |
+
+Look: the app uses the presentation colours and the KlarSchiff mark (`.streamlit/config.toml`).
