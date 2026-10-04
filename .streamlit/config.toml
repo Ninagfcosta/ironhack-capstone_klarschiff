@@ -1,10 +1,10 @@
 [theme]
-# The same colours as the presentation: deep plum, warm cream text, sunset orange
-base = "dark"
-primaryColor = "#FF8A3D"
-backgroundColor = "#170F2E"
-secondaryBackgroundColor = "#231640"
-textColor = "#FFF4EA"
+# Light theme (Oct 2026): white page, dark plum text, sunset orange accent, same logo as the presentation
+base = "light"
+primaryColor = "#E8622C"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F7F3FA"
+textColor = "#1E1433"
 font = "sans serif"
 
 [server]

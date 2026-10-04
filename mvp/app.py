@@ -26,10 +26,10 @@ from klarschiff.models import Shipment  # noqa: E402
 sys.path.insert(0, str(ROOT / "mvp"))
 from i18n import ABOUT, LANGS, reason, t  # noqa: E402
 
-# Brand colours: the same "sunset" palette as the presentation
-# Brand colours: the same palette as the presentation (deep plum background, cream text, sunset orange)
-INK, CREAM, MUTED, CARD, LINE = "#170F2E", "#FFF4EA", "#CDBBD6", "#231640", "#4B2E66"
-ORANGE, AMBER, CORAL, GREEN, VIOLET = "#FF8A3D", "#FFC857", "#FF5F6D", "#5BE0A0", "#B87CFF"
+# Brand colours (light theme, Oct 2026): white page, dark plum text, sunset orange accents, same logo as the presentation.
+# CREAM = main text colour and logo square; INK = the check inside the logo.
+INK, CREAM, MUTED, CARD, LINE = "#FFF4EA", "#1E1433", "#5E5470", "#FAF7FC", "#E4DAEE"
+ORANGE, AMBER, CORAL, GREEN, VIOLET = "#E8622C", "#F2A93B", "#E5484D", "#1F9D6B", "#8E5BD6"
 st.set_page_config(page_title="KlarSchiff · Pre-shipment co-pilot", page_icon="✅", layout="wide")
 st.markdown(f"""<style>
 .ks-bar {{height:6px;border-radius:6px;background:linear-gradient(90deg,{AMBER},{ORANGE},{CORAL},{VIOLET});margin:6px 0 14px 0}}
@@ -38,12 +38,12 @@ st.markdown(f"""<style>
 .ks-label {{color:{MUTED};font-size:.8rem;text-transform:uppercase;letter-spacing:.08em}}
 .ks-big {{font-size:2rem;font-weight:800;color:{CREAM};line-height:1.15}}
 .ks-small {{color:{MUTED};font-size:.85rem}}
-.ks-ok {{background:#173A33;border:1px solid #2F6B5A;border-left:8px solid {GREEN};padding:14px 18px;border-radius:12px;color:{CREAM}}}
-.ks-warn {{background:#3B1838;border:1px solid #6B2F4F;border-left:8px solid {ORANGE};padding:14px 18px;border-radius:12px;color:{CREAM}}}
+.ks-ok {{background:#EAF7F0;border:1px solid #BFE6D2;border-left:8px solid {GREEN};padding:14px 18px;border-radius:12px;color:{CREAM}}}
+.ks-warn {{background:#FFF1E8;border:1px solid #F6CDB2;border-left:8px solid {ORANGE};padding:14px 18px;border-radius:12px;color:{CREAM}}}
 .ks-verdict {{font-size:1.35rem;font-weight:800}}
 .ks-step {{border:1px solid {LINE};border-radius:12px;padding:10px 10px;background:{CARD};text-align:center;min-height:104px}}
 .ks-step b {{display:block;color:{CREAM}}}
-.ks-track {{height:10px;border-radius:6px;background:#3A2A55;position:relative;margin-top:8px}}
+.ks-track {{height:10px;border-radius:6px;background:#ECE6F2;position:relative;margin-top:8px}}
 .ks-fill {{height:10px;border-radius:6px}}
 .ks-mark {{position:absolute;top:-4px;width:2px;height:18px;background:{CREAM}}}
 </style>""", unsafe_allow_html=True)
@@ -529,7 +529,7 @@ with tab_ask:
             st.session_state["ask"] = assistant.answer(qtext)
     a = st.session_state.get("ask")
     if a:
-        st.markdown(f'<div class="ks-card">{a["answer"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="ks-card" style="min-height:0">{a["answer"]}</div>', unsafe_allow_html=True)
         st.caption(T("Mode: {}", a["mode"]))
         for i, src in enumerate(a["sources"], 1):
             link = f"[{src['source']}]({src['source']})" if str(src["source"]).startswith("http") else src["source"]
