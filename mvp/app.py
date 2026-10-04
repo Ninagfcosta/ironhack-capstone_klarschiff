@@ -19,7 +19,7 @@ import time  # noqa: E402
 
 from klarschiff import agent, batch, config, intake, master_list, monitor, precedents, report, tariff_lines, vision  # noqa: E402
 from klarschiff import quality, recheck, review_queue, semantic_search, supplier_request, voice  # noqa: E402
-from klarschiff import broker_export, learning, preference  # noqa: E402
+from klarschiff import assistant, broker_export, inbox, learning, llm, preference  # noqa: E402
 from klarschiff.intake import DOC_PATTERNS  # noqa: E402
 from klarschiff.models import Shipment  # noqa: E402
 
@@ -92,9 +92,9 @@ for line in (ROOT / "evaluation" / "dataset.jsonl").read_text(encoding="utf-8").
     c = json.loads(line)
     SAMPLES[f"{c['id']} · {c['inputs']['description'][:70]}"] = c["inputs"]
 
-tab_check, tab_queue, tab_batch, tab_master, tab_monitor, tab_log, tab_about = st.tabs(
-    [T(x) for x in ["🔎 Check a shipment", "📋 Review queue", "📦 Batch", "📒 Master list", "📡 Tariff monitor",
-                    "📊 Dashboard", "ℹ️ How it works"]])
+tab_check, tab_inbox, tab_queue, tab_batch, tab_master, tab_ask, tab_monitor, tab_log, tab_about = st.tabs(
+    [T(x) for x in ["🔎 Check a shipment", "📥 Inbox", "📋 Review queue", "📦 Batch", "📒 Master list", "💬 Ask KlarSchiff",
+                    "📡 Tariff monitor", "📊 Dashboard", "ℹ️ How it works"]])
 
 # ---------------------------------------------------------------- CHECK
 with tab_check:
@@ -367,6 +367,32 @@ with tab_check:
                                    file_name=f"klarschiff_{r.shipment_id}_declaration_data.json", width="stretch")
             st.caption(T(r.disclaimer))
 
+# ---------------------------------------------------------------- INBOX (v2.6)
+with tab_inbox:
+    st.subheader(T("E-mail inbox"))
+    st.write(T("Supplier e-mails with documents are saved here by n8n (n8n/email_inbox_workflow.json: Gmail → save "
+               "attachment → Telegram). One click checks them all: no download, no copy-paste. Nothing is sent to the supplier."))
+    waiting = inbox.pending()
+    i1, i2 = st.columns(2)
+    i1.metric(T("Waiting in the inbox"), len(waiting))
+    i2.metric(T("Checked from e-mail"), len(inbox.history(10_000)))
+    st.caption(T("Inbox folder: {}", str(inbox.folder())))
+    for f in waiting[:20]:
+        st.markdown(f"- 📎 `{f.name}`")
+    if waiting and st.button(T("Check all"), type="primary"):
+        with st.spinner(T("Checking documents, rules and tariffs…")):
+            st.session_state["inbox_rows"] = inbox.check_all()
+        st.rerun()
+    hist = inbox.history()
+    if hist:
+        st.markdown("#### " + T("Last checked"))
+        st.dataframe(pd.DataFrame([{T("File"): h["file"], T("From"): h["from"], "HS": h["hs_code"], T("Category"): h["category"],
+                                    T("Needs a person"): T("yes") if h["manual_review"] else T("no"),
+                                    T("Missing documents"): " | ".join(h["missing_documents"]), T("Ticket"): h["ticket"]}
+                                   for h in hist]), hide_index=True, width="stretch")
+    elif not waiting:
+        st.caption(T("The inbox is empty. Test it: put a fictional invoice (PDF, CSV, XML or TXT) into the inbox folder."))
+
 # ---------------------------------------------------------------- REVIEW QUEUE
 with tab_queue:
     st.subheader(T("Review queue"))
@@ -488,6 +514,27 @@ with tab_master:
         st.success(T("{} rulings added · {} in the library", rep["imported"], rep["total"]))
     st.caption(T("Rulings in the library: {}", len(precedents.load())))
 
+# ---------------------------------------------------------------- ASK (v2.6)
+with tab_ask:
+    st.subheader(T("Ask KlarSchiff"))
+    st.write(T("Quick questions about rules, documents and approved products, answered only from KlarSchiff's own "
+               "knowledge, with sources. It informs; a person decides. The same assistant can run on Telegram "
+               "(n8n/telegram_assistant_workflow.json)."))
+    examples = ["Which proof of origin do I need for goods from Turkey?", "What does CBAM mean for steel?",
+                "Do I need a safety data sheet for chemicals?"]
+    ex = st.selectbox(T("Example questions"), [""] + examples, format_func=lambda x: x or T("(write your own)"), key="ask_ex")
+    qtext = st.text_input(T("Your question"), ex, key="ask_q_" + (ex or "own"))
+    if st.button(T("Ask"), type="primary") and qtext.strip():
+        with st.spinner(T("Searching the KlarSchiff knowledge…")):
+            st.session_state["ask"] = assistant.answer(qtext)
+    a = st.session_state.get("ask")
+    if a:
+        st.markdown(f'<div class="ks-card">{a["answer"]}</div>', unsafe_allow_html=True)
+        st.caption(T("Mode: {}", a["mode"]))
+        for i, src in enumerate(a["sources"], 1):
+            link = f"[{src['source']}]({src['source']})" if str(src["source"]).startswith("http") else src["source"]
+            st.markdown(f"**[{i}]** {src['kind']} · {src['title']} · {link}")
+
 # ---------------------------------------------------------------- MONITOR
 with tab_monitor:
     st.subheader(T("Tariff & regulation monitor"))
@@ -548,6 +595,10 @@ with tab_log:
     e1, e2 = st.columns(2)
     e1.metric(T("Median review time (minutes, measured)"), "-" if sm["median_review_minutes"] is None else sm["median_review_minutes"])
     e2.metric(T("Corrections turned into test cases"), sm["learned_cases"])
+    cs = llm.cache_stats()
+    f1, f2 = st.columns(2)
+    f1.metric(T("AI answers reused from the cache"), cs["hits"])
+    f2.metric(T("Share of AI calls saved"), "-" if cs["saved_share"] is None else f"{cs['saved_share']:.0%}")
     st.caption(T("Measured review time replaces the illustrative ROI numbers during the pilot."))
     if sm["top_reasons"]:
         st.markdown("#### " + T("Why shipments go to a person"))

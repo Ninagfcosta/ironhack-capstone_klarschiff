@@ -16,3 +16,9 @@ data/decision_log.csv
 data/_test/
 .pytest_cache/
 data/master_list.json
+
+# v2.6 runtime files
+data/inbox/
+data/inbox_log.jsonl
+data/llm_cache.json
+data/llm_cache_stats.json

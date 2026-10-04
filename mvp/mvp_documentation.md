@@ -104,3 +104,13 @@ Look: the app uses the presentation colours and the KlarSchiff mark (`.streamlit
 | Duty paid only because a proof is missing | **Money tip**: for partner countries (Türkiye A.TR, UK, CH, NO, JP, KR, CA) the app reminds the team to get the proof of preferential origin. Not a review trigger; a person checks the origin rules | Rules, Python |
 | Brokers retype the data | **Download data for the broker (JSON)**: code, line, origin, destination, documents, measures, preference | Python (structured output) |
 | ROI was illustrative | **Measured review time** (result on screen → decision saved) in the Dashboard | Streamlit |
+
+## v2.6: three more savings (Oct 2026, same course tools)
+
+| Improvement | Pilot need | How (course tools) | Saves |
+|---|---|---|---|
+| E-mail inbox (`klarschiff/inbox.py`, tab **Inbox**, `n8n/email_inbox_workflow.json`) | Documents arrive as e-mail attachments; downloading and re-typing takes time and causes mistakes | n8n: Gmail Trigger → save attachment + `.meta.json` (sender, subject, date) into `data/inbox/` → Telegram alert. In the app, **Check all** runs the agent on every file, opens review tickets and moves files to `data/inbox/done/`. Scanned PDFs are flagged for a person. Nothing is sent to the supplier. | Time (no copy-paste) |
+| AI answer cache (`klarschiff/llm.py`) | Re-checks and repeated products ask the model the same question again | Identical requests (same model, prompt, temperature 0) are answered from `data/llm_cache.json`. Dashboard shows reused answers and the share of AI calls saved. Off with `KLARSCHIFF_LLM_CACHE=false`; `llm.clear_cache()` after a model or prompt change, then re-run the evaluation. | Money (fewer API calls) and speed |
+| Ask KlarSchiff (`klarschiff/assistant.py`, tab **Ask KlarSchiff**, `n8n/telegram_assistant_workflow.json`) | The team interrupts the customs lead with the same small questions | RAG: BM25 search over the rule base, the master list and the origin table → GPT-4o-mini answers only from those sources, with citations, or says "I don't know". Prompt-injection guard blocks instruction-like questions. On Telegram: n8n AI Agent + OpenAI chat model + Airtable tool (master list). It informs; a person decides. | Expert time |
+
+Tested offline (no key): 3 inbox files checked, 3 tickets opened, files moved to `done/`; cache: 3 requests → 2 API calls, 1 reused; assistant: correct sources for Türkiye origin proof, CBAM, construction products (German question), safety data sheet; "what is the weather" → "I don't know"; injection text → blocked.

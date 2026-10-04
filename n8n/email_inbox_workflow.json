@@ -1,0 +1,68 @@
+{
+  "name": "KlarSchiff - e-mail inbox (Gmail Trigger -> save attachment + info -> Telegram)",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {"item": [{"mode": "everyMinute"}]},
+        "simple": false,
+        "filters": {"q": "has:attachment label:klarschiff-documents"},
+        "options": {"downloadAttachments": true, "dataPropertyAttachmentsPrefixName": "attachment_"}
+      },
+      "id": "e1", "name": "Gmail Trigger (supplier e-mail with documents)", "type": "n8n-nodes-base.gmailTrigger", "typeVersion": 1.2, "position": [0, 0],
+      "notes": "Choose your Gmail credential. Create a Gmail filter that puts supplier e-mails with documents under the label 'klarschiff-documents'. Test with fictional documents only."
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/data/klarschiff/inbox/{{ $json.id }}_{{ $binary.attachment_0.fileName }}",
+        "dataPropertyName": "attachment_0",
+        "options": {}
+      },
+      "id": "e2", "name": "Save attachment to the KlarSchiff inbox", "type": "n8n-nodes-base.readWriteFile", "typeVersion": 1, "position": [240, 0],
+      "notes": "The path must be the KlarSchiff inbox folder (KLARSCHIFF_INBOX_DIR, default data/inbox/ in the project). With n8n in Docker, mount that folder as /data/klarschiff/inbox. Only the first attachment is saved; duplicate this node for attachment_1, attachment_2."
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ JSON.stringify({ from: $('Gmail Trigger (supplier e-mail with documents)').item.json.from.text, subject: $('Gmail Trigger (supplier e-mail with documents)').item.json.subject, received: $('Gmail Trigger (supplier e-mail with documents)').item.json.date, origin: '', destination: 'DE' }) }}",
+        "options": {}
+      },
+      "id": "e3", "name": "Set (e-mail info for the agent)", "type": "n8n-nodes-base.set", "typeVersion": 3.4, "position": [480, 0],
+      "notes": "Sender, subject and date go next to the file as <file>.meta.json. Origin can be filled by hand later in the app."
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "options": {"fileName": "=/data/klarschiff/inbox/{{ $('Gmail Trigger (supplier e-mail with documents)').item.json.id }}_{{ $('Gmail Trigger (supplier e-mail with documents)').item.binary.attachment_0.fileName }}.meta.json"}
+      },
+      "id": "e4", "name": "Convert to File (meta.json)", "type": "n8n-nodes-base.convertToFile", "typeVersion": 1.1, "position": [720, 0]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/data/klarschiff/inbox/{{ $('Gmail Trigger (supplier e-mail with documents)').item.json.id }}_{{ $('Gmail Trigger (supplier e-mail with documents)').item.binary.attachment_0.fileName }}.meta.json",
+        "dataPropertyName": "data",
+        "options": {}
+      },
+      "id": "e5", "name": "Save meta.json", "type": "n8n-nodes-base.readWriteFile", "typeVersion": 1, "position": [960, 0]
+    },
+    {
+      "parameters": {
+        "chatId": "",
+        "text": "=New supplier documents for KlarSchiff: \"{{ $('Gmail Trigger (supplier e-mail with documents)').item.json.subject }}\" from {{ $('Gmail Trigger (supplier e-mail with documents)').item.json.from.text }}. Open the app -> Inbox -> Check all.",
+        "additionalFields": {}
+      },
+      "id": "e6", "name": "Telegram (tell the team)", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [1200, 0],
+      "notes": "Choose your Telegram credential (bot token from @BotFather) and the team group chat id."
+    }
+  ],
+  "connections": {
+    "Gmail Trigger (supplier e-mail with documents)": {"main": [[{"node": "Save attachment to the KlarSchiff inbox", "type": "main", "index": 0}]]},
+    "Save attachment to the KlarSchiff inbox": {"main": [[{"node": "Set (e-mail info for the agent)", "type": "main", "index": 0}]]},
+    "Set (e-mail info for the agent)": {"main": [[{"node": "Convert to File (meta.json)", "type": "main", "index": 0}]]},
+    "Convert to File (meta.json)": {"main": [[{"node": "Save meta.json", "type": "main", "index": 0}]]},
+    "Save meta.json": {"main": [[{"node": "Telegram (tell the team)", "type": "main", "index": 0}]]}
+  },
+  "settings": {},
+  "pinData": {}
+}

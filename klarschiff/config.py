@@ -22,6 +22,10 @@ MODEL = os.getenv("KLARSCHIFF_MODEL", "gpt-4o-mini")
 VISION_MODEL = os.getenv("KLARSCHIFF_VISION_MODEL", MODEL)   # reads scanned invoices and photos
 APP_PASSWORD = os.getenv("KLARSCHIFF_APP_PASSWORD", "")      # empty = no login (local demo only)
 TEMPERATURE = float(os.getenv("KLARSCHIFF_TEMPERATURE", "0"))
+# v2.6: answer cache for repeated identical AI requests (only used with temperature 0). Clear it when the model changes.
+LLM_CACHE = os.getenv("KLARSCHIFF_LLM_CACHE", "true").lower() == "true"
+# v2.6: folder where the n8n e-mail workflow saves supplier attachments (see n8n/email_inbox_workflow.json)
+INBOX_DIR = Path(os.getenv("KLARSCHIFF_INBOX_DIR", DATA_DIR / "inbox"))
 # v2.3: look up US HTS lines live on the free USITC API (cached in data/hts_cache.json). "false" = cache only.
 LIVE_TARIFF = os.getenv("KLARSCHIFF_LIVE_TARIFF", "true").lower() == "true"
 # Model prices (USD per 1M tokens) for the cost estimate. Check the provider's price page when you change model.

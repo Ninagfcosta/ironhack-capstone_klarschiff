@@ -11,17 +11,18 @@ Always re-run `python evaluation/run_eval.py --local` after changing the provide
 from __future__ import annotations
 
 import base64
+import hashlib
 import json
 
 from . import config
 
 
 # token usage of the current agent run (for the cost estimate); reset by the agent at the start of each run
-USAGE = {"prompt_tokens": 0, "completion_tokens": 0, "calls": 0}
+USAGE = {"prompt_tokens": 0, "completion_tokens": 0, "calls": 0, "cache_hits": 0}
 
 
 def reset_usage() -> None:
-    USAGE.update(prompt_tokens=0, completion_tokens=0, calls=0)
+    USAGE.update(prompt_tokens=0, completion_tokens=0, calls=0, cache_hits=0)
 
 
 def usage_with_cost() -> dict:
@@ -44,7 +45,16 @@ def chat_json(system: str, user, model: str | None = None) -> dict:
     """Send one chat request and return the JSON object the model answers with.
 
     `user` is a string, or a list of content parts (text + images) for vision requests.
+    v2.6 answer cache: the same question to the same model (temperature 0) is answered from data/llm_cache.json,
+    so a repeated product or a re-check costs nothing and is instant. Turn off with KLARSCHIFF_LLM_CACHE=false.
     """
+    key = _cache_key(model or config.MODEL, system, user)
+    if config.LLM_CACHE and config.TEMPERATURE == 0:
+        hit = _cache_load().get(key)
+        if hit is not None:
+            USAGE["cache_hits"] += 1
+            _stats_add("hits")
+            return hit
     resp = client().chat.completions.create(
         model=model or config.MODEL,
         temperature=config.TEMPERATURE,
@@ -58,7 +68,61 @@ def chat_json(system: str, user, model: str | None = None) -> dict:
     USAGE["calls"] += 1
     text = resp.choices[0].message.content or "{}"
     text = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-    return json.loads(text)
+    data = json.loads(text)
+    if config.LLM_CACHE and config.TEMPERATURE == 0:
+        cache = _cache_load()
+        cache[key] = data
+        _cache_file().write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
+        _stats_add("misses")
+    return data
+
+
+# ---------------------------------------------------------------- answer cache (v2.6)
+def _cache_file():
+    return config.DATA_DIR / "llm_cache.json"
+
+
+def _stats_file():
+    return config.DATA_DIR / "llm_cache_stats.json"
+
+
+def _cache_key(model: str, system: str, user) -> str:
+    raw = json.dumps([model, system, user], ensure_ascii=False, sort_keys=True)
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def _cache_load() -> dict:
+    try:
+        return json.loads(_cache_file().read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+
+def _stats_add(field: str) -> None:
+    try:
+        st = json.loads(_stats_file().read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        st = {"hits": 0, "misses": 0}
+    st[field] = st.get(field, 0) + 1
+    _stats_file().write_text(json.dumps(st), encoding="utf-8")
+
+
+def cache_stats() -> dict:
+    """For the dashboard: answers served from the cache vs. new AI calls, and the share saved."""
+    try:
+        st = json.loads(_stats_file().read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        st = {"hits": 0, "misses": 0}
+    total = st.get("hits", 0) + st.get("misses", 0)
+    return {"hits": st.get("hits", 0), "misses": st.get("misses", 0), "entries": len(_cache_load()),
+            "saved_share": round(st.get("hits", 0) / total, 2) if total else None}
+
+
+def clear_cache() -> None:
+    """Empty the cache, e.g. after changing the prompt rules or the model (then re-run the evaluation)."""
+    for f in (_cache_file(), _stats_file()):
+        if f.exists():
+            f.unlink()
 
 
 def image_part(image_bytes: bytes, mime: str = "image/png") -> dict:
