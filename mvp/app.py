@@ -530,7 +530,7 @@ with tab_ask:
     a = st.session_state.get("ask")
     if a:
         st.markdown(f'<div class="ks-card" style="min-height:0">{a["answer"]}</div>', unsafe_allow_html=True)
-        st.caption(T("Mode: {}", a["mode"]))
+        st.caption(T("🤖 You are talking to an AI assistant (EU AI Act Art. 50). Mode: {}", a["mode"]))
         for i, src in enumerate(a["sources"], 1):
             link = f"[{src['source']}]({src['source']})" if str(src["source"]).startswith("http") else src["source"]
             st.markdown(f"**[{i}]** {src['kind']} · {src['title']} · {link}")

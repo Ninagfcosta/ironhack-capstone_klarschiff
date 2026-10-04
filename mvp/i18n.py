@@ -16,6 +16,7 @@ import re
 LANGS = {"en": "English", "de": "Deutsch"}
 
 UI: dict[str, str] = {
+    '🤖 You are talking to an AI assistant (EU AI Act Art. 50). Mode: {}': '🤖 Sie sprechen mit einem KI-Assistenten (EU AI Act Art. 50). Modus: {}',
     # v2.6: inbox, assistant, cache
     '📥 Inbox': '📥 Posteingang',
     '💬 Ask KlarSchiff': '💬 KlarSchiff fragen',

@@ -69,8 +69,8 @@ Germany requires every business to **receive** EN 16931 e-invoices since 1 Jan 2
 
 - Filing customs declarations or talking to ATLAS. A person always files.
 - Final legal classification advice (the broker and, where needed, a Binding Tariff Information / vZTA decide).
-- Goods outside construction materials (the agent says so and routes them to a person).
-- Scanned documents without text (OCR is a pilot extension).
+- Goods outside construction materials are **classified against the full HS 2022 nomenclature** but always routed to a person in the pilot (the reviewed rule base covers construction materials first).
+- Dedicated OCR for poor scans and handwriting: scans and photos are read by the vision model and **always reviewed**; a dedicated OCR step is a Phase 2 extension.
 - Duty-rate calculation: the agent links to the live TARIC / HTS for the shipment date instead of storing rates.
 
 ## 7. How the use case evolved from Round 1 to Round 2

@@ -73,3 +73,13 @@ Because a wrong code can cost money and penalties, KlarSchiff follows the spirit
 6. Testing and metrics, known errors → `evaluation/langsmith.md`, `evaluation/results/`
 7. Risk management → `roi_risk_assessment.md`
 8. Change log and re-evaluation rule (re-run the evaluation before any model or rule change) → `README.md`
+
+## 7. Update 4 Oct 2026: new features and Article 50
+
+| Feature | AI Act effect | What we do |
+|---|---|---|
+| **Ask KlarSchiff** assistant (app tab + Telegram bot) | It interacts directly with people, so **Art. 50(1)** applies (in force since 2 Aug 2026): users must be told they are talking to an AI system | The app shows "You are talking to an AI assistant (EU AI Act Art. 50)"; every Telegram answer starts with "KlarSchiff AI assistant (automated answer, a person decides)" |
+| Supplier e-mail draft, assistant answers | Generated text; **Art. 50(2)** machine-readable marking is mainly the duty of the GPAI provider (OpenAI); grace period for systems already on the market until 2 Dec 2026 | Watch the Commission guidance; drafts are reviewed and sent by a person, never automatically |
+| E-mail inbox, cache, review queue | No change to the risk class | Still minimal risk; classification re-checked at every milestone |
+
+Result unchanged: **minimal risk**, with the Article 50(1) disclosure now built in.
