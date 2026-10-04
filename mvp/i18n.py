@@ -17,6 +17,15 @@ LANGS = {"en": "English", "de": "Deutsch"}
 
 UI: dict[str, str] = {
     # interface redesign (Oct 2026)
+    'Money tip': 'Spartipp',
+    'The correction is now a test case: the next evaluation checks it.': 'Die Korrektur ist jetzt ein Testfall: die nächste Auswertung prüft ihn.',
+    'Download data for the broker (JSON)': 'Daten für den Zollvertreter herunterladen (JSON)',
+    'Repeated lines reused': 'Wiederholte Positionen übernommen',
+    'AI checks saved': 'Eingesparte KI-Prüfungen',
+    'Money tips': 'Spartipps',
+    'Median review time (minutes, measured)': 'Median der Prüfzeit (Minuten, gemessen)',
+    'Corrections turned into test cases': 'Korrekturen als Testfälle',
+    'Measured review time replaces the illustrative ROI numbers during the pilot.': 'Die gemessene Prüfzeit ersetzt im Pilot die beispielhaften ROI-Zahlen.',
     '📋 Review queue': '📋 Prüfliste',
     '📊 Dashboard': '📊 Dashboard',
     'New client (first 30 days): a person reviews every shipment': 'Neuer Kunde (erste 30 Tage): eine Person prüft jede Sendung',

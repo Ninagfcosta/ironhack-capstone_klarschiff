@@ -94,3 +94,13 @@ v2.3: any product can be classified (full HS 2022), but only reviewed headings a
 | New clients are a risk | **New client (first 30 days)** checkbox: every shipment goes to a person | Python |
 
 Look: the app uses the presentation colours and the KlarSchiff mark (`.streamlit/config.toml`).
+
+## v2.5 (Oct 2026): save time and money (expert review)
+
+| Need | What the app does now | Course tool |
+|---|---|---|
+| Invoices repeat the same products | **Batch**: identical lines are checked once and the result is reused (no second AI call); master-list hits need no AI at all. The report shows "AI checks saved" | Python, master list |
+| The agent should learn from people | **Learning loop**: every correction becomes a test case in `evaluation/dataset_learned.jsonl`; run `python evaluation/run_eval.py --local --dataset learned` (or `--langsmith`) | LangSmith datasets |
+| Duty paid only because a proof is missing | **Money tip**: for partner countries (Türkiye A.TR, UK, CH, NO, JP, KR, CA) the app reminds the team to get the proof of preferential origin. Not a review trigger; a person checks the origin rules | Rules, Python |
+| Brokers retype the data | **Download data for the broker (JSON)**: code, line, origin, destination, documents, measures, preference | Python (structured output) |
+| ROI was illustrative | **Measured review time** (result on screen → decision saved) in the Dashboard | Streamlit |

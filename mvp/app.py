@@ -15,9 +15,11 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 import hmac  # noqa: E402
+import time  # noqa: E402
 
 from klarschiff import agent, batch, config, intake, master_list, monitor, precedents, report, tariff_lines, vision  # noqa: E402
 from klarschiff import quality, recheck, review_queue, semantic_search, supplier_request, voice  # noqa: E402
+from klarschiff import broker_export, learning, preference  # noqa: E402
 from klarschiff.intake import DOC_PATTERNS  # noqa: E402
 from klarschiff.models import Shipment  # noqa: E402
 
@@ -178,6 +180,7 @@ with tab_check:
                 st.session_state["result"] = agent.run(s)
             res = st.session_state["result"]
             st.session_state["ticket"] = review_queue.add(res, text) if res.manual_review else None
+            st.session_state["shown_at"] = time.time()  # to measure the real review time
             st.session_state.pop("supplier_draft", None)
         except (ValueError, RuntimeError) as e:
             st.error(str(e))
@@ -202,6 +205,11 @@ with tab_check:
                 st.markdown(f'<div class="ks-ok"><div class="ks-verdict">🟢 {T("All checks passed")}</div>'
                             f'<div>{T("A person still approves before filing.")}</div></div>', unsafe_allow_html=True)
 
+            shp0 = st.session_state.get("shipment")
+            tip = preference.tip(shp0, r.hs_code) if shp0 else None
+            if tip:
+                st.markdown(f'<div class="ks-card" style="min-height:0;border-left:8px solid {AMBER}"><b>💶 {T("Money tip")}</b><br>'
+                            f'<span class="ks-small">{tip["message"]}</span></div>', unsafe_allow_html=True)
             tk = st.session_state.get("ticket")
             if tk:
                 st.caption(T("Review ticket {} opened · due {} · see the Review queue tab", tk["id"], tk["due"]))
@@ -342,6 +350,10 @@ with tab_check:
                 else:
                     report.log_decision(r, decision, final_hs, comment=comment)
                     st.success(T("Saved to the decision log (audit trail)."))
+                    if st.session_state.get("shown_at"):
+                        quality.log_review_time(time.time() - st.session_state.pop("shown_at"), decision)
+                    if decision == "corrected" and shp and learning.record_correction(shp, r.hs_code, final_hs, comment):
+                        st.success(T("The correction is now a test case: the next evaluation checks it."))
                     if add_master and decision != "rejected" and final_hs and shp:
                         pid = (r.master or {}).get("product", {}) or {}
                         prod = master_list.approve(r.original_description or shp.description, final_hs, part_number=shp.part_number,
@@ -350,6 +362,9 @@ with tab_check:
                         st.success(T("Master list updated: product {}.", prod.product_id))
             b2.download_button(T("Download review pack for the broker"), report.review_pack(r, decision, final_hs, comment),
                                file_name=f"klarschiff_{r.shipment_id}_review_pack.md", width="stretch")
+            if shp:
+                b2.download_button(T("Download data for the broker (JSON)"), broker_export.to_json(r, shp, decision, final_hs),
+                                   file_name=f"klarschiff_{r.shipment_id}_declaration_data.json", width="stretch")
             st.caption(T(r.disclaimer))
 
 # ---------------------------------------------------------------- REVIEW QUEUE
@@ -398,6 +413,10 @@ with tab_batch:
         b2.metric(T("To review"), summ["to_review"])
         b3.metric(T("Master-list hits"), summ["master_list_hits"])
         b4.metric(T("AI cost (estimate)"), f"${summ['est_cost_usd_total']:.4f}")
+        c1, c2, c3 = st.columns(3)
+        c1.metric(T("Repeated lines reused"), summ["reused_results"])
+        c2.metric(T("AI checks saved"), summ["ai_checks_saved"])
+        c3.metric(T("Money tips"), summ["money_tips"])
         st.caption(T("Per line: about ${} · categories 1/2/3: {} / {} / {} · {} s", f"{summ['est_cost_usd_per_line']:.5f}",
                      summ["by_category"][1], summ["by_category"][2], summ["by_category"][3], summ["seconds"]))
         st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
@@ -526,6 +545,10 @@ with tab_log:
     d1.metric(T("Open reviews"), sm["queue"]["open"])
     d2.metric(T("Overdue reviews"), sm["queue"]["overdue"])
     d3.metric(T("Average time to close (hours)"), "-" if sm["queue"]["avg_hours_to_close"] is None else sm["queue"]["avg_hours_to_close"])
+    e1, e2 = st.columns(2)
+    e1.metric(T("Median review time (minutes, measured)"), "-" if sm["median_review_minutes"] is None else sm["median_review_minutes"])
+    e2.metric(T("Corrections turned into test cases"), sm["learned_cases"])
+    st.caption(T("Measured review time replaces the illustrative ROI numbers during the pilot."))
     if sm["top_reasons"]:
         st.markdown("#### " + T("Why shipments go to a person"))
         st.bar_chart(pd.DataFrame(sm["top_reasons"], columns=[T("Reason"), T("Count")]).set_index(T("Reason")), horizontal=True)

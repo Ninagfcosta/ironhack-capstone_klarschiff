@@ -15,11 +15,12 @@ import io
 import json
 import time
 
-from . import agent
+from . import agent, master_list, preference
 from .models import Shipment
 
 REPORT_FIELDS = ["shipment_id", "part_number", "description", "hs_code", "national_code", "category", "manual_review",
-                 "review_reasons", "missing_documents", "master_list", "confidence", "mode", "tokens", "est_cost_usd"]
+                 "review_reasons", "missing_documents", "master_list", "confidence", "mode", "tokens", "est_cost_usd",
+                 "reused", "money_tip"]
 
 
 def _split(v: str) -> list[str]:
@@ -27,7 +28,9 @@ def _split(v: str) -> list[str]:
 
 
 def run_rows(rows: list[dict]) -> tuple[list[dict], dict]:
-    out, t0 = [], time.time()
+    """Lines with the same description, origin and destination are checked once and the result is reused:
+    invoices repeat the same products, so this saves AI calls, money and review time."""
+    out, t0, cache = [], time.time(), {}
     for i, r in enumerate(rows, 1):
         r = {k.strip().lower(): (v or "").strip() for k, v in r.items() if k}
         if not r.get("description"):
@@ -36,14 +39,20 @@ def run_rows(rows: list[dict]) -> tuple[list[dict], dict]:
                      origin=(r.get("origin") or "").upper(), destination=(r.get("destination") or "DE").upper(),
                      part_number=r.get("part_number", ""), documents_provided=_split(r.get("documents_provided", "")),
                      intended_use=r.get("intended_use") or "other")
-        res = agent.run(s)
+        key = (master_list.fingerprint(s.description), s.origin, s.destination, s.part_number.upper())
+        reused = key in cache
+        res = cache[key] if reused else agent.run(s)
+        cache[key] = res
+        tip = preference.tip(s, res.hs_code)
         out.append({"shipment_id": s.shipment_id, "part_number": s.part_number, "description": s.description[:200],
                     "hs_code": res.hs_code, "national_code": (res.national or {}).get("suggested", ""),
                     "category": res.category, "manual_review": "yes" if res.manual_review else "no",
                     "review_reasons": " | ".join(res.review_reasons), "missing_documents": " | ".join(res.missing_documents),
                     "master_list": (res.master or {}).get("kind", ""), "confidence": res.confidence, "mode": res.mode,
-                    "tokens": res.usage.get("prompt_tokens", 0) + res.usage.get("completion_tokens", 0),
-                    "est_cost_usd": res.usage.get("est_cost_usd", 0)})
+                    "tokens": 0 if reused else res.usage.get("prompt_tokens", 0) + res.usage.get("completion_tokens", 0),
+                    "est_cost_usd": 0 if reused else res.usage.get("est_cost_usd", 0),
+                    "reused": "yes" if reused else "no",
+                    "money_tip": (tip["message"] if tip and not tip["has_proof"] else "")})
     n = len(out)
     summary = {
         "shipments": n,
@@ -51,6 +60,9 @@ def run_rows(rows: list[dict]) -> tuple[list[dict], dict]:
         "passed_checks": sum(1 for o in out if o["manual_review"] == "no"),
         "by_category": {c: sum(1 for o in out if o["category"] == c) for c in (1, 2, 3)},
         "master_list_hits": sum(1 for o in out if o["master_list"] in ("part_number", "same_description")),
+        "reused_results": sum(1 for o in out if o["reused"] == "yes"),
+        "ai_checks_saved": sum(1 for o in out if o["reused"] == "yes" or o["mode"] == "master list"),
+        "money_tips": sum(1 for o in out if o["money_tip"]),
         "with_missing_documents": sum(1 for o in out if any(not d.startswith("(not stated)")
                                                             for d in o["missing_documents"].split(" | ") if d)),
         "est_cost_usd_total": round(sum(o["est_cost_usd"] for o in out), 4),

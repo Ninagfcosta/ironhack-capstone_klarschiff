@@ -23,7 +23,8 @@ from evaluators import ALL  # noqa: E402
 
 DATASET = ROOT / "evaluation" / "dataset.jsonl"
 DATASET_NAME = "klarschiff-eval-v2"
-DATASETS = {"core": ("dataset.jsonl", "klarschiff-eval-v2"), "universal": ("dataset_universal.jsonl", "klarschiff-eval-universal")}
+DATASETS = {"core": ("dataset.jsonl", "klarschiff-eval-v2"), "universal": ("dataset_universal.jsonl", "klarschiff-eval-universal"),
+            "learned": ("dataset_learned.jsonl", "klarschiff-eval-learned")}  # learned = cases corrected by reviewers (klarschiff/learning.py)
 
 
 JUDGE = False
@@ -85,7 +86,7 @@ if __name__ == "__main__":
     ap.add_argument("--label", default=None)
     ap.add_argument("--judge", action="store_true", help="also run the LLM-as-judge (needs an AI key)")
     ap.add_argument("--dataset", choices=list(DATASETS), default="core",
-                    help="core = the 20 construction cases; universal = 17 cases from other industries (v2.3)")
+                    help="core = the 20 construction cases; universal = 17 cases from other industries (v2.3); learned = reviewer corrections")
     a = ap.parse_args()
     JUDGE = a.judge
     DATASET = ROOT / "evaluation" / DATASETS[a.dataset][0]
