@@ -433,6 +433,24 @@ def t(text: str, lang: str = "en", *args) -> str:
     return out.format(*args) if args else out
 
 
+# document names inside translated reasons (German wording used by German customs brokers)
+DOCS_DE = {
+    "Declaration of Performance (DoP / DoPC)": "Leistungserklärung (DoP / DoPC)",
+    "CE marking evidence (label or photo)": "Nachweis CE-Kennzeichnung (Etikett oder Foto)",
+    "Commercial invoice": "Handelsrechnung",
+    "Packing list": "Packliste",
+    "Mill certificate showing the country of melt and pour": "Werkszeugnis mit Schmelz- und Gießland",
+    "Safety Data Sheet (SDS, in German for the German market)": "Sicherheitsdatenblatt (SDB, auf Deutsch)",
+    "Country of melt and pour / smelt and cast declaration": "Erklärung zum Schmelz- und Gießland",
+}
+
+
+def _docs_de(text: str) -> str:
+    for en, de in DOCS_DE.items():
+        text = text.replace(en, de)
+    return text
+
+
 def reason(text: str, lang: str = "en") -> str:
     """Translate one agent review reason; unknown reasons stay in English."""
     if lang != "de":
@@ -443,5 +461,5 @@ def reason(text: str, lang: str = "en") -> str:
             groups = [g or "" for g in m.groups()]
             if tpl.startswith("Übersetzt aus") and groups[1]:
                 groups[1] = " Unsichere Begriffe: " + groups[1]
-            return tpl.format(*groups)
+            return _docs_de(tpl.format(*groups))
     return text

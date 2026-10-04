@@ -43,7 +43,8 @@ def detect_documents(text: str) -> tuple[list[str], list[str]]:
             for m in re.finditer(p, t):
                 # look only inside the same sentence/clause ("DoP missing. CE label attached." = two facts)
                 window_before = re.split(r"[.;:\n,]", t[max(0, m.start() - 40): m.start()])[-1]
-                window_after = re.split(r"[.;:\n,]", t[m.end(): m.end() + 40])[0]
+                end = m.end() + len(re.match(r"\w*", t[m.end():]).group())  # finish the word ("leistungserkl|ärung")
+                window_after = re.split(r"[.;:\n,]", t[end: end + 40])[0]
                 if re.search(NEGATIVE, window_before[-25:]) or re.search(r"^\W*" + NEGATIVE, window_after) or re.search(r"\b(is|are)\s+" + NEGATIVE, window_after):
                     missing.append(name)
                 elif re.search(POSITIVE, window_before[-15:] + " " + window_after[:25]):

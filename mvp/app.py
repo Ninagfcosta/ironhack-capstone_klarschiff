@@ -209,7 +209,7 @@ with tab_check:
             tip = preference.tip(shp0, r.hs_code) if shp0 else None
             if tip:
                 st.markdown(f'<div class="ks-card" style="min-height:0;border-left:8px solid {AMBER}"><b>💶 {T("Money tip")}</b><br>'
-                            f'<span class="ks-small">{tip["message"]}</span></div>', unsafe_allow_html=True)
+                            f'<span class="ks-small">{tip["message_de"] if L == "de" else tip["message"]}</span></div>', unsafe_allow_html=True)
             tk = st.session_state.get("ticket")
             if tk:
                 st.caption(T("Review ticket {} opened · due {} · see the Review queue tab", tk["id"], tk["due"]))

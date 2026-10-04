@@ -114,3 +114,7 @@ Look: the app uses the presentation colours and the KlarSchiff mark (`.streamlit
 | Ask KlarSchiff (`klarschiff/assistant.py`, tab **Ask KlarSchiff**, `n8n/telegram_assistant_workflow.json`) | The team interrupts the customs lead with the same small questions | RAG: BM25 search over the rule base, the master list and the origin table → GPT-4o-mini answers only from those sources, with citations, or says "I don't know". Prompt-injection guard blocks instruction-like questions. On Telegram: n8n AI Agent + OpenAI chat model + Airtable tool (master list). It informs; a person decides. | Expert time |
 
 Tested offline (no key): 3 inbox files checked, 3 tickets opened, files moved to `done/`; cache: 3 requests → 2 API calls, 1 reused; assistant: correct sources for Türkiye origin proof, CBAM, construction products (German question), safety data sheet; "what is the weather" → "I don't know"; injection text → blocked.
+
+### v2.6b fixes (4 Oct 2026)
+- **E11 (found while checking the German screenshot):** "Leistungserklärung fehlt" was not flagged as a missing DoP, because the word pattern stopped in the middle of the word ("leistungserkl|ärung") and the word "fehlt" was not seen. Same for "CE marking missing" and "Mill certificate missing". Fix in `klarschiff/intake.py`: the check now reads to the end of the word. Re-tested: all five sentences correct; offline evaluation unchanged (no regressions).
+- German app: the money tip and the document names in the review reasons are now in German (`klarschiff/preference.py`, `mvp/i18n.py`).
