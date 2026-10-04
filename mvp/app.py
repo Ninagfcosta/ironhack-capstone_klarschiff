@@ -23,24 +23,49 @@ from klarschiff.models import Shipment  # noqa: E402
 sys.path.insert(0, str(ROOT / "mvp"))
 from i18n import ABOUT, LANGS, reason, t  # noqa: E402
 
-NAVY, TEAL = "#081A2B", "#00B8C8"
+# Brand colours: the same "sunset" palette as the presentation
+INK, PLUM, ORANGE, AMBER, CORAL, GREEN = "#1E1433", "#3B1838", "#E8622C", "#F5A524", "#E2475A", "#1F9D6B"
 st.set_page_config(page_title="KlarSchiff · Pre-shipment co-pilot", page_icon="⚓", layout="wide")
 st.markdown(f"""<style>
-.ks-title {{font-size:2.2rem;font-weight:800;color:{NAVY};margin-bottom:0}} .ks-title span{{color:{TEAL}}}
-.ks-sub {{color:#5b6b7b;margin-top:0}}
-.ks-card {{border:1px solid #d6e2ea;border-radius:12px;padding:16px 18px;background:#f7fbfc}}
-.ks-big {{font-size:2rem;font-weight:800;color:{NAVY}}}
-.ks-ok {{background:#e7f8ef;border-left:6px solid #1f9d55;padding:12px 16px;border-radius:8px}}
-.ks-warn {{background:#fff4e0;border-left:6px solid #d97706;padding:12px 16px;border-radius:8px}}
+.ks-bar {{height:6px;border-radius:6px;background:linear-gradient(90deg,{AMBER},{ORANGE},{CORAL},#9B5DE5);margin:6px 0 14px 0}}
+.ks-pill {{display:inline-block;border:1px solid #F1D9C8;background:#FFF6EF;color:{INK};border-radius:999px;padding:3px 12px;margin:2px 6px 2px 0;font-size:.85rem}}
+.ks-card {{border:1px solid #F1D9C8;border-radius:14px;padding:14px 16px;background:#FFFFFF;box-shadow:0 1px 2px rgba(30,20,51,.06);min-height:150px}}
+.ks-label {{color:#7A6A80;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em}}
+.ks-big {{font-size:2rem;font-weight:800;color:{INK};line-height:1.15}}
+.ks-small {{color:#7A6A80;font-size:.85rem}}
+.ks-ok {{background:#E9F7F0;border:1px solid #BFE6D3;border-left:8px solid {GREEN};padding:14px 18px;border-radius:12px;color:{INK}}}
+.ks-warn {{background:#FFF4E6;border:1px solid #F7D7AE;border-left:8px solid {ORANGE};padding:14px 18px;border-radius:12px;color:{INK}}}
+.ks-verdict {{font-size:1.35rem;font-weight:800}}
+.ks-step {{border:1px solid #F1D9C8;border-radius:12px;padding:10px 10px;background:#FFFFFF;text-align:center;min-height:104px}}
+.ks-step b {{display:block;color:{INK}}}
+.ks-track {{height:10px;border-radius:6px;background:#F3E6DC;position:relative;margin-top:8px}}
+.ks-fill {{height:10px;border-radius:6px}}
+.ks-mark {{position:absolute;top:-4px;width:2px;height:18px;background:{INK}}}
 </style>""", unsafe_allow_html=True)
+# KlarSchiff mark: a check (shipment cleared) above a route line, on a dark rounded square
+LOGO = (f'<svg width="60" height="60" viewBox="0 0 120 120" aria-label="KlarSchiff logo">'
+        f'<rect width="120" height="120" rx="28" fill="{INK}"/>'
+        f'<path d="M30 58 L52 80 L92 34" fill="none" stroke="#FFFFFF" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>'
+        f'<path d="M28 98 H92" stroke="{ORANGE}" stroke-width="7" stroke-linecap="round"/></svg>')
+def short(text, n=70):
+    """Shorten a long title at a word boundary."""
+    return text if len(text) <= n else text[:n].rsplit(" ", 1)[0] + " …"
+
+
+CATEGORY = {1: "Standard goods", 2: "CE-marked product", 3: "Trade measures or controls"}
+
 # ---------------------------------------------------------------- LANGUAGE (English default, German on one click)
 head, switch = st.columns([5, 1])
 with switch:
     L = st.radio("🌐 Language / Sprache", list(LANGS), format_func=LANGS.get, horizontal=True, key="lang")
 T = lambda text, *a: t(text, L, *a)  # noqa: E731
-head.markdown(f'<div style="font-size:44px;font-weight:800;color:{NAVY};line-height:1.1">Klar<span style="color:{TEAL}">Schiff</span></div>'
-              f'<div style="color:#5b6b7b;margin:4px 0 12px 0">{T("AI pre-shipment co-pilot · HS code suggestion, document check and tariff monitor")}'
-              f' · <b>{T("Clear answers. Human decisions.")}</b></div>', unsafe_allow_html=True)
+head.markdown(f'<div style="display:flex;align-items:center;gap:14px">{LOGO}'
+              f'<div><div style="font-size:42px;font-weight:800;color:{INK};line-height:1.05">Klar<span style="color:{ORANGE}">Schiff</span></div>'
+              f'<div style="color:#7A6A80;margin-top:2px">{T("AI pre-shipment co-pilot · HS code suggestion, document check and tariff monitor")}'
+              f' · <b style="color:{INK}">{T("Clear answers. Human decisions.")}</b></div></div></div>', unsafe_allow_html=True)
+head.markdown('<div class="ks-bar"></div>' + "".join(f'<span class="ks-pill">{T(x)}</span>' for x in
+              ["Suggests the customs code", "Checks the documents", "Applies official rules", "You decide"]),
+              unsafe_allow_html=True)
 
 # ---------------------------------------------------------------- LOGIN (set KLARSCHIFF_APP_PASSWORD on any shared server)
 if config.APP_PASSWORD and not st.session_state.get("auth"):
@@ -150,91 +175,129 @@ with tab_check:
     with right:
         st.subheader(T("2 · Suggestion"))
         if not r:
-            st.caption(T("The result appears here."))
+            st.markdown(f'<div class="ks-card"><b>{T("How the agent works")}</b><br>'
+                        f'<span class="ks-small">{T("1 Intake → 2 Validate → 3 Recommend → 4 Rules → 5 You decide. The result appears here.")}</span></div>',
+                        unsafe_allow_html=True)
         else:
+            # --- the verdict: one clear sentence first
             if r.manual_review:
-                st.markdown(f'<div class="ks-warn"><b>{T("⚠️ Manual review needed")}</b></div>', unsafe_allow_html=True)
-                for x in r.review_reasons:
-                    st.markdown(f"- {reason(x, L)}")
+                items = "".join(f"<li>{reason(x, L)}</li>" for x in r.review_reasons)
+                st.markdown(f'<div class="ks-warn"><div class="ks-verdict">🟠 {T("A person must review this shipment")}</div>'
+                            f'<div class="ks-small">{T("{} reason(s):", len(r.review_reasons))}</div><ul style="margin:6px 0 0 0">{items}</ul></div>',
+                            unsafe_allow_html=True)
             else:
-                st.markdown(f'<div class="ks-ok"><b>{T("✅ All checks passed.")}</b> {T("A person still approves before filing.")}</div>', unsafe_allow_html=True)
-            k1, k2, k3 = st.columns(3)
-            k1.markdown(f'<div class="ks-card">{T("HS code")}<br><span class="ks-big">{r.hs_code}</span></div>', unsafe_allow_html=True)
-            k2.markdown(f'<div class="ks-card">{T("Confidence")}<br><span class="ks-big">{r.confidence:.0%}</span></div>', unsafe_allow_html=True)
-            k3.markdown(f'<div class="ks-card">{T("Category")}<br><span class="ks-big">{r.category}</span> / 3</div>', unsafe_allow_html=True)
-            st.markdown(f"**{r.hs_title}**")
-            if r.master:
-                mp = r.master.get("product") or {}
-                kind = {"part_number": "📒 Known part number", "same_description": "📒 New part number, same product",
-                        "similar": "📒 Similar product in the master list"}.get(r.master["kind"], "📒 Master list")
-                with st.expander(T(kind) + f": {mp.get('product_id', '')}", expanded=True):
-                    st.markdown(f"**{mp.get('description', '')}** · HS **{mp.get('hs_code') or '-'}**")
-                    if mp.get("description_de"):
-                        st.markdown(f"🇩🇪 {mp['description_de']}")
-                    st.caption(T("Part numbers") + ": " + (", ".join(mp.get("part_numbers") or []) or "-"))
-                    for dff in r.master.get("differences") or []:
-                        st.warning(dff)
-            if r.national:
-                nat = r.national
-                with st.expander(T("🔢 Full code ({})", nat["system"]) + (f": {nat['suggested']}" if nat.get("suggested") else ""),
-                                 expanded=True):
-                    if nat.get("suggested"):
-                        st.caption(T("Suggested by word match; a person confirms the line."))
-                    else:
-                        st.caption(T("Several lines fit: a person chooses."))
-                    st.dataframe(pd.DataFrame(nat["lines"]), hide_index=True, width="stretch")
-            if r.precedents:
-                with st.expander(T("📚 Similar official rulings in your library ({})", len(r.precedents))):
-                    for pr in r.precedents:
-                        badge = "✅" if pr.get("valid") else "⌛ " + T("expired")
-                        st.markdown(f"- **{pr['reference']}** ({pr['source']}) · HS {pr['code']} · {badge}: {pr['description'][:160]}")
-            if r.translated_description:
-                with st.expander(T("🌐 Translated from '{}': original and English", r.source_language), expanded=True):
-                    st.markdown(f"**{T('Original')}:** {r.original_description}")
-                    st.markdown(f"**{T('English (used for the check)')}:** {r.translated_description}")
-            if st.session_state.get("vision"):
-                v = st.session_state["vision"]
-                with st.expander(T("📷 Read from the scan/photo ({}, legible: {})", v.get('document_type', 'document'), v.get('legible'))):
-                    st.write(v.get("text", ""))
-                    if v.get("unreadable_parts"):
-                        st.warning(T("Not readable") + ": " + "; ".join(v["unreadable_parts"]))
-            st.markdown(f"**{T('Why')}:** {r.reasoning}")
-            if L == "de":
-                st.caption(T("The AI model writes its reasoning in English."))
-            if r.evidence:
-                st.markdown(f"**{T('Evidence')}:** " + ", ".join(f"`{e}`" for e in r.evidence))
-            for cr in r.category_reasons:
-                st.caption("• " + reason(cr, L))
+                st.markdown(f'<div class="ks-ok"><div class="ks-verdict">🟢 {T("All checks passed")}</div>'
+                            f'<div>{T("A person still approves before filing.")}</div></div>', unsafe_allow_html=True)
 
-            st.markdown("#### " + T("Documents"))
-            status = {"provided": "✅ provided", "missing": "❌ missing", "not stated": "❔ not stated"}
-            st.dataframe(pd.DataFrame([{T("Document"): d.name, T("Type"): T("required" if d.mandatory else "recommended"),
-                                        T("Status"): T(status[d.status]), T("Legal basis"): d.legal_ref} for d in r.required_documents]),
-                         hide_index=True, width="stretch")
-            if r.validation_issues:
-                st.markdown("#### " + T("Invoice vs packing list"))
-                for i in r.validation_issues:
-                    st.markdown(f"- **{i.field}** ({i.severity}): {i.detail}")
-            if r.measures:
-                st.markdown("#### " + T("Trade measures and rules"))
-                for m in r.measures:
-                    icon = "⏳" if m.upcoming else ("🔴" if m.volatility in ("high", "very high") else "🟡")
-                    label = f"{icon} {m.name}" + (f" · {T('from')} {m.effective_from}" if m.upcoming else "")
-                    with st.expander(label):
-                        st.write(m.effect)
-                        st.caption(f"{m.legal_ref} · {T('verified')} {m.last_verified}{' · ⚠️ ' + T('re-verify') if m.stale else ''} · [{T('source')}]({m.source_url})")
-            if r.alerts:
-                st.error(T("{} open tariff alert(s) for this code: see the Tariff monitor tab.", len(r.alerts)))
-            st.markdown(f"**{T('Check live before filing')}:** " + " · ".join(f"[{k}]({v})" for k, v in r.links.items()))
-            with st.expander(T("Retrieved candidates (RAG) and alternatives")):
-                st.dataframe(pd.DataFrame([c.model_dump() for c in r.candidates]), hide_index=True)
-                st.write(T("Alternatives considered by the model:"), ", ".join(r.alternatives) or "-")
-            st.caption(f"{T('Mode')}: {r.mode} · {T('model')}: {r.model} · {T('knowledge base')} {r.kb_version} · {r.tariff_data_as_of}")
-            if r.usage.get("calls"):
-                st.caption(T("AI use for this check: {} calls · {} tokens · about ${}", r.usage["calls"],
-                             r.usage["prompt_tokens"] + r.usage["completion_tokens"], f"{r.usage['est_cost_usd']:.5f}"))
+            # --- the agent's steps, made visible
+            missing = [d for d in r.required_documents if d.status == "missing" and d.mandatory]
+            unknown = [d for d in r.required_documents if d.status == "not stated" and d.mandatory]
+            low = r.confidence < config.CONFIDENCE_THRESHOLD
+            steps = [("1 · Intake", "✅", T("translated") if r.translated_description else T("read")),
+                     ("2 · Validate", "⚠️" if r.validation_issues else "✅", T("{} issue(s)", len(r.validation_issues))),
+                     ("3 · Recommend", "⚠️" if low else "✅", f"HS {r.hs_code}"),
+                     ("4 · Rules", "⚠️" if (missing or unknown) else "✅",
+                      T("{} missing", len(missing)) if missing else (T("{} to confirm", len(unknown)) if unknown else T("documents OK"))),
+                     ("5 · You decide", "👤", T("waiting for you"))]
+            st.write("")
+            for col, (name, icon, sub) in zip(st.columns(5), steps):
+                col.markdown(f'<div class="ks-step"><span style="font-size:1.3rem">{icon}</span><b>{T(name)}</b>'
+                             f'<span class="ks-small">{sub}</span></div>', unsafe_allow_html=True)
+
+            # --- three key numbers
+            st.write("")
+            k1, k2, k3 = st.columns(3)
+            k1.markdown(f'<div class="ks-card"><div class="ks-label">{T("HS code")}</div><div class="ks-big">{r.hs_code}</div>'
+                        f'<div class="ks-small">{short(r.hs_title)}</div></div>', unsafe_allow_html=True)
+            pct, thr = r.confidence, config.CONFIDENCE_THRESHOLD
+            colour = GREEN if pct >= thr else ORANGE
+            k2.markdown(f'<div class="ks-card"><div class="ks-label">{T("Confidence")}</div><div class="ks-big">{pct:.0%}</div>'
+                        f'<div class="ks-track"><div class="ks-fill" style="width:{pct*100:.0f}%;background:{colour}"></div>'
+                        f'<div class="ks-mark" style="left:{thr*100:.0f}%"></div></div>'
+                        f'<div class="ks-small">{T("Below {:.0%}: a person reviews", thr)}</div></div>', unsafe_allow_html=True)
+            k3.markdown(f'<div class="ks-card"><div class="ks-label">{T("Category")}</div><div class="ks-big">{r.category} / 3</div>'
+                        f'<div class="ks-small">{T(CATEGORY.get(r.category, ""))}</div></div>', unsafe_allow_html=True)
+            st.write("")
+
+            # --- details in tabs: short screen, nothing hidden
+            tw, tdoc, trule, tsrc = st.tabs([T("💬 Why"), T("📄 Documents"), T("⚖️ Rules"), T("🔗 Sources & data")])
+            with tw:
+                st.markdown(f"**{r.hs_title}**")
+                st.markdown(f"**{T('Why')}:** {r.reasoning}")
+                if L == "de":
+                    st.caption(T("The AI model writes its reasoning in English."))
+                if r.evidence:
+                    st.markdown(f"**{T('Evidence')}:** " + ", ".join(f"`{e}`" for e in r.evidence))
+                for cr in r.category_reasons:
+                    st.caption("• " + reason(cr, L))
+                if r.master:
+                    mp = r.master.get("product") or {}
+                    kind = {"part_number": "📒 Known part number", "same_description": "📒 New part number, same product",
+                            "similar": "📒 Similar product in the master list"}.get(r.master["kind"], "📒 Master list")
+                    with st.expander(T(kind) + f": {mp.get('product_id', '')}", expanded=True):
+                        st.markdown(f"**{mp.get('description', '')}** · HS **{mp.get('hs_code') or '-'}**")
+                        if mp.get("description_de"):
+                            st.markdown(f"🇩🇪 {mp['description_de']}")
+                        st.caption(T("Part numbers") + ": " + (", ".join(mp.get("part_numbers") or []) or "-"))
+                        for dff in r.master.get("differences") or []:
+                            st.warning(dff)
+                if r.translated_description:
+                    with st.expander(T("🌐 Translated from '{}': original and English", r.source_language), expanded=True):
+                        st.markdown(f"**{T('Original')}:** {r.original_description}")
+                        st.markdown(f"**{T('English (used for the check)')}:** {r.translated_description}")
+                if st.session_state.get("vision"):
+                    v = st.session_state["vision"]
+                    with st.expander(T("📷 Read from the scan/photo ({}, legible: {})", v.get('document_type', 'document'), v.get('legible'))):
+                        st.write(v.get("text", ""))
+                        if v.get("unreadable_parts"):
+                            st.warning(T("Not readable") + ": " + "; ".join(v["unreadable_parts"]))
+                if r.precedents:
+                    with st.expander(T("📚 Similar official rulings in your library ({})", len(r.precedents))):
+                        for pr in r.precedents:
+                            badge = "✅" if pr.get("valid") else "⌛ " + T("expired")
+                            st.markdown(f"- **{pr['reference']}** ({pr['source']}) · HS {pr['code']} · {badge}: {pr['description'][:160]}")
+            with tdoc:
+                status = {"provided": "✅ provided", "missing": "❌ missing", "not stated": "❔ not stated"}
+                st.dataframe(pd.DataFrame([{T("Document"): d.name, T("Type"): T("required" if d.mandatory else "recommended"),
+                                            T("Status"): T(status[d.status]), T("Legal basis"): d.legal_ref} for d in r.required_documents]),
+                             hide_index=True, width="stretch")
+                if r.validation_issues:
+                    st.markdown("#### " + T("Invoice vs packing list"))
+                    for i in r.validation_issues:
+                        st.markdown(f"- **{i.field}** ({i.severity}): {i.detail}")
+            with trule:
+                if r.measures:
+                    for m in r.measures:
+                        icon = "⏳" if m.upcoming else ("🔴" if m.volatility in ("high", "very high") else "🟡")
+                        label = f"{icon} {m.name}" + (f" · {T('from')} {m.effective_from}" if m.upcoming else "")
+                        with st.expander(label):
+                            st.write(m.effect)
+                            st.caption(f"{m.legal_ref} · {T('verified')} {m.last_verified}{' · ⚠️ ' + T('re-verify') if m.stale else ''} · [{T('source')}]({m.source_url})")
+                else:
+                    st.caption(T("No special trade measures for this code."))
+                if r.alerts:
+                    st.error(T("{} open tariff alert(s) for this code: see the Tariff monitor tab.", len(r.alerts)))
+                if r.national:
+                    nat = r.national
+                    with st.expander(T("🔢 Full code ({})", nat["system"]) + (f": {nat['suggested']}" if nat.get("suggested") else ""),
+                                     expanded=True):
+                        if nat.get("suggested"):
+                            st.caption(T("Suggested by word match; a person confirms the line."))
+                        else:
+                            st.caption(T("Several lines fit: a person chooses."))
+                        st.dataframe(pd.DataFrame(nat["lines"]), hide_index=True, width="stretch")
+            with tsrc:
+                st.markdown(f"**{T('Check live before filing')}:** " + " · ".join(f"[{k}]({v})" for k, v in r.links.items()))
+                with st.expander(T("Retrieved candidates (RAG) and alternatives")):
+                    st.dataframe(pd.DataFrame([c.model_dump() for c in r.candidates]), hide_index=True)
+                    st.write(T("Alternatives considered by the model:"), ", ".join(r.alternatives) or "-")
+                st.caption(f"{T('Mode')}: {r.mode} · {T('model')}: {r.model} · {T('knowledge base')} {r.kb_version} · {r.tariff_data_as_of}")
+                if r.usage.get("calls"):
+                    st.caption(T("AI use for this check: {} calls · {} tokens · about ${}", r.usage["calls"],
+                                 r.usage["prompt_tokens"] + r.usage["completion_tokens"], f"{r.usage['est_cost_usd']:.5f}"))
 
             st.markdown("#### " + T("3 · Your decision"))
+            st.caption(T("The agent suggests. You approve, correct or reject. Every decision is logged."))
             d1, d2 = st.columns([1, 1])
             dec_opts = ["approved", "corrected", "rejected"]
             decision = d1.radio(T("Decision"), dec_opts, horizontal=True, format_func=T, key="decision_" + L,
