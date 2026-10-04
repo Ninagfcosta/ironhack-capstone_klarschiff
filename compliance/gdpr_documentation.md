@@ -85,3 +85,16 @@ Keys only in `.env` / platform secrets, never in code or Git (`.gitignore`; secr
 - **Translation** sends only the goods description.
 - For clients who require EU processing, set an EU provider in `.env` (`KLARSCHIFF_LLM_BASE_URL`, see `klarschiff/llm.py`) and re-run the evaluation.
 - For the pilot, the app runs on a server in Germany behind HTTPS and a password (set up with the client's IT).
+
+## 10. v2.4–v2.6 additions (review queue, e-mail inbox, assistant, cache, voice) — added 4 Oct 2026
+
+| Processing | Personal data? | Purpose and legal basis | Retention | Control |
+|---|---|---|---|---|
+| **E-mail inbox** (n8n Gmail Trigger → `data/inbox/`) | Yes: sender name and e-mail address, subject, date in `.meta.json`; attachments may contain names and signatures | Process supplier documents for the importer's customs duties; Art. 6(1)(b)/(f) | Files moved to `done/` after the check; delete after 90 days (same as decision log) | Only goods text goes to the AI; sender data stays local; dedicated mailbox label, not the whole inbox |
+| **Review queue + n8n alert** (Airtable, Telegram) | Low: ticket owner = team or role, not a named person | Make sure every flagged shipment is reviewed; Art. 6(1)(f) | Until the ticket is closed + 90 days | Team-level owners (works council, §87 BetrVG); Airtable and Telegram listed as processors in the DPA list |
+| **Ask KlarSchiff / Telegram assistant** | Possible: a question can contain a name | Answer rule questions from the knowledge base; Art. 6(1)(f) | Telegram chat history per the company's policy; the app keeps no question log | Users are told not to type personal data; injection guard; answers only from sources |
+| **AI answer cache** (`data/llm_cache.json`) | Indirect: stores the goods text sent to the model and the answer | Save cost and time on repeated identical requests; Art. 6(1)(f) | Cleared at every model or prompt change and at least every 90 days (`llm.clear_cache()`) | Same data minimisation as the agent (goods data only) |
+| **Supplier e-mail draft** | Yes if the user adds a contact name | Ask the supplier for a missing document; Art. 6(1)(b) | Not stored by the app; nothing is sent automatically | A person reviews and sends from their own mailbox |
+| **Voice note** (Whisper) | Yes: the voice itself | Turn a warehouse note into text; Art. 6(1)(f) with consent of the speaker | Audio not stored; only the text is used | Optional feature; inform staff before use |
+
+New processors to add to the record of processing: Google (Gmail, if used), Airtable, Telegram. Transfers outside the EU: Standard Contractual Clauses / EU-US Data Privacy Framework where certified; prefer EU hosting in Phase 2.

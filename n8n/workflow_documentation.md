@@ -88,4 +88,5 @@ The full consulting proposal is a five-step, human-supervised workflow:
 
 ## 7. Demo recording
 
-_Link to the 2–5 minute demo recording (trigger → result, narrated) will be added here._
+Demo video (trigger → result, narrated): [`poc/KlarSchiff_POC_demo.mp4`](../poc/KlarSchiff_POC_demo.mp4) (Round 1 POC, about 2 minutes).
+Round 2 MVP demo: shown live in the final presentation; plan B recording described in `mvp/mvp_documentation.md` §6.

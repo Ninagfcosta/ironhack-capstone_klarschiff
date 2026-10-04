@@ -54,5 +54,5 @@ streamlit run mvp/app.py      # the MVP
 
 ## 4. Demo video
 
-Round 1 demo (n8n, 2:10, AI narration with Kokoro TTS): link in `n8n/workflow_documentation.md` §7.
+Round 1 demo (n8n, 2:10, AI narration with Kokoro TTS): [`KlarSchiff_POC_demo.mp4`](KlarSchiff_POC_demo.mp4) in this folder (also linked in `n8n/workflow_documentation.md` §7).
 Round 2 demo (MVP, 2-5 min): see `mvp/mvp_documentation.md` §6.

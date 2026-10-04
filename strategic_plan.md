@@ -11,23 +11,28 @@
 | **Next: paid pilot with I&E LLC** | Proposed: 3 months, 1 route, 1 product family |
 | Product for the German market | After a successful pilot |
 
-## 2. Roadmap
+## 2. Roadmap (realistic: about 12 months to full production, Scrum with 2-week sprints)
 
-```
-Oct 2026        Nov 2026 - Jan 2027 (pilot)                         Feb - Jun 2027              H2 2027
-Round 2 ─────► Sprint 0  Sprint 1   Sprint 2    Sprint 3    Sprint 4 ─► Production at I&E ───► 2-3 more clients
-               baseline  connect    blind test  live, all   decide      (subscription)          (via a customs broker)
-                         data       (broker)    reviewed
-```
+Updated 4 Oct 2026 to match the presentation (slide 14). Benchmarks: AI pilots in customs brokerage run 10-12 weeks; enterprise AI rollouts take 6-18 months; many AI projects stop after the proof of concept (Gartner). So each phase ends with a go / no-go gate.
+
+| Phase | When | Sprints | Main work | Gate |
+|---|---|---|---|---|
+| Done: POC + MVP | Bootcamp, Sep-Oct 2026 | - | n8n POC, Python agent, Streamlit app, LangSmith evaluation | Ironhack + IHK review |
+| 1 · Pilot | Months 1-3 | 6 | Baseline, client data, blind test, shadow mode, live pilot with review, decide | Go / no-go (section 3) |
+| 2 · Production readiness | Months 4-7 | 8 | Security, EU hosting, ERP / TMS link, 10-digit TARIC, training, ATLAS-ready export for the broker | Security and data-protection sign-off |
+| 3 · Go-live and scale | Months 8-12 | 10 | Second route and product family, then customs brokers (one broker serves many importers) | Measured KPIs (section 7) |
+
+Pilot sprints (2 weeks each): 1 Baseline · 2 Client data · 3 Blind test · 4 Shadow mode · 5 Live pilot · 6 Decide.
 
 | Milestone | When | Done when |
 |---|---|---|
-| M0 Pilot contract | Oct 2026 | Scope, price, DPA, liability clause signed |
-| M1 Baseline measured (Sprint 0) | Month 1 | 20 shipments timed; 12 months of holds and broker corrections collected |
-| M2 Blind test (Sprint 2) | Month 2 | 50-100 real, anonymised shipments, labelled by the broker, scored by the agent **before** anyone sees the answers |
-| M3 Live pilot (Sprint 3) | Months 2-3 | Every live shipment checked; every result reviewed by a person |
-| M4 Go / no-go (Sprint 4) | Month 3 | Pilot success criteria reviewed with Chleo and the broker |
-| M5 Production | Month 4+ | Subscription tier chosen from measured value; monitor running daily |
+| M0 Pilot contract | Month 0 | Scope, price, DPA, liability clause signed |
+| M1 Baseline measured | Sprint 1 | 20 shipments timed; 12 months of holds and broker corrections collected |
+| M2 Blind test | Sprint 3 | 50-100 real, anonymised shipments, labelled by the broker, scored by the agent **before** anyone sees the answers |
+| M3 Live pilot | Sprints 4-5 | Shadow mode first, then every live shipment checked and reviewed by a person |
+| M4 Go / no-go | Sprint 6 (month 3) | Pilot success criteria reviewed with Chleo and the broker |
+| M5 Production ready | Month 7 | Security, hosting and integration accepted |
+| M6 Scale | Months 8-12 | Second route live; first customs broker signed |
 
 ## 3. Pilot success criteria (go / no-go)
 
