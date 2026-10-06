@@ -11,6 +11,24 @@ AI Consulting Capstone · Ironhack AI Consulting & Integration Bootcamp · **Aut
 
 ---
 
+## 0. Project journey: all phases at a glance
+
+| # | Phase | When | What happened | Where to look |
+|---|---|---|---|---|
+| 0 | **Origin** | Sep 2026 (Module 4) | SilverTrust pair exercise with Asal: logistics client interview, first idea | [`00_origin_silvertrust/`](00_origin_silvertrust/) |
+| 1 | **Round 1: research + POC** | 22-24 Sep | Sector research, use cases, charts, n8n POC (3 nodes), eval plan (5 cases), cost and timeline; presented 24 Sep | [`research/`](research/) · [`charts/`](charts/) · [`n8n/`](n8n/) · [`evaluation/eval_plan.md`](evaluation/eval_plan.md) · [`cost_estimation/`](cost_estimation/) |
+| 2 | **Feedback → decision** | 24 Sep - 1 Oct | Teacher and classmates' feedback; KEEP the use case, 5 changes | [`feedback/round1_decision.md`](feedback/round1_decision.md) |
+| 3 | **Round 2: build + evaluate (v2.0-v2.1)** | 24 Sep | Agent, MVP, n8n batch POC v2, 20-case LangSmith experiment, error analysis | [`klarschiff/`](klarschiff/) · [`mvp/`](mvp/) · [`poc/`](poc/) · [`evaluation/langsmith.md`](evaluation/langsmith.md) |
+| 4 | **Pilot readiness (v2.2-v2.3)** | 25-29 Sep | Scans and photos, translation, EN/DE interface, any product (HS 2022), master list, prompt-injection guard; project kept fully fictional and within the course | [`PILOT_READINESS.md`](PILOT_READINESS.md) |
+| 5 | **Pilot features (v2.4-v2.6)** | 4-6 Oct | Review queue, supplier e-mail draft, learning loop, e-mail inbox, Ask KlarSchiff assistant; errors E11-E12 found and fixed | [`mvp/`](mvp/) · [`klarschiff/`](klarschiff/) |
+| 6 | **Business + compliance** | Sep - Oct | ROI and risks, EU AI Act, GDPR, strategic plan, consulting pack | [`roi_risk_assessment.md`](roi_risk_assessment.md) · [`compliance/`](compliance/) · [`strategic_plan.md`](strategic_plan.md) · [`consulting/`](consulting/) |
+| 7 | **Final presentation** | 10 Oct 2026 | Slide deck + live demo | [`presentation.pdf`](presentation.pdf) |
+| ➡️ | **Next: pilot → production** | after Oct 2026 | 3-month pilot with go / no-go criteria, about 12 months to full production | [`strategic_plan.md`](strategic_plan.md) |
+
+The plan inside the project follows the same logic: **POC → Pilot → Full deployment**.
+
+---
+
 ## 1. The problem
 
 **I&E LLC** (fictional SME, construction materials) checks shipment documents by hand. Errors are **created when documents are prepared** but **found only at customs**, when the goods are already at the border: holds of 2+ days, ~€1,500 per delay, weekly (illustrative, SilverTrust interview, Sept 2026).
@@ -33,9 +51,9 @@ flowchart LR
 
 **The AI suggests; a person decides. Nothing is ever filed automatically.**
 
-> **v2.2 (branch `v2.2-pro`):** scans and photos, Turkish/Chinese invoices, EU model provider option, login + EU server setup, blind-test runner, **English / German interface switch** → [`PILOT_READINESS.md`](PILOT_READINESS.md)
+> **v2.2:** scans and photos, Turkish/Chinese invoices, EU model provider option, login + EU server setup, blind-test runner, **English / German interface switch** → [`PILOT_READINESS.md`](PILOT_READINESS.md)
 >
-> **v2.3 (same branch): any product, not only construction.**
+> **v2.3: any product, not only construction.**
 > - **Full HS 2022** (5,613 subheadings, public-domain UN reference texts) as the search base; the 50 broker-reviewed headings stay on top. Codes not yet reviewed always go to a person.
 > - **Rule packs for all goods:** CE (machinery, electrical/radio + WEEE, batteries), export control (EU dual-use on export, US EAR for US-origin items), food/plants (official controls), EUDR (shown as *upcoming* until 30 Dec 2026), CBAM full scope, trade defence.
 > - **Master list (Produktstamm):** part numbers change, the product stays. A new part number with the same description reuses the approved HS code and German description; similar products show the differences; conflicts in the client's list are found on import → [`klarschiff/master_list.py`](klarschiff/master_list.py)
@@ -71,6 +89,9 @@ python -m klarschiff.monitor    # tariff monitor (also runs daily via GitHub Act
 | EU AI Act | [`compliance/eu_ai_act_compliance.md`](compliance/eu_ai_act_compliance.md) | Minimal risk, reasoning step by step, Digital Omnibus 2026 dates |
 | GDPR | [`compliance/gdpr_documentation.md`](compliance/gdpr_documentation.md) | Data flow, legal bases, DPIA screening, transfers, retention |
 | Strategic plan | [`strategic_plan.md`](strategic_plan.md) | Pilot with go/no-go criteria, German go-to-market via customs brokers, pricing |
+| Consulting pack | [`consulting/`](consulting/) | One-pager, pilot proposal, roadmap to production |
+| **Presentation** | [`presentation.pdf`](presentation.pdf) | Final deck (business, compliance, technical, errors found) |
+| Demo video | [`poc/`](poc/) | New 2-5 min end-to-end recording, added before 10 Oct |
 
 ### Round 1
 
@@ -90,12 +111,15 @@ python -m klarschiff.monitor    # tariff monitor (also runs daily via GitHub Act
 │   └── knowledge/         # hs2022_subheadings.json (5,613), hs_headings.json (50 reviewed), trade_measures.json (rule packs + sources)
 ├── mvp/                   # Streamlit app + sample data + documentation
 ├── evaluation/            # dataset (20 cases), evaluators, runner, LangSmith doc, results
-├── poc/                   # n8n batch POC v2
+├── poc/                   # n8n batch POC v2 + demo video
 ├── compliance/            # EU AI Act, GDPR
+├── consulting/            # one-pager, pilot proposal, roadmap to production
+├── scripts/               # free download of official tariff data (CN 2026, US HTS)
 ├── data/                  # decision log, monitor state, alerts (created at runtime)
 ├── .github/workflows/     # daily tariff monitor
 ├── research/ charts/ n8n/ cost_estimation/ feedback/ 00_origin_silvertrust/
-└── use_case_definition.md · roi_risk_assessment.md · strategic_plan.md
+├── use_case_definition.md · roi_risk_assessment.md · strategic_plan.md
+└── presentation.pdf · PILOT_READINESS.md
 ```
 
 ## 6. Honesty notes

@@ -1,7 +1,7 @@
 # KlarSchiff v2.2: pilot readiness
 
-Version 2.1 is the one presented on 10 October (branch `main`). Version 2.2 (branch `v2.2-pro`) adds what a real
-pilot at a German importer needs. Same agent, same rules, same review triggers; 24 offline tests pass.
+Version 2.1 was the first working agent (24 September). Version 2.2 adds what a real
+pilot at a German importer needs. Everything is now in the `main` branch. Same agent, same rules, same review triggers.
 
 | Gap (from the professional review) | What v2.2 adds | Where |
 |---|---|---|
@@ -15,7 +15,6 @@ pilot at a German importer needs. Same agent, same rules, same review triggers; 
 ## Try it
 
 ```bash
-git checkout v2.2-pro
 pip install -r requirements.txt
 streamlit run mvp/app.py                              # upload mvp/sample_data/scan_invoice_TR.jpg (fictional Turkish invoice)
 python evaluation/blind_test.py evaluation/blind_test_template.csv
