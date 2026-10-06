@@ -37,6 +37,8 @@ def detect_documents(text: str) -> tuple[list[str], list[str]]:
     only if it is the invoice or packing list itself (the text usually IS the invoice).
     """
     t = text.lower()
+    # E12: "Invoice no. TR-1047" / "Invoice No: 55" / "Rechnung Nr. 12" is a number, not "no invoice"
+    t = re.sub(r"\b(no|nr)\b\s*[.:#]?\s*(?=[a-z]*-?\d)", "number ", t)
     provided, missing = [], []
     for name, pats in DOC_PATTERNS.items():
         for p in pats:

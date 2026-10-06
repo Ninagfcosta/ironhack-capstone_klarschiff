@@ -118,3 +118,7 @@ Tested offline (no key): 3 inbox files checked, 3 tickets opened, files moved to
 ### v2.6b fixes (4 Oct 2026)
 - **E11 (found while checking the German screenshot):** "Leistungserklärung fehlt" was not flagged as a missing DoP, because the word pattern stopped in the middle of the word ("leistungserkl|ärung") and the word "fehlt" was not seen. Same for "CE marking missing" and "Mill certificate missing". Fix in `klarschiff/intake.py`: the check now reads to the end of the word. Re-tested: all five sentences correct; offline evaluation unchanged (no regressions).
 - German app: the money tip and the document names in the review reasons are now in German (`klarschiff/preference.py`, `mvp/i18n.py`).
+
+### v2.6c fix (6 Oct 2026)
+- **E12 (found while preparing the live demo invoice):** a normal invoice header "Invoice no. TR-2026-1047" was read as "no invoice", so the commercial invoice was listed as **missing**. Fix in `klarschiff/intake.py`: "no." / "No:" / "Nr." followed by a number is treated as an invoice number. Re-tested: "No invoice attached." is still flagged as missing; offline evaluation unchanged (no regressions).
+- Demo file for the live demo: `mvp/sample_data/DEMO_invoice_TR-2026-1047.pdf` (fictional; precast wall panels from Türkiye, DoP missing, no proof of origin → manual review + money tip).
