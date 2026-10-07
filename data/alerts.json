@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "id": "09e978e3e1",
+    "created": "2026-10-07T11:24:48+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-05: General Services Administration Acquisition Regulation; GSAR Implementation of Executive Order 14275, Acquisition of Utility Services",
+    "url": "https://www.federalregister.gov/documents/2026/10/05/2026-20317/general-services-administration-acquisition-regulation-gsar-implementation-of-executive-order-14275",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "GSA is proposing to amend the General Services Administration Acquisition Regulation (GSAR) part 541 which outlines procedures and guidance for the procurement of utility services. GSA guidance does not apply to agencies using their special authorities listed in Federal Acquisition Regulation (FAR) section 41.103(a)(2) and (3). This proposed rule would align the GSAR with the FAR Council's propose",
+    "status": "open"
+  },
+  {
+    "id": "7e80c72d61",
+    "created": "2026-10-07T11:24:48+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-02: Common Alloy Aluminum Sheet From the People's Republic of China: Initiation of Circumvention Inquiry of the Antidumping Duty and Countervailing Duty Orders",
+    "url": "https://www.federalregister.gov/documents/2026/10/02/2026-20256/common-alloy-aluminum-sheet-from-the-peoples-republic-of-china-initiation-of-circumvention-inquiry",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "Based on available information, the U.S. Department of Commerce (Commerce) is self-initiating a circumvention inquiry to determine whether imports of certain aluminum composite panels (ACPs) produced in the People's Republic of China (China) by Shanghai Alumetal Decorative Material Co. (Alumetal) are circumventing the antidumping duty (AD) and countervailing duty (CVD) orders on common alloy alumi",
+    "status": "open"
+  },
+  {
+    "id": "e3e6d17250",
+    "created": "2026-10-07T11:24:48+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-01: Agency Information Collection Activities; Revision; Entry",
+    "url": "https://www.federalregister.gov/documents/2026/10/01/2026-20170/agency-information-collection-activities-revision-entry",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "The Department of Homeland Security, U.S. Customs and Border Protection (CBP) will be submitting the following information collection request to the Office of Management and Budget (OMB) for review and approval in accordance with the Paperwork Reduction Act of 1995 (PRA). The information collection is published in the Federal Register to obtain comments from the public and affected agencies.",
+    "status": "open"
+  }
+]
