@@ -91,7 +91,7 @@ python -m klarschiff.monitor    # tariff monitor (also runs daily via GitHub Act
 | Strategic plan | [`strategic_plan.md`](strategic_plan.md) | Pilot with go/no-go criteria, German go-to-market via customs brokers, pricing |
 | Consulting pack | [`consulting/`](consulting/) | One-pager, pilot proposal, roadmap to production |
 | **Presentation** | [`presentation.pdf`](presentation.pdf) | Final deck (business, compliance, technical, errors found) |
-| Demo video | [`poc/`](poc/) | New 2-5 min end-to-end recording, added before 10 Oct |
+| Demo video | `poc/KlarSchiff_demo.mp4` | 2-5 min end-to-end recording of the MVP (script: [`mvp/mvp_documentation.md`](mvp/mvp_documentation.md) §6), also shown live on 10 Oct |
 
 ### Round 1
 

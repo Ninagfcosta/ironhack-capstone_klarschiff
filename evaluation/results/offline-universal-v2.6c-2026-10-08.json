@@ -1,0 +1,1229 @@
+{
+  "label": "offline-universal-v2.6c-2026-10-08",
+  "run_at": "2026-10-08T19:39:02",
+  "model": "gpt-4o-mini",
+  "llm": false,
+  "summary": {
+    "hs_code_correct": {
+      "mean": 0.75,
+      "n": 16
+    },
+    "missing_document_flagged": {
+      "mean": null,
+      "n": 0
+    },
+    "source_shown": {
+      "mean": 1.0,
+      "n": 17
+    },
+    "review_routing": {
+      "mean": 1.0,
+      "n": 17
+    },
+    "no_false_all_clear": {
+      "mean": 1.0,
+      "n": 17
+    },
+    "category_correct": {
+      "mean": 0.875,
+      "n": 16
+    }
+  },
+  "cases": [
+    {
+      "id": "U01",
+      "description": "Laser cutting machine for metal sheets, 6 kW fibre laser, 1 unit",
+      "reference": {
+        "accepted_hs": [
+          "8456.11"
+        ],
+        "category": 2,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "Machinery CE",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "8456.11",
+        "hs_title": "Machine-tools; for working any material by removal of material; operated by laser",
+        "confidence": 0.47,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list",
+          "(not stated) EU Declaration of Conformity (machinery) + CE marking",
+          "(not stated) Instructions for use in German"
+        ],
+        "review_reasons": [
+          "Confidence 0.47 is below 0.75.",
+          "Code 8456.11 is not in the reviewed knowledge base.",
+          "Close call between 8456.11 and 8457.20: a person must choose.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 8456.11 'Machine-tools; for working any material by removal of material; operated by laser'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "8456.11 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "U02",
+      "description": "Laser cutting head, spare part for a laser cutting machine",
+      "reference": {
+        "accepted_hs": [
+          "8466.93"
+        ],
+        "category": 1,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "parts of machine-tools",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "8456.11",
+        "hs_title": "Machine-tools; for working any material by removal of material; operated by laser",
+        "confidence": 0.48,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list",
+          "(not stated) EU Declaration of Conformity (machinery) + CE marking",
+          "(not stated) Instructions for use in German"
+        ],
+        "review_reasons": [
+          "Confidence 0.48 is below 0.75.",
+          "Code 8456.11 is not in the reviewed knowledge base.",
+          "Close call between 8456.11 and 8456.12: a person must choose.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 8456.11 'Machine-tools; for working any material by removal of material; operated by laser'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 0.0,
+          "comment": "Wrong code: 8456.11 vs ['8466.93']."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 0.0,
+          "comment": "got 2, expected 1"
+        }
+      }
+    },
+    {
+      "id": "U03",
+      "description": "Rechargeable lithium-ion battery packs for notebook computers, 200 pieces",
+      "reference": {
+        "accepted_hs": [
+          "8507.60"
+        ],
+        "category": 2,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "Batteries Regulation",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "8507.60",
+        "hs_title": "Electric accumulators; lithium-ion, including separators, whether or not rectangular (including square)",
+        "confidence": 0.5,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list",
+          "(not stated) EU Declaration of Conformity (batteries) + CE marking",
+          "(not stated) Battery producer registration (BattDG, Germany)"
+        ],
+        "review_reasons": [
+          "Confidence 0.50 is below 0.75.",
+          "Code 8507.60 is not in the reviewed knowledge base.",
+          "Close call between 8507.60 and 8507.80: a person must choose.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 8507.60 'Electric accumulators; lithium-ion, including separators, whether or not rectangular (including square)'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "8507.60 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "U04",
+      "description": "Notebook computers, 14 inch display, 16 GB RAM, 300 units",
+      "reference": {
+        "accepted_hs": [
+          "8471.30"
+        ],
+        "category": 2,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "LVD/EMC/RoHS + WEEE",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "8471.30",
+        "hs_title": "Automatic data processing machines; portable, weighing not more than 10kg, consisting of at least a central processing unit, a keyboard and a display",
+        "confidence": 0.58,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list",
+          "(not stated) EU Declaration of Conformity (LVD / EMC / RoHS / RED) + CE marking",
+          "(not stated) WEEE registration number (ElektroG, Germany)"
+        ],
+        "review_reasons": [
+          "Confidence 0.58 is below 0.75.",
+          "Code 8471.30 is not in the reviewed knowledge base.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 8471.30 'Automatic data processing machines; portable, weighing not more than 10kg, consisting of at least a central processing unit, a keyboard and a display'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "8471.30 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "U05",
+      "description": "Roasted coffee beans, not decaffeinated, 60 bags of 20 kg",
+      "reference": {
+        "accepted_hs": [
+          "0901.21"
+        ],
+        "category": 3,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "SPS controls; EUDR upcoming",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "0901.21",
+        "hs_title": "Coffee; roasted, not decaffeinated",
+        "confidence": 0.45,
+        "category": 3,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list"
+        ],
+        "review_reasons": [
+          "Confidence 0.45 is below 0.75.",
+          "Code 0901.21 is not in the reviewed knowledge base.",
+          "Close call between 0901.21 and 0901.12: a person must choose.",
+          "Category 3: additional trade measures or controls always need a person.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 0901.21 'Coffee; roasted, not decaffeinated'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "0901.21 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 3, expected 3"
+        }
+      }
+    },
+    {
+      "id": "U06",
+      "description": "Men's T-shirts, knitted, 100% cotton, 2,000 pieces",
+      "reference": {
+        "accepted_hs": [
+          "6109.10"
+        ],
+        "category": 1,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "standard goods",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "6105.10",
+        "hs_title": "Shirts; men's or boys', of cotton, knitted or crocheted",
+        "confidence": 0.46,
+        "category": 1,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list"
+        ],
+        "review_reasons": [
+          "Confidence 0.46 is below 0.75.",
+          "Code 6105.10 is not in the reviewed knowledge base.",
+          "Close call between 6105.10 and 6205.20: a person must choose.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 6105.10 'Shirts; men's or boys', of cotton, knitted or crocheted'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 0.0,
+          "comment": "Wrong code: 6105.10 vs ['6109.10']."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 1, expected 1"
+        }
+      }
+    },
+    {
+      "id": "U07",
+      "description": "Office chairs with wooden frame and upholstered seat, 120 pieces",
+      "reference": {
+        "accepted_hs": [
+          "9401.61"
+        ],
+        "category": 1,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "EUDR upcoming (wood furniture)",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "9401.61",
+        "hs_title": "Seats; with wooden frames, upholstered, (excluding medical, surgical, dental, veterinary or barber furniture)",
+        "confidence": 0.46,
+        "category": 1,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list"
+        ],
+        "review_reasons": [
+          "Confidence 0.46 is below 0.75.",
+          "Code 9401.61 is not in the reviewed knowledge base.",
+          "Close call between 9401.61 and 9401.69: a person must choose.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 9401.61 'Seats; with wooden frames, upholstered, (excluding medical, surgical, dental, veterinary or barber furniture)'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "9401.61 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 1, expected 1"
+        }
+      }
+    },
+    {
+      "id": "U08",
+      "description": "Bicycles without motor, aluminium frame, 28 inch wheels, 150 units",
+      "reference": {
+        "accepted_hs": [
+          "8712.00"
+        ],
+        "category": 1,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "standard goods",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "7610.10",
+        "hs_title": "Doors, windows and their frames and thresholds for doors, of aluminium",
+        "confidence": 0.55,
+        "category": 3,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list",
+          "(not stated) Authorised CBAM declarant number (if > 50 t of CBAM goods per year)",
+          "(not stated) Embedded-emissions data from the producer/installation"
+        ],
+        "review_reasons": [
+          "Confidence 0.55 is below 0.75.",
+          "Category 3: additional trade measures or controls always need a person.",
+          "4 open tariff/regulation alert(s) for this code.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 7610.10 'Doors, windows and their frames and thresholds for doors, of aluminium'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 0.0,
+          "comment": "Wrong code: 7610.10 vs ['8712.00']."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 0.0,
+          "comment": "got 3, expected 1"
+        }
+      }
+    },
+    {
+      "id": "U09",
+      "description": "High-density polyethylene (HDPE) granules, specific gravity 0.952, primary form, 20 t",
+      "reference": {
+        "accepted_hs": [
+          "3901.20"
+        ],
+        "category": 1,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "plastics in primary form",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "3901.20",
+        "hs_title": "Ethylene polymers; in primary forms, polyethylene having a specific gravity of 0.94 or more",
+        "confidence": 0.46,
+        "category": 1,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list"
+        ],
+        "review_reasons": [
+          "Confidence 0.46 is below 0.75.",
+          "Code 3901.20 is not in the reviewed knowledge base.",
+          "Close call between 3901.20 and 3901.10: a person must choose.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 3901.20 'Ethylene polymers; in primary forms, polyethylene having a specific gravity of 0.94 or more'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "3901.20 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 1, expected 1"
+        }
+      }
+    },
+    {
+      "id": "U10",
+      "description": "Aluminium alloy extruded profiles for window systems, 8 t",
+      "reference": {
+        "accepted_hs": [
+          "7604.21",
+          "7604.29"
+        ],
+        "category": 3,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "CBAM aluminium",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "7604.29",
+        "hs_title": "Aluminium alloy bars, rods and profiles (other than hollow profiles)",
+        "confidence": 0.46,
+        "category": 3,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list",
+          "(not stated) Authorised CBAM declarant number (if > 50 t of CBAM goods per year)",
+          "(not stated) Embedded-emissions data from the producer/installation"
+        ],
+        "review_reasons": [
+          "Confidence 0.46 is below 0.75.",
+          "Close call between 7604.29 and 7604.21: a person must choose.",
+          "Category 3: additional trade measures or controls always need a person.",
+          "4 open tariff/regulation alert(s) for this code.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 7604.29 'Aluminium alloy bars, rods and profiles (other than hollow profiles)'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "7604.29 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 3, expected 3"
+        }
+      }
+    },
+    {
+      "id": "U11",
+      "description": "Electric centrifugal water pumps, 2.2 kW, 40 units",
+      "reference": {
+        "accepted_hs": [
+          "8413.70"
+        ],
+        "category": 2,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "Machinery CE",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "8413.70",
+        "hs_title": "Pumps; centrifugal, n.e.c. in heading no. 8413, for liquids",
+        "confidence": 0.58,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list",
+          "(not stated) EU Declaration of Conformity (machinery) + CE marking",
+          "(not stated) Instructions for use in German"
+        ],
+        "review_reasons": [
+          "Confidence 0.58 is below 0.75.",
+          "Code 8413.70 is not in the reviewed knowledge base.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 8413.70 'Pumps; centrifugal, n.e.c. in heading no. 8413, for liquids'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "8413.70 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "U12",
+      "description": "Raw cocoa beans, whole, fermented and dried, 25 t",
+      "reference": {
+        "accepted_hs": [
+          "1801.00"
+        ],
+        "category": 3,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "SPS controls; EUDR upcoming",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "1801.00",
+        "hs_title": "Cocoa beans; whole or broken, raw or roasted",
+        "confidence": 0.73,
+        "category": 3,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list"
+        ],
+        "review_reasons": [
+          "Confidence 0.73 is below 0.75.",
+          "Code 1801.00 is not in the reviewed knowledge base.",
+          "Category 3: additional trade measures or controls always need a person.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 1801.00 'Cocoa beans; whole or broken, raw or roasted'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "1801.00 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 3, expected 3"
+        }
+      }
+    },
+    {
+      "id": "U13",
+      "description": "Smartphones, 128 GB, 500 units",
+      "reference": {
+        "accepted_hs": [
+          "8517.13"
+        ],
+        "category": 2,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "Radio equipment CE + WEEE",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "8517.13",
+        "hs_title": "Telephone sets; smartphones for cellular or other wireless networks",
+        "confidence": 0.46,
+        "category": 2,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list",
+          "(not stated) EU Declaration of Conformity (LVD / EMC / RoHS / RED) + CE marking",
+          "(not stated) WEEE registration number (ElektroG, Germany)"
+        ],
+        "review_reasons": [
+          "Confidence 0.46 is below 0.75.",
+          "Code 8517.13 is not in the reviewed knowledge base.",
+          "Close call between 8517.13 and 8517.14: a person must choose.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 8517.13 'Telephone sets; smartphones for cellular or other wireless networks'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "8517.13 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 2, expected 2"
+        }
+      }
+    },
+    {
+      "id": "U14",
+      "description": "Stainless steel hexagon bolts M10 with nuts, 2 t",
+      "reference": {
+        "accepted_hs": [
+          "7318.15"
+        ],
+        "category": 3,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "CBAM + trade defence",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "7318.19",
+        "hs_title": "Iron or steel; threaded screws, bolts and nuts n.e.c. in item no. 7318.1",
+        "confidence": 0.47,
+        "category": 3,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list",
+          "(not stated) Authorised CBAM declarant number (if > 50 t of CBAM goods per year)",
+          "(not stated) Embedded-emissions data from the producer/installation"
+        ],
+        "review_reasons": [
+          "Confidence 0.47 is below 0.75.",
+          "Code 7318.19 is not in the reviewed knowledge base.",
+          "Close call between 7318.19 and 7318.15: a person must choose.",
+          "Category 3: additional trade measures or controls always need a person.",
+          "4 open tariff/regulation alert(s) for this code.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 7318.19 'Iron or steel; threaded screws, bolts and nuts n.e.c. in item no. 7318.1'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 0.5,
+          "comment": "Right heading, wrong subheading: 7318.19 vs ['7318.15']."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 3, expected 3"
+        }
+      }
+    },
+    {
+      "id": "U15",
+      "description": "Steel ball bearings, single row, deep groove, 5,000 pieces",
+      "reference": {
+        "accepted_hs": [
+          "8482.10"
+        ],
+        "category": 1,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "standard goods",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "8482.10",
+        "hs_title": "Ball bearings",
+        "confidence": 0.47,
+        "category": 1,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list"
+        ],
+        "review_reasons": [
+          "Confidence 0.47 is below 0.75.",
+          "Code 8482.10 is not in the reviewed knowledge base.",
+          "Close call between 8482.10 and 8482.91: a person must choose.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 8482.10 'Ball bearings'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 1.0,
+          "comment": "8482.10 is correct."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 1, expected 1"
+        }
+      }
+    },
+    {
+      "id": "U16",
+      "description": "Unmanned aircraft (drone) with camera, take-off weight 2 kg, export from Germany to China",
+      "reference": {
+        "accepted_hs": [
+          "8806.22"
+        ],
+        "category": 3,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "EU dual-use export check",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "8806.99",
+        "hs_title": "Unmanned aircraft; for other than remote-controlled flight and other than for carriage of passengers with a maximum take-off weight more than 150kg",
+        "confidence": 0.45,
+        "category": 3,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list",
+          "(not stated) Export-control classification (Annex I entry or 'not listed') by the exporter"
+        ],
+        "review_reasons": [
+          "Confidence 0.45 is below 0.75.",
+          "Code 8806.99 is not in the reviewed knowledge base.",
+          "Close call between 8806.99 and 8806.29: a person must choose.",
+          "Category 3: additional trade measures or controls always need a person.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 8806.99 'Unmanned aircraft; for other than remote-controlled flight and other than for carriage of passengers with a maximum take-off weight more than 150kg'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": 0.5,
+          "comment": "Right heading, wrong subheading: 8806.99 vs ['8806.22']."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": 1.0,
+          "comment": "got 3, expected 3"
+        }
+      }
+    },
+    {
+      "id": "U17",
+      "description": "Parts, 50 pcs",
+      "reference": {
+        "accepted_hs": [],
+        "category": null,
+        "manual_review": true,
+        "missing": []
+      },
+      "meta": {
+        "note": "too vague: must go to a person",
+        "tags": [
+          "universal"
+        ]
+      },
+      "output": {
+        "hs_code": "8708.93",
+        "hs_title": "Vehicle parts; clutches and parts thereof",
+        "confidence": 0.45,
+        "category": 1,
+        "manual_review": true,
+        "missing_documents": [
+          "(not stated) Commercial invoice",
+          "(not stated) Packing list"
+        ],
+        "review_reasons": [
+          "Confidence 0.45 is below 0.75.",
+          "Code 8708.93 is not in the reviewed knowledge base.",
+          "Description too vague (1 meaningful word(s)): material, form or use is missing.",
+          "Close call between 8708.93 and 8708.91: a person must choose.",
+          "Offline mode (no LLM): keyword match only."
+        ],
+        "reasoning": "Offline mode (no LLM): best keyword match in the knowledge base is 8708.93 'Vehicle parts; clutches and parts thereof'. Confidence is based on how clearly it beats the next match.",
+        "mode": "offline"
+      },
+      "scores": {
+        "hs_code_correct": {
+          "key": "hs_code_correct",
+          "score": null,
+          "comment": "No single correct code (ambiguous case): not scored."
+        },
+        "missing_document_flagged": {
+          "key": "missing_document_flagged",
+          "score": null,
+          "comment": "No missing document in this case."
+        },
+        "source_shown": {
+          "key": "source_shown",
+          "score": 1.0,
+          "comment": "reason=True trace=True links=True"
+        },
+        "review_routing": {
+          "key": "review_routing",
+          "score": 1.0,
+          "comment": "Correct routing."
+        },
+        "no_false_all_clear": {
+          "key": "no_false_all_clear",
+          "score": 1.0,
+          "comment": "ok"
+        },
+        "category_correct": {
+          "key": "category_correct",
+          "score": null,
+          "comment": "Not scored."
+        }
+      }
+    }
+  ]
+}

@@ -5,7 +5,7 @@
 
 ## 1. Result in one line
 
-KlarSchiff is an **AI system with minimal risk**: not prohibited, not high-risk, and not subject to the Article 50 transparency duties in the way it is used. It must still meet the **general obligations** (AI literacy) and we apply **voluntary high-risk-style controls** because customs errors are costly.
+KlarSchiff is an **AI system with minimal risk**: not prohibited and not high-risk. One **Article 50(1)** transparency duty applies to the *Ask KlarSchiff* assistant (people must be told they are talking to an AI), and it is built in (see §8). It must still meet the **general obligations** (AI literacy) and we apply **voluntary high-risk-style controls** because customs errors are costly.
 
 ## 2. Roles
 
@@ -23,8 +23,8 @@ KlarSchiff is an **AI system with minimal risk**: not prohibited, not high-risk,
 | Is it a **prohibited practice** (Art. 5)? | **No** | No manipulation, social scoring, biometric identification or emotion recognition. |
 | **High-risk via Annex I** (safety component of a regulated product)? | **No** | It is not a safety component of a construction product and is not itself a product under EU harmonisation law. It only *checks* whether documents such as the DoP exist. |
 | **High-risk via Annex III** (the eight listed areas)? | **No** | The closest area is point 7 (migration, asylum and **border control management**), which covers systems used **by or on behalf of public authorities**. KlarSchiff is used by a private company to prepare its own documents. It does not decide about natural persons (no employment, credit, education or public-service decisions). |
-| **Transparency duties** (Art. 50)? | **Not triggered** | It is not a chatbot for the public and does not publish generated text or deepfakes. We still label every output as an AI suggestion (good practice). |
-| Result | **Minimal risk** | Voluntary codes of conduct (Art. 95) may be followed. |
+| **Transparency duties** (Art. 50)? | **Partly: Art. 50(1) for the assistant only** | The core check is not a chatbot and does not publish generated text or deepfakes, so it triggers no duty. The *Ask KlarSchiff* assistant (added in v2.6) talks directly with people, so Art. 50(1) applies: users are told it is an AI (§8). Every other output is also labelled as an AI suggestion (good practice). |
+| Result | **Minimal risk** (+ Art. 50(1) disclosure for the assistant) | Voluntary codes of conduct (Art. 95) may be followed. |
 
 **What would change the class** (re-assess immediately if any becomes true):
 - the system **files declarations automatically** or is used **by a customs authority** → possible Annex III point 7;
@@ -45,7 +45,7 @@ KlarSchiff is an **AI system with minimal risk**: not prohibited, not high-risk,
 |---|---|---|
 | 2 Feb 2025 | Prohibitions, AI literacy | Yes (AI literacy) |
 | 2 Aug 2025 | GPAI model obligations | Indirectly (OpenAI) |
-| 2 Dec 2026 | Transparency rules for AI-generated content (Art. 50) | Only if the use changes |
+| 2 Dec 2026 | End of the grace period for Art. 50(2) marking of AI-generated content (systems already on the market) | Mainly OpenAI's duty; we watch the guidance (§8) |
 | 2 Dec 2027 | Stand-alone high-risk systems (Annex III), moved from 2 Aug 2026 | Only if reclassified |
 | 2 Aug 2028 | High-risk systems in products (Annex I) | No |
 
@@ -74,7 +74,7 @@ Because a wrong code can cost money and penalties, KlarSchiff follows the spirit
 7. Risk management → `roi_risk_assessment.md`
 8. Change log and re-evaluation rule (re-run the evaluation before any model or rule change) → `README.md`
 
-## 7. Update 4 Oct 2026: new features and Article 50
+## 8. Update 4 Oct 2026: new features and Article 50
 
 | Feature | AI Act effect | What we do |
 |---|---|---|

@@ -44,7 +44,7 @@ Shipment ─► Intake ─► Validate ─► Retrieve candidates (RAG) ─► L
 ## 3. Reproduce
 
 ```bash
-cd capstone-round1-hoffmann
+cd ironhack-capstone_klarschiff
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env          # paste your own keys into .env
@@ -54,5 +54,5 @@ streamlit run mvp/app.py      # the MVP
 
 ## 4. Demo video
 
-Round 1 demo (n8n, 2:10, AI narration with Kokoro TTS): [`KlarSchiff_POC_demo.mp4`](KlarSchiff_POC_demo.mp4) in this folder (also linked in `n8n/workflow_documentation.md` §7).
-Round 2 demo (MVP, 2-5 min): see `mvp/mvp_documentation.md` §6.
+- **Round 2 demo (MVP, 2-5 min):** `poc/KlarSchiff_demo.mp4`, recorded for the final presentation on 10 Oct 2026. It follows the demo script in [`mvp/mvp_documentation.md`](../mvp/mvp_documentation.md) §6 and is also shown live.
+- **Round 1 demo (n8n, 3 nodes):** shown live in the Round 1 presentation on 24 Sep 2026. The Round 1 workflow can be re-run at any time from [`n8n/workflow.json`](../n8n/workflow.json) (see [`n8n/workflow_documentation.md`](../n8n/workflow_documentation.md) §6).

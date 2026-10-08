@@ -43,9 +43,14 @@
 | A · Offline baseline (keyword retrieval, no LLM) | 0.89 | 1.00 | 1.00 | 0.83 | 1.00 | 1.00 |
 | C1 · Full agent v2.0, gpt-4o-mini | **0.95** | 1.00 | 1.00 | 0.95 | **0.95 (1 false all-clear: TC14)** | 1.00 |
 | C2 · Full agent v2.1 (two new review triggers) · LangSmith experiment `klarschiff-v2.1-77b05f0d` (EU region) | 0.95 | 1.00 | 1.00 | **1.00** | **1.00** | 1.00 |
-| B · Prompt-only n8n batch (no retrieval, no rules) | *run `poc/poc_workflow.json`* | | | | | |
+| A2 · Offline re-run after v2.3-v2.6c (regression check, 8 Oct 2026) | **0.95** | 1.00 | 1.00 | 0.82 | 1.00 | 1.00 |
+| B · Prompt-only (Round 1 n8n POC, 5 cases, scored by hand) | 3 Pass · 2 Partial (2 wrong sub-codes) | 1 of 1 flagged | shown | not scored | 0 false all-clears | not scored |
 
-Runs on 24 Sep 2026 (`evaluation/results/offline-baseline.json`, `llm-gpt-4o-mini-v2.0.json`, `llm-gpt-4o-mini-v2.1.json`). In v2.1, 13 of 20 shipments go to a person; 7 pass as "all checks passed" (a person still approves before filing).
+Runs on 24 Sep 2026 (`evaluation/results/offline-baseline.json`, `llm-gpt-4o-mini-v2.0.json`, `llm-gpt-4o-mini-v2.1.json`); regression re-run A2 on 8 Oct 2026 (`evaluation/results/offline-v2.6c-2026-10-08.json`).
+
+**About the prompt-only baseline (B):** the Round 1 POC *is* the prompt-only baseline: 5 cases scored by hand in [`eval_plan.md`](eval_plan.md), 3 Pass and 2 Partial, both misses on fine HS sub-codes. The 20-case batch version (`poc/poc_workflow.json`) is ready to run in n8n but was not run on all 20 cases, to stay within the free course budget. It is the first run planned for the pilot, so the value of retrieval + rules can be shown on the same 20 cases.
+
+**Regression check (A2):** after the v2.3-v2.6c changes (full HS 2022, master list, guard, E11/E12 fixes) the offline run was repeated on the same 20 cases. Nothing got worse; one case improved: TC15 kitchen sinks now gets the correct code 7324.10 (was 7308.90, error E3), because the full HS 2022 list now contains it. The shipment still goes to a person (code not in the reviewed layer). The universal set was also re-run (`offline-universal-v2.6c-2026-10-08.json`): unchanged (HS 0.75, routing 1.00, no false all-clear). In v2.1, 13 of 20 shipments go to a person; 7 pass as "all checks passed" (a person still approves before filing).
 
 **Read this carefully:** v2.1 still picks a wrong code in TC16 (0.95 on HS codes). What improved is that the wrong code is now **caught**. And because the two new triggers were designed after looking at these 20 cases, **1.00 on routing is optimistic** (E6): the pilot's blind test is the real measure.
 
@@ -75,9 +80,13 @@ Runs on 24 Sep 2026 (`evaluation/results/offline-baseline.json`, `llm-gpt-4o-min
 
 ## 7. Screenshots (`evaluation/screenshots/`)
 
-- LangSmith dataset `klarschiff-eval-v2` (20 examples)
-- Experiment comparison view (A vs C, and B from n8n)
-- One trace opened: `klarschiff_agent` → `recommend_llm` (prompt, candidates, JSON answer, latency, tokens)
+**LangSmith experiment `klarschiff-v2.1-77b05f0d` (20 cases, 6 evaluators). Row 3 in red: TC16, the wrong code (E2/E8), still sent to a person:**
+
+![LangSmith experiment v2.1](screenshots/langsmith_experiment_v2.1.png)
+
+**One trace opened: TC14 ("panels, 200 pieces"), the case that was a false all-clear in v2.0 and now goes to a person:**
+
+![LangSmith trace TC14](screenshots/langsmith_trace_TC14.png)
 
 ## v2.3: universal cases (other industries)
 

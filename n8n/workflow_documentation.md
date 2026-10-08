@@ -88,5 +88,5 @@ The full consulting proposal is a five-step, human-supervised workflow:
 
 ## 7. Demo recording
 
-Demo video (trigger → result, narrated): [`poc/KlarSchiff_POC_demo.mp4`](../poc/KlarSchiff_POC_demo.mp4) (Round 1 POC, about 2 minutes).
-Round 2 MVP demo: shown live in the final presentation; plan B recording described in `mvp/mvp_documentation.md` §6.
+The Round 1 POC was demonstrated live in the Round 1 presentation (24 Sep 2026); §6 above shows how to re-run it.
+Round 2 MVP demo video: `poc/KlarSchiff_demo.mp4` (see [`poc/poc_documentation.md`](../poc/poc_documentation.md) §4), following the demo script in [`mvp/mvp_documentation.md`](../mvp/mvp_documentation.md) §6.
