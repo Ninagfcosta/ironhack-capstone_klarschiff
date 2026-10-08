@@ -40,5 +40,32 @@
     ],
     "detail": "The Department of Homeland Security, U.S. Customs and Border Protection (CBP) will be submitting the following information collection request to the Office of Management and Budget (OMB) for review and approval in accordance with the Paperwork Reduction Act of 1995 (PRA). The information collection is published in the Federal Register to obtain comments from the public and affected agencies.",
     "status": "open"
+  },
+  {
+    "id": "bbf294d358",
+    "created": "2026-10-08T11:40:15+00:00",
+    "source": "EU official page",
+    "title": "Official page changed: EC_STEEL_NEWS (2026-10-08)",
+    "url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries",
+    "affects_hs_prefixes": [
+      "72",
+      "7306"
+    ],
+    "detail": "Content changed since the last check. A person must read it.",
+    "status": "open"
+  },
+  {
+    "id": "e27aa58a90",
+    "created": "2026-10-08T11:40:16+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-08: Low-Value Shipments",
+    "url": "https://www.federalregister.gov/documents/2026/10/08/2026-20650/low-value-shipments",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "This document proposes to amend the U.S. Customs and Border Protection regulations to modify filing requirements for informal entries of goods valued at $2,500 or less and to establish a new electronic informal entry type for merchandise entering through the mail environment. This document also proposes other related changes such as requiring an additional data element for carriers pertaining to m",
+    "status": "open"
   }
 ]
