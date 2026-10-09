@@ -67,5 +67,47 @@
     ],
     "detail": "This document proposes to amend the U.S. Customs and Border Protection regulations to modify filing requirements for informal entries of goods valued at $2,500 or less and to establish a new electronic informal entry type for merchandise entering through the mail environment. This document also proposes other related changes such as requiring an additional data element for carriers pertaining to m",
     "status": "open"
+  },
+  {
+    "id": "53e5b97c8f",
+    "created": "2026-10-09T11:33:45+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-09: Foreign-Trade Zone (FTZ) 50, Notification of Proposed Production Activity; Sanyo Denki America, Inc.; (Cooling, Servo, and Power Systems and Assemblies); Torrance, California",
+    "url": "https://www.federalregister.gov/documents/2026/10/09/2026-20776/foreign-trade-zone-ftz-50-notification-of-proposed-production-activity-sanyo-denki-america-inc",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
+  },
+  {
+    "id": "c8a308c9fc",
+    "created": "2026-10-09T11:33:45+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-09: Foreign-Trade Zone (FTZ) 40, Notification of Proposed Production Activity; Norman Noble Company Inc.; (Implantable Medical Devices); Highland Heights, Ohio",
+    "url": "https://www.federalregister.gov/documents/2026/10/09/2026-20775/foreign-trade-zone-ftz-40-notification-of-proposed-production-activity-norman-noble-company-inc",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
+  },
+  {
+    "id": "b43777759a",
+    "created": "2026-10-09T11:33:45+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-09: Foreign-Trade Zone (FTZ) 16, Notification of Proposed Production Activity; Yazaki North America, Inc.; (Stamped Copper Terminals); Petoskey, Michigan",
+    "url": "https://www.federalregister.gov/documents/2026/10/09/2026-20774/foreign-trade-zone-ftz-16-notification-of-proposed-production-activity-yazaki-north-america-inc",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
   }
 ]
