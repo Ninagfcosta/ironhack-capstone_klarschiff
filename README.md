@@ -7,7 +7,6 @@ AI Consulting Capstone · Ironhack AI Consulting & Integration Bootcamp · **Aut
 > **Why "KlarSchiff"?** In German, *"Klar Schiff"* means the ship is ready and everything is in order. *Klar* also means **clear**: every suggestion must be clear enough for a person to check it in seconds. That answers the client's biggest fear: *"AI is not transparent."*
 >
 > 🌱 **Origin:** born in **Project 4 · SilverTrust**, a pair consulting exercise with my classmate Asal (logistics client) → [`00_origin_silvertrust/`](00_origin_silvertrust/)
-> 🧭 [Module 1](https://github.com/ninagfcosta/ironhack-module-1_ai-foundations_podcast-studio) → [Module 2](https://github.com/ninagfcosta/ironhack-module-2_python-apis_content-creator) → [Module 3](https://github.com/ninagfcosta/ironhack-module-3_rag-agents_company-research) → [Module 4 · SilverTrust](https://github.com/ninagfcosta/ironhack-module-4_evaluation-compliance_silvertrust) → **Capstone · KlarSchiff**
 
 ---
 

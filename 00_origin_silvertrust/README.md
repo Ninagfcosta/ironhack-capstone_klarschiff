@@ -13,4 +13,4 @@ This folder keeps the original deliverables of that exercise:
 
 **From seed to product:** the problem, the first numbers (illustrative) and the 5-step workflow came from here. The capstone then turned them into KlarSchiff: research, charts, an n8n proof of concept and a scored evaluation.
 
-Full module: [ironhack-module-4_evaluation-compliance_silvertrust](https://github.com/ninagfcosta/ironhack-module-4_evaluation-compliance_silvertrust)
+The original files of the exercise are kept in this folder.
