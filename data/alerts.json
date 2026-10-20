@@ -187,5 +187,19 @@
     ],
     "detail": "Content changed since the last check. A person must read it.",
     "status": "open"
+  },
+  {
+    "id": "6c0ab8edd4",
+    "created": "2026-10-20T09:42:29+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-20: Authorizations for Certain Activities at Liquefied Natural Gas Plants",
+    "url": "https://www.federalregister.gov/documents/2026/10/20/2026-21443/authorizations-for-certain-activities-at-liquefied-natural-gas-plants",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "The Federal Energy Regulatory Commission proposes to revise its regulations to establish procedures for authorizing activities at liquefied natural gas plants without case-specific authorization orders under sections 3 or 7 of the Natural Gas Act.",
+    "status": "open"
   }
 ]
