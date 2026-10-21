@@ -201,5 +201,18 @@
     ],
     "detail": "The Federal Energy Regulatory Commission proposes to revise its regulations to establish procedures for authorizing activities at liquefied natural gas plants without case-specific authorization orders under sections 3 or 7 of the Natural Gas Act.",
     "status": "open"
+  },
+  {
+    "id": "96ba6b890f",
+    "created": "2026-10-21T09:43:48+00:00",
+    "source": "EU official page",
+    "title": "Official page changed: EC_STEEL_NEWS (2026-10-21)",
+    "url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries",
+    "affects_hs_prefixes": [
+      "72",
+      "7306"
+    ],
+    "detail": "Content changed since the last check. A person must read it.",
+    "status": "open"
   }
 ]
