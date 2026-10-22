@@ -214,5 +214,144 @@
     ],
     "detail": "Content changed since the last check. A person must read it.",
     "status": "open"
+  },
+  {
+    "id": "c61345b36c",
+    "created": "2026-10-22T09:43:20+00:00",
+    "source": "EU official page",
+    "title": "Official page changed: EC_STEEL_NEWS (2026-10-22)",
+    "url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries",
+    "affects_hs_prefixes": [
+      "72",
+      "7306"
+    ],
+    "detail": "Content changed since the last check. A person must read it.",
+    "status": "open"
+  },
+  {
+    "id": "50a2480419",
+    "created": "2026-10-22T09:43:20+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-22: Foreign-Trade Zone (FTZ) 186, Notification of Proposed Production Activity; Pratt & Whitney, a Division of RTX Corporation; (Aircraft Engines, Engine Modules, and Parts); North Berwick, Maine",
+    "url": "https://www.federalregister.gov/documents/2026/10/22/2026-21561/foreign-trade-zone-ftz-186-notification-of-proposed-production-activity-pratt-and-whitney-a-division",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
+  },
+  {
+    "id": "07514d6444",
+    "created": "2026-10-22T09:43:20+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-22: Foreign-Trade Zone (FTZ) 71, Notification of Proposed Production Activity; Pratt & Whitney, a Division of RTX Corporation; (Aircraft Engines, Engine Modules, and Parts); Middletown, Connecticut",
+    "url": "https://www.federalregister.gov/documents/2026/10/22/2026-21552/foreign-trade-zone-ftz-71-notification-of-proposed-production-activity-pratt-and-whitney-a-division",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
+  },
+  {
+    "id": "6269de21e4",
+    "created": "2026-10-22T09:43:20+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-22: Foreign-Trade Zone (FTZ) 26, Notification of Proposed Production Activity; Pratt & Whitney, a Division of RTX Corporation; (Aircraft Engines, Engine Modules, and Parts); Midland, Georgia",
+    "url": "https://www.federalregister.gov/documents/2026/10/22/2026-21542/foreign-trade-zone-ftz-26-notification-of-proposed-production-activity-pratt-and-whitney-a-division",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
+  },
+  {
+    "id": "06e853bb4e",
+    "created": "2026-10-22T09:43:20+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-22: Foreign-Trade Zone (FTZ) 123, Notification of Proposed Production Activity; Metal Container (MCC) LP; (Beverage Containers); Windsor, Colorado",
+    "url": "https://www.federalregister.gov/documents/2026/10/22/2026-21555/foreign-trade-zone-ftz-123-notification-of-proposed-production-activity-metal-container-mcc-lp",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
+  },
+  {
+    "id": "b519ab480f",
+    "created": "2026-10-22T09:43:20+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-22: Foreign-Trade Zone (FTZ) 64, Notification of Proposed Production Activity; Metal Container (MCC) LP; (Beverage Containers); Jacksonville, Florida",
+    "url": "https://www.federalregister.gov/documents/2026/10/22/2026-21548/foreign-trade-zone-ftz-64-notification-of-proposed-production-activity-metal-container-mcc-lp",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
+  },
+  {
+    "id": "de760f700c",
+    "created": "2026-10-22T09:43:20+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-22: Foreign-Trade Zone (FTZ) 106, Notification of Proposed Production Activity; Metal Container (MCC) LP; (Beverage Containers); Oklahoma City, Oklahoma",
+    "url": "https://www.federalregister.gov/documents/2026/10/22/2026-21543/foreign-trade-zone-ftz-106-notification-of-proposed-production-activity-metal-container-mcc-lp",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
+  },
+  {
+    "id": "0f033f3723",
+    "created": "2026-10-22T09:43:20+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-22: Foreign-Trade Zone (FTZ) 37, Notification of Proposed Production Activity; Metal Container (MCC) LP; (Beverage Containers); New Windsor, New York",
+    "url": "https://www.federalregister.gov/documents/2026/10/22/2026-21537/foreign-trade-zone-ftz-37-notification-of-proposed-production-activity-metal-container-mcc-lp",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
+  },
+  {
+    "id": "44fd9062a6",
+    "created": "2026-10-22T09:43:20+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-22: Foreign-Trade Zone (FTZ) 244, Notification of Proposed Production Activity; Metal Container (MCC) LP; (Beverage Containers); Riverside and Jurupa Valley, California",
+    "url": "https://www.federalregister.gov/documents/2026/10/22/2026-21534/foreign-trade-zone-ftz-244-notification-of-proposed-production-activity-metal-container-mcc-lp",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
+  },
+  {
+    "id": "c05cb8c2dc",
+    "created": "2026-10-22T09:43:21+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-22: Modification of the Test of the New Electronic Informal Entry Process for Mail",
+    "url": "https://www.federalregister.gov/documents/2026/10/22/2026-21570/modification-of-the-test-of-the-new-electronic-informal-entry-process-for-mail",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "This document announces that U.S. Customs and Border Protection (CBP) is modifying the test of the new electronic informal entry type for merchandise entering the United States through the international mail process to permit transmission of the entry with or without electronic Partner Government Agency (PGA) data.",
+    "status": "open"
   }
 ]
