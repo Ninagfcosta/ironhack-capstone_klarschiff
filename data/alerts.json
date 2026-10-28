@@ -420,5 +420,46 @@
     ],
     "detail": "PHMSA proposes to update the Hazardous Materials Regulations to adopt certain international regulations and standards related to proper shipping names, hazard classes, packing groups, special provisions, packaging authorizations, air transport quantity limitations, and vessel stowage requirements. These proposed amendments are intended to maintain consistency with the latest international regulati",
     "status": "open"
+  },
+  {
+    "id": "2d0f54ba19",
+    "created": "2026-10-28T10:53:20+00:00",
+    "source": "EU official page",
+    "title": "Official page changed: EC_STEEL_NEWS (2026-10-28)",
+    "url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries",
+    "affects_hs_prefixes": [
+      "72",
+      "7306"
+    ],
+    "detail": "Content changed since the last check. A person must read it.",
+    "status": "open"
+  },
+  {
+    "id": "6bffc4e540",
+    "created": "2026-10-28T10:53:20+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-28: Adjusting Imports of Wind Turbines and Their Parts and Components Into the United States",
+    "url": "https://www.federalregister.gov/documents/2026/10/28/2026-22049/adjusting-imports-of-wind-turbines-and-their-parts-and-components-into-the-united-states",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
+  },
+  {
+    "id": "c9b64f1ddf",
+    "created": "2026-10-28T10:53:20+00:00",
+    "source": "US Federal Register",
+    "title": "2026-10-28: Foreign-Trade Zone (FTZ) 155, Notification of Proposed Production Activity; Kerrville Public Utility Board Public Facility Corporation; (Natural Gas Reciprocating Internal Combustion Engine Generation Power Plant); Garwood, Texas",
+    "url": "https://www.federalregister.gov/documents/2026/10/28/2026-21928/foreign-trade-zone-ftz-155-notification-of-proposed-production-activity-kerrville-public-utility",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
   }
 ]
