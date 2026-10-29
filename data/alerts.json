@@ -461,5 +461,26 @@
     ],
     "detail": "",
     "status": "open"
+  },
+  {
+    "id": "8a055f0de7",
+    "created": "2026-10-29T11:10:16+00:00",
+    "source": "EU official page",
+    "title": "Official page changed: EU_DUAL_USE_PAGE (2026-10-29)",
+    "url": "https://policy.trade.ec.europa.eu/help-exporters-and-importers/exporting-dual-use-items_en",
+    "affects_hs_prefixes": [
+      "8486",
+      "9031",
+      "9030",
+      "9012",
+      "901320",
+      "8401",
+      "2844",
+      "8526",
+      "8806",
+      "9014"
+    ],
+    "detail": "Content changed since the last check. A person must read it.",
+    "status": "open"
   }
 ]
