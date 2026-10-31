@@ -571,5 +571,46 @@
     ],
     "detail": "",
     "status": "open"
+  },
+  {
+    "id": "77c4df53df",
+    "created": "2026-10-31T10:39:22+00:00",
+    "source": "EU official page",
+    "title": "Official page changed: EC_STEEL_NEWS (2026-10-31)",
+    "url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries",
+    "affects_hs_prefixes": [
+      "72",
+      "7306"
+    ],
+    "detail": "Content changed since the last check. A person must read it.",
+    "status": "open"
+  },
+  {
+    "id": "67133417f9",
+    "created": "2026-10-31T10:39:25+00:00",
+    "source": "US Federal Register",
+    "title": "2026-11-02: Foreign-Trade Zone (FTZ) 17, Notification of Proposed Production Activity; Honeywell Aerospace US LLC; (Aircraft Components); Olathe, Kansas",
+    "url": "https://www.federalregister.gov/documents/2026/11/02/2026-22302/foreign-trade-zone-ftz-17-notification-of-proposed-production-activity-honeywell-aerospace-us-llc",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
+  },
+  {
+    "id": "6f23c48f2b",
+    "created": "2026-10-31T10:39:26+00:00",
+    "source": "US Federal Register",
+    "title": "2026-11-02: Adjusting Imports of Robotics, Industrial Machinery, and Their Parts and Components Into the United States",
+    "url": "https://www.federalregister.gov/documents/2026/11/02/2026-22385/adjusting-imports-of-robotics-industrial-machinery-and-their-parts-and-components-into-the-united",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
   }
 ]
