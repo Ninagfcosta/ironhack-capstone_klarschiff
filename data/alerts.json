@@ -625,5 +625,81 @@
     ],
     "detail": "Content changed since the last check. A person must read it.",
     "status": "open"
+  },
+  {
+    "id": "753d98b5b3",
+    "created": "2026-11-05T12:50:12+00:00",
+    "source": "EU official page",
+    "title": "Official page changed: EC_STEEL_NEWS (2026-11-05)",
+    "url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries",
+    "affects_hs_prefixes": [
+      "72",
+      "7306"
+    ],
+    "detail": "Content changed since the last check. A person must read it.",
+    "status": "open"
+  },
+  {
+    "id": "715c489f7d",
+    "created": "2026-11-05T12:50:13+00:00",
+    "source": "EU official page",
+    "title": "Official page changed: EU_EUDR_PAGE (2026-11-05)",
+    "url": "https://environment.ec.europa.eu/topics/forests/deforestation/regulation-deforestation-free-products_en",
+    "affects_hs_prefixes": [
+      "0102",
+      "0201",
+      "0202",
+      "0206",
+      "4101",
+      "4104",
+      "4107",
+      "1801",
+      "1802",
+      "1803",
+      "1804",
+      "1805",
+      "1806",
+      "0901",
+      "1201",
+      "1507",
+      "2304",
+      "1511",
+      "1513",
+      "120710",
+      "4001",
+      "4005",
+      "4006",
+      "4007",
+      "4008",
+      "4010",
+      "4011",
+      "4012",
+      "4013",
+      "4015",
+      "4016",
+      "4017",
+      "44",
+      "47",
+      "48",
+      "9401",
+      "9403",
+      "9406"
+    ],
+    "detail": "Content changed since the last check. A person must read it.",
+    "status": "open"
+  },
+  {
+    "id": "78cdd50428",
+    "created": "2026-11-05T12:50:13+00:00",
+    "source": "US Federal Register",
+    "title": "2026-11-05: Foreign-Trade Zone (FTZ) 70, Notification of Proposed Production Activity; Heidtman Tubular Products, LLC; (Galvanized Tubing); Erie, Michigan",
+    "url": "https://www.federalregister.gov/documents/2026/11/05/2026-22620/foreign-trade-zone-ftz-70-notification-of-proposed-production-activity-heidtman-tubular-products-llc",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
   }
 ]
