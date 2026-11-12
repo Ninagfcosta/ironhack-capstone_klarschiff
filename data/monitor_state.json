@@ -5,7 +5,7 @@
     "EU_EUDR_PAGE": "72e4b792bd73fbf03fdc43975677f96971cf12662ba133271608dfd3a3b64527",
     "EU_DUAL_USE_PAGE": "6558d1d8357a990f4d62d39daca96b5a67b5f578bbfe2aa0a6d6b41e08170fe3"
   },
-  "fedreg_since": "2026-11-11",
+  "fedreg_since": "2026-11-12",
   "hts_rates": {
     "2523.29": [
       "2523.29.00.00=Free"
@@ -33,6 +33,6 @@
       "6907.21.90=8.5%"
     ]
   },
-  "last_run": "2026-11-11T12:15:47+00:00",
+  "last_run": "2026-11-12T13:24:34+00:00",
   "last_errors": []
 }
