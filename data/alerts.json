@@ -944,5 +944,32 @@
     ],
     "detail": "To allow for further discussion with China regarding the acts, policies, and practices at issue in this investigation, the U.S. Trade Representative (Trade Representative) is modifying the action taken in this investigation to further suspend that action for two months, until January 10, 2027.",
     "status": "open"
+  },
+  {
+    "id": "e5263a5565",
+    "created": "2026-11-13T12:42:16+00:00",
+    "source": "EU official page",
+    "title": "Official page changed: EC_STEEL_NEWS (2026-11-13)",
+    "url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries",
+    "affects_hs_prefixes": [
+      "72",
+      "7306"
+    ],
+    "detail": "Content changed since the last check. A person must read it.",
+    "status": "open"
+  },
+  {
+    "id": "3b7ae9f66c",
+    "created": "2026-11-13T12:42:17+00:00",
+    "source": "US Federal Register",
+    "title": "2026-11-13: Foreign-Trade Zone (FTZ) 62, Notification of Proposed Production Activity; Penn Aluminum International, LLC; (Extruded and Drawn Coiled Aluminum Tubing); Harlingen, Texas",
+    "url": "https://www.federalregister.gov/documents/2026/11/13/2026-23172/foreign-trade-zone-ftz-62-notification-of-proposed-production-activity-penn-aluminum-international",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
   }
 ]
