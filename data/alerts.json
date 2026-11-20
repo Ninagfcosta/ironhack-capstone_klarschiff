@@ -997,5 +997,101 @@
     ],
     "detail": "Content changed since the last check. A person must read it.",
     "status": "open"
+  },
+  {
+    "id": "39f07efeeb",
+    "created": "2026-11-20T13:41:29+00:00",
+    "source": "EU official page",
+    "title": "Official page changed: EC_CBAM_PAGE (2026-11-20)",
+    "url": "https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/cbam-definitive-regime_en",
+    "affects_hs_prefixes": [
+      "250700",
+      "2523",
+      "2716",
+      "280410",
+      "2808",
+      "2814",
+      "283421",
+      "3102",
+      "3105",
+      "72",
+      "7301",
+      "7302",
+      "7303",
+      "7304",
+      "7305",
+      "7306",
+      "7307",
+      "7308",
+      "7309",
+      "7310",
+      "7311",
+      "7318",
+      "7326",
+      "7601",
+      "7603",
+      "7604",
+      "7605",
+      "7606",
+      "7607",
+      "7608",
+      "7609",
+      "7610",
+      "7611",
+      "7612",
+      "7613",
+      "7614",
+      "7616"
+    ],
+    "detail": "Content changed since the last check. A person must read it.",
+    "status": "open"
+  },
+  {
+    "id": "35a46aa026",
+    "created": "2026-11-20T13:41:29+00:00",
+    "source": "EU official page",
+    "title": "Official page changed: EC_STEEL_NEWS (2026-11-20)",
+    "url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries",
+    "affects_hs_prefixes": [
+      "72",
+      "7306"
+    ],
+    "detail": "Content changed since the last check. A person must read it.",
+    "status": "open"
+  },
+  {
+    "id": "43de423031",
+    "created": "2026-11-20T13:41:31+00:00",
+    "source": "US Federal Register",
+    "title": "2026-11-20: Cotton Board Rules and Regulations: Adjusting Supplemental Assessment on Imports (2025 Amendments)",
+    "url": "https://www.federalregister.gov/documents/2026/11/20/2026-23689/cotton-board-rules-and-regulations-adjusting-supplemental-assessment-on-imports-2025-amendments",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "The Agricultural Marketing Service (AMS) is amending the Cotton Board Rules and Regulations to decrease the value assigned to imported cotton for the purposes of calculating supplemental assessments collected for use by the Cotton Research and Promotion Program. This amendment is required each year to ensure that assessments collected on imported cotton, and the cotton content of imported products",
+    "status": "open"
+  },
+  {
+    "id": "7452ff1e4d",
+    "created": "2026-11-20T13:41:33+00:00",
+    "source": "EU official page",
+    "title": "Official page changed: EU_DUAL_USE_PAGE (2026-11-20)",
+    "url": "https://policy.trade.ec.europa.eu/help-exporters-and-importers/exporting-dual-use-items_en",
+    "affects_hs_prefixes": [
+      "8486",
+      "9031",
+      "9030",
+      "9012",
+      "901320",
+      "8401",
+      "2844",
+      "8526",
+      "8806",
+      "9014"
+    ],
+    "detail": "Content changed since the last check. A person must read it.",
+    "status": "open"
   }
 ]
