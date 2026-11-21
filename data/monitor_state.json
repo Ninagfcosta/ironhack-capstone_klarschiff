@@ -3,9 +3,9 @@
     "EC_CBAM_PAGE": "6e5c4b0771b609b38f81e5a9f3b0fd8f06db4cd6fb8307b0cef89d5be73448f2",
     "EC_STEEL_NEWS": "df63e6b2347dd217385ebcac0e0690c2b2f34fc7f1bf804fad6166133b384478",
     "EU_EUDR_PAGE": "72e4b792bd73fbf03fdc43975677f96971cf12662ba133271608dfd3a3b64527",
-    "EU_DUAL_USE_PAGE": "b49059e9b6c0340d6ebc225187adb0e573408e85e63056d08b48d3f608cb82f3"
+    "EU_DUAL_USE_PAGE": "ab289b5b40b5e55a64d1633d41039cf53c386fb7883c86b88140088270e743fa"
   },
-  "fedreg_since": "2026-11-20",
+  "fedreg_since": "2026-11-21",
   "hts_rates": {
     "2523.29": [
       "2523.29.00.00=Free"
@@ -33,6 +33,6 @@
       "6907.21.90=8.5%"
     ]
   },
-  "last_run": "2026-11-20T13:41:28+00:00",
+  "last_run": "2026-11-21T13:07:21+00:00",
   "last_errors": []
 }

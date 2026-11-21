@@ -1093,5 +1093,68 @@
     ],
     "detail": "Content changed since the last check. A person must read it.",
     "status": "open"
+  },
+  {
+    "id": "2d07e4b0e8",
+    "created": "2026-11-21T13:07:23+00:00",
+    "source": "US Federal Register",
+    "title": "2026-11-23: Foreign-Trade Zone (FTZ) 19, Notification of Proposed Production Activity; CLAAS Omaha, Inc.; (Combine Harvesters and Adapters); Omaha, Nebraska",
+    "url": "https://www.federalregister.gov/documents/2026/11/23/2026-23806/foreign-trade-zone-ftz-19-notification-of-proposed-production-activity-claas-omaha-inc-combine",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "",
+    "status": "open"
+  },
+  {
+    "id": "2b227dce12",
+    "created": "2026-11-21T13:07:23+00:00",
+    "source": "US Federal Register",
+    "title": "2026-11-23: Marine Mammals; Incidental Take During Specified Activities; Proposed Incidental Harassment Authorization for Southwest Alaska Stock of Northern Sea Otters in Kodiak, Alaska",
+    "url": "https://www.federalregister.gov/documents/2026/11/23/2026-23771/marine-mammals-incidental-take-during-specified-activities-proposed-incidental-harassment",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "We, the U.S. Fish and Wildlife Service (FWS or we), in response to a request under the Marine Mammal Protection Act of 1972, as amended, from the City of Kodiak, propose to authorize incidental take by harassment of small numbers of Southwest Alaska stock northern sea otters (Enhydra lutris kenyoni) from November 1, 2026, to October 31, 2027. The applicant has requested this authorization for take",
+    "status": "open"
+  },
+  {
+    "id": "1579b5835b",
+    "created": "2026-11-21T13:07:23+00:00",
+    "source": "US Federal Register",
+    "title": "2026-11-23: Marine Mammals; Incidental Take During Specified Activities; Proposed Incidental Harassment Authorization for Southcentral Alaska Stock of Northern Sea Otters at the ARRC Seward Alaska Marine Terminal Freight Dock in Seward, Alaska",
+    "url": "https://www.federalregister.gov/documents/2026/11/23/2026-23734/marine-mammals-incidental-take-during-specified-activities-proposed-incidental-harassment",
+    "affects_hs_prefixes": [
+      "72",
+      "73",
+      "76"
+    ],
+    "detail": "We, the U.S. Fish and Wildlife Service (FWS), in response to a request under the Marine Mammal Protection Act of 1972, as amended, from the Alaska Railroad Corporation, propose to authorize incidental take by harassment of small numbers of Southcentral Alaska stock northern sea otters (Enhydra lutris kenyoni) for a period of up to 1 year. The applicant has requested this authorization for take by ",
+    "status": "open"
+  },
+  {
+    "id": "854884c9ce",
+    "created": "2026-11-21T13:07:26+00:00",
+    "source": "EU official page",
+    "title": "Official page changed: EU_DUAL_USE_PAGE (2026-11-21)",
+    "url": "https://policy.trade.ec.europa.eu/help-exporters-and-importers/exporting-dual-use-items_en",
+    "affects_hs_prefixes": [
+      "8486",
+      "9031",
+      "9030",
+      "9012",
+      "901320",
+      "8401",
+      "2844",
+      "8526",
+      "8806",
+      "9014"
+    ],
+    "detail": "Content changed since the last check. A person must read it.",
+    "status": "open"
   }
 ]
