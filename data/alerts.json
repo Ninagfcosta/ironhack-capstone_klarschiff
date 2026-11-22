@@ -1156,5 +1156,18 @@
     ],
     "detail": "Content changed since the last check. A person must read it.",
     "status": "open"
+  },
+  {
+    "id": "ec35005796",
+    "created": "2026-11-22T12:55:20+00:00",
+    "source": "EU official page",
+    "title": "Official page changed: EC_STEEL_NEWS (2026-11-22)",
+    "url": "https://trade.ec.europa.eu/access-to-markets/en/news/new-eu-safeguards-steel-imports-third-countries",
+    "affects_hs_prefixes": [
+      "72",
+      "7306"
+    ],
+    "detail": "Content changed since the last check. A person must read it.",
+    "status": "open"
   }
 ]
